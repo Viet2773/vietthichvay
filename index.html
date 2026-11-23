@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>viettulam — Hệ Thống Ôn Luyện & Ngân Hàng Câu Hỏi</title>
 
-  <!-- Favicon tông Sangria & kem Blonde ấm -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='16'%20fill='%23653040'/%3E%3Cpath%20d='M17%2018H26L32%2037.5L38%2018H47L36%2048H28Z'%20fill='%23FAF8F4'/%3E%3C/svg%3E" />
+  <!-- Favicon Logo mới: Nền tối viền vàng kim, chữ V cách điệu & ngôi sao 4 cánh -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20x='2'%20y='2'%20width='60'%20height='60'%20rx='15'%20fill='%23131B1C'%20stroke='%23DBC696'%20stroke-width='2.6'/%3E%3Cpath%20d='M15%2024%20L24%2041%20L32.5%2025.5%20M15%2024%20H22.5%20L27.5%2034'%20fill='none'%20stroke='%23DBC696'%20stroke-width='3.2'%20stroke-linejoin='miter'/%3E%3Ccircle%20cx='34.5'%20cy='20.5'%20r='2.2'%20fill='%23DBC696'/%3E%3Cpath%20d='M26%2047%20L40.5%2019.5%20H44%20L29.5%2047%20Z'%20fill='%23FFFFFF'/%3E%3Cpath%20d='M33%2047%20L44.5%2025%20H48%20L36.5%2047%20Z'%20fill='%23FFFFFF'/%3E%3Cpath%20d='M46.5%2010%20Q47%2014.8%2051.5%2015.5%20Q47%2016.2%2046.5%2021%20Q46%2016.2%2041.5%2015.5%20Q46%2014.8%2046.5%2010%20Z'%20fill='%23DBC696'/%3E%3C/svg%3E" />
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -416,34 +416,70 @@
       background: #CE675D;
     }
 
-    /* Thanh bên trái: hiệu ứng thu gọn mượt về thanh icon 72px trên desktop */
+    /* Thanh bên trái: thu nhỏ mảnh giống Gemini (60px khi thu gọn, 220px khi mở rộng) */
     #leftNavSidebar {
-      transition: width 0.32s var(--ease-editorial), transform 0.3s ease;
+      transition: width 0.28s var(--ease-editorial), transform 0.28s ease, background-color 0.22s ease;
+    }
+
+    .sidebar-show-collapsed {
+      display: none;
     }
 
     @media (min-width: 1024px) {
       #leftNavSidebar.is-collapsed {
-        width: 72px !important;
+        width: 60px !important;
+        cursor: pointer;
+      }
+
+      #leftNavSidebar.is-collapsed:hover {
+        background-color: #EFE7D9;
       }
 
       #leftNavSidebar.is-collapsed .sidebar-hide-collapsed {
         display: none !important;
       }
 
+      #leftNavSidebar.is-collapsed .sidebar-show-collapsed {
+        display: flex !important;
+      }
+
       #leftNavSidebar.is-collapsed .sidebar-center-collapsed {
         justify-content: center !important;
-        padding-left: 0 !important;
-        padding-right: 0 !important;
+        width: 40px !important;
+        height: 40px !important;
+        padding: 0 !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
       }
 
       #leftNavSidebar.is-collapsed .sidebar-pad-collapsed {
-        padding-left: 0.625rem !important;
-        padding-right: 0.625rem !important;
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
       }
+    }
 
-      #leftNavSidebar.is-collapsed .sidebar-collapse-icon {
-        transform: rotate(180deg);
-      }
+    /* Thanh tua thời gian cho Video Hướng Dẫn tích hợp */
+    input[type="range"].timeline-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      background: transparent;
+      cursor: pointer;
+    }
+    input[type="range"].timeline-slider::-webkit-slider-runnable-track {
+      height: 6px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.25);
+    }
+    input[type="range"].timeline-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 9999px;
+      background: #DDB247;
+      border: 2px solid #FFFFFF;
+      margin-top: -4px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
     }
   </style>
 </head>
@@ -452,7 +488,7 @@
   <!-- ======================================================================
        HEADER COMPACT CHO MOBILE (< lg) & LỚP PHỦ NGĂN KÉO TRÁI
        ====================================================================== -->
-  <header class="lg:hidden sticky top-0 z-40 bg-[#FAF8F4]/95 backdrop-blur-md border-b border-[#E2D7BF]">
+  <header id="mobileTopHeader" class="lg:hidden sticky top-0 z-40 bg-[#FAF8F4]/95 backdrop-blur-md border-b border-[#E2D7BF] cursor-pointer">
     <div class="px-4 h-14 flex items-center justify-between gap-3">
       <div class="flex items-center gap-2.5">
         <button id="btnToggleLeftSidebarMobile" type="button" aria-label="Mở thanh điều hướng" class="w-9 h-9 rounded-xl border border-[#E2D7BF] bg-[#FFFFFF] hover:bg-[#F3ECE0] text-[#3E1D27] flex items-center justify-center transition">
@@ -461,10 +497,14 @@
           </svg>
         </button>
         <a href="#overview" onclick="return false;" data-nav-tab="overview" class="nav-brand-link flex items-center gap-2 cursor-pointer">
-          <div class="w-7 h-7 rounded-lg bg-[#653040] flex items-center justify-center overflow-hidden">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center overflow-hidden shrink-0">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" class="w-full h-full" aria-label="Logo viettulam">
-              <rect width="64" height="64" rx="16" fill="#653040"/>
-              <path d="M17 18H26L32 37.5L38 18H47L36 48H28Z" fill="#FAF8F4"/>
+              <rect x="2" y="2" width="60" height="60" rx="15" fill="#131B1C" stroke="#DBC696" stroke-width="2.6" />
+              <path d="M15 24 L24 41 L32.5 25.5 M15 24 H22.5 L27.5 34" fill="none" stroke="#DBC696" stroke-width="3.2" stroke-linejoin="miter" />
+              <circle cx="34.5" cy="20.5" r="2.2" fill="#DBC696" />
+              <path d="M26 47 L40.5 19.5 H44 L29.5 47 Z" fill="#FFFFFF" />
+              <path d="M33 47 L44.5 25 H48 L36.5 47 Z" fill="#FFFFFF" />
+              <path d="M46.5 10 Q47 14.8 51.5 15.5 Q47 16.2 46.5 21 Q46 16.2 41.5 15.5 Q46 14.8 46.5 10 Z" fill="#DBC696" />
             </svg>
           </div>
           <span class="font-display font-extrabold text-sm tracking-tight text-[#3E1D27] uppercase">VIETTULAM</span>
@@ -484,120 +524,120 @@
        ====================================================================== -->
   <div class="relative z-10 flex-1 flex flex-col lg:flex-row min-h-screen w-full">
 
-    <!-- CỘT TRÁI: THANH ĐIỀU HƯỚNG DỌC TÔNG SANGRIA / RASPBERRY / COPPER / SUNFLOWER / BLONDE -->
-    <aside id="leftNavSidebar" class="fixed inset-y-0 left-0 z-50 w-64 xl:w-[272px] bg-[#F4EFE6] border-r border-[#E2D7BF] flex flex-col justify-between transform -translate-x-full lg:translate-x-0 lg:sticky lg:top-0 lg:h-screen shrink-0 shadow-2xl lg:shadow-none overflow-hidden">
+    <!-- CỘT TRÁI: THANH ĐIỀU HƯỚNG MẢNH PHONG CÁCH GEMINI (60px THU GỌN / 220px MỞ RỘNG) -->
+    <aside id="leftNavSidebar" class="is-collapsed fixed inset-y-0 left-0 z-50 w-[220px] bg-[#F4EFE6] border-r border-[#E2D7BF] flex flex-col justify-between transform -translate-x-full lg:translate-x-0 lg:sticky lg:top-0 lg:h-screen shrink-0 shadow-2xl lg:shadow-none overflow-hidden">
       <div class="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
-        <!-- Thanh chấm macOS + Nút thu gọn/mở rộng thanh bên trái -->
-        <div class="sidebar-pad-collapsed sidebar-center-collapsed px-5 pt-4 pb-3 border-b border-[#E2D7BF] flex items-center justify-between gap-2">
-          <div class="sidebar-hide-collapsed flex items-center gap-1.5">
-            <span class="w-2.5 h-2.5 rounded-full bg-[#AA1342]"></span>
-            <span class="w-2.5 h-2.5 rounded-full bg-[#DDB247]"></span>
-            <span class="w-2.5 h-2.5 rounded-full bg-[#CE675D]"></span>
-          </div>
+        <!-- Khu vực đầu thanh bên & danh sách menu: không tự thụt vào khi đang mở rộng -->
+        <div id="sidebarMenuZone">
+          <!-- Đầu thanh bên: Nút menu ☰ (giống Gemini) + Thương hiệu -->
+          <div class="sidebar-pad-collapsed px-3 pt-3 pb-2 flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2 min-w-0 flex-1">
+              <button id="btnCollapseLeftSidebar" type="button" title="Mở rộng / Thu gọn menu" aria-label="Mở rộng hoặc thu gọn menu" class="sidebar-center-collapsed w-10 h-10 rounded-full hover:bg-[#EAE1D2] text-[#7B5A64] hover:text-[#3E1D27] flex items-center justify-center transition shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-[18px] h-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.9">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
+              </button>
 
-          <div class="flex items-center gap-1.5">
-            <span class="sidebar-hide-collapsed hidden lg:inline-block font-mono-code text-[10px] text-[#7B5A64]">LOCAL</span>
-            <button id="btnCollapseLeftSidebar" type="button" title="Thu gọn thanh bên" aria-label="Thu gọn hoặc mở rộng thanh bên" class="hidden lg:inline-flex w-7 h-7 rounded-lg border border-transparent hover:border-[#E2D7BF] hover:bg-[#EAE1D2] text-[#7B5A64] hover:text-[#3E1D27] items-center justify-center transition">
-              <svg xmlns="http://www.w3.org/2000/svg" class="sidebar-collapse-icon w-4 h-4 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 5.25h16.5v13.5H3.75V5.25Zm5.25 0v13.5m5.25-9.75-2.75 3 2.75 3" />
-              </svg>
-            </button>
-            <button id="btnCloseLeftSidebarMobile" type="button" aria-label="Đóng thanh điều hướng" class="lg:hidden w-7 h-7 rounded-lg hover:bg-[#EAE1D2] text-[#7B5A64] hover:text-[#3E1D27] flex items-center justify-center text-xs font-bold transition">
+              <a href="#overview" onclick="return false;" data-nav-tab="overview" title="viettulam — Tổng Quan" class="nav-brand-link sidebar-hide-collapsed flex items-center gap-2 group cursor-pointer min-w-0">
+                <div class="w-7 h-7 rounded-lg flex items-center justify-center transition-transform duration-300 group-hover:scale-105 overflow-hidden shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" class="w-full h-full" aria-label="Logo viettulam">
+                    <rect x="2" y="2" width="60" height="60" rx="15" fill="#131B1C" stroke="#DBC696" stroke-width="2.6" />
+                    <path d="M15 24 L24 41 L32.5 25.5 M15 24 H22.5 L27.5 34" fill="none" stroke="#DBC696" stroke-width="3.2" stroke-linejoin="miter" />
+                    <circle cx="34.5" cy="20.5" r="2.2" fill="#DBC696" />
+                    <path d="M26 47 L40.5 19.5 H44 L29.5 47 Z" fill="#FFFFFF" />
+                    <path d="M33 47 L44.5 25 H48 L36.5 47 Z" fill="#FFFFFF" />
+                    <path d="M46.5 10 Q47 14.8 51.5 15.5 Q47 16.2 46.5 21 Q46 16.2 41.5 15.5 Q46 14.8 46.5 10 Z" fill="#DBC696" />
+                  </svg>
+                </div>
+                <span class="font-display font-extrabold text-[13px] tracking-tight text-[#3E1D27] uppercase whitespace-nowrap truncate">VIETTULAM</span>
+              </a>
+            </div>
+
+            <button id="btnCloseLeftSidebarMobile" type="button" aria-label="Đóng thanh điều hướng" class="lg:hidden w-8 h-8 rounded-full hover:bg-[#EAE1D2] text-[#7B5A64] hover:text-[#3E1D27] flex items-center justify-center text-xs font-bold transition shrink-0">
               ✕
             </button>
           </div>
-        </div>
 
-        <!-- Logo + Thương hiệu VIETTULAM -->
-        <div class="sidebar-pad-collapsed px-5 pt-5 pb-3">
-          <a href="#overview" onclick="return false;" data-nav-tab="overview" title="viettulam — Tổng Quan" class="nav-brand-link sidebar-center-collapsed flex items-center gap-2.5 group cursor-pointer">
-            <div class="w-7 h-7 rounded-lg bg-[#653040] flex items-center justify-center transition-transform duration-300 group-hover:scale-105 overflow-hidden shrink-0">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" class="w-full h-full" aria-label="Logo viettulam">
-                <rect width="64" height="64" rx="16" fill="#653040"/>
-                <path d="M17 18H26L32 37.5L38 18H47L36 48H28Z" fill="#FAF8F4"/>
+          <!-- Nút nhanh Tải đề mới (hình viên thuốc / nút tròn + giống nút Cuộc trò chuyện mới của Gemini) -->
+          <div class="sidebar-pad-collapsed px-2.5 py-2">
+            <label title="Tải đề mới (.PDF, .DOCX, .TXT)" class="sidebar-center-collapsed cursor-pointer w-full px-3 py-2 rounded-full bg-[#ECE3D3] hover:bg-[#E2D7BF] text-[#3E1D27] text-[13px] font-semibold transition flex items-center gap-3">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-[17px] h-[17px] text-[#AA1342] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.1">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
               </svg>
-            </div>
-            <span class="sidebar-hide-collapsed font-display font-extrabold text-[15px] tracking-tight text-[#3E1D27] uppercase whitespace-nowrap">VIETTULAM</span>
-          </a>
+              <span class="sidebar-hide-collapsed whitespace-nowrap">Tải đề mới</span>
+              <input id="fileInputUploadHeader" type="file" accept=".pdf,.docx,.txt" multiple class="hidden" />
+            </label>
+          </div>
+
+          <!-- Danh sách điều hướng dọc gọn nhẹ -->
+          <nav class="sidebar-pad-collapsed px-2.5 py-1 space-y-1">
+            <button type="button" data-nav-tab="overview" title="Tổng Quan" class="nav-tab-btn sidebar-center-collapsed w-full text-left px-3 py-2 rounded-full text-[13px] font-semibold transition-all duration-200 flex items-center gap-3 bg-[#653040] text-[#FFFFFF]">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-[18px] h-[18px] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75A2.25 2.25 0 0 1 6 4.5h12a2.25 2.25 0 0 1 2.25 2.25v10.5A2.25 2.25 0 0 1 18 19.5H6a2.25 2.25 0 0 1-2.25-2.25V6.75Z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 9.75h16.5M14.25 14.25h3" />
+              </svg>
+              <span class="sidebar-hide-collapsed whitespace-nowrap">Tổng Quan</span>
+            </button>
+
+            <button type="button" data-nav-tab="practice" title="Luyện Tập" class="nav-tab-btn sidebar-center-collapsed w-full text-left px-3 py-2 rounded-full text-[13px] font-medium transition-all duration-200 flex items-center gap-3 text-[#7B5A64] hover:text-[#3E1D27] hover:bg-[#EBE3D3]">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-[18px] h-[18px] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
+              </svg>
+              <span class="sidebar-hide-collapsed whitespace-nowrap">Luyện Tập</span>
+            </button>
+
+            <button type="button" data-nav-tab="exam" title="Thi Thử" class="nav-tab-btn sidebar-center-collapsed w-full text-left px-3 py-2 rounded-full text-[13px] font-medium transition-all duration-200 flex items-center gap-3 text-[#7B5A64] hover:text-[#3E1D27] hover:bg-[#EBE3D3]">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-[18px] h-[18px] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l3.75 2.25M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+              </svg>
+              <span class="sidebar-hide-collapsed whitespace-nowrap">Thi Thử</span>
+            </button>
+
+            <button type="button" data-nav-tab="bank" title="Ngân Hàng" class="nav-tab-btn sidebar-center-collapsed w-full text-left px-3 py-2 rounded-full text-[13px] font-medium transition-all duration-200 flex items-center gap-3 text-[#7B5A64] hover:text-[#3E1D27] hover:bg-[#EBE3D3]">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-[18px] h-[18px] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z" />
+              </svg>
+              <span class="sidebar-hide-collapsed whitespace-nowrap">Ngân Hàng</span>
+            </button>
+
+            <button type="button" data-nav-tab="guide" title="Hướng Dẫn" class="nav-tab-btn sidebar-center-collapsed w-full text-left px-3 py-2 rounded-full text-[13px] font-medium transition-all duration-200 flex items-center gap-3 text-[#7B5A64] hover:text-[#3E1D27] hover:bg-[#EBE3D3]">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-[18px] h-[18px] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+              </svg>
+              <span class="sidebar-hide-collapsed whitespace-nowrap">Hướng Dẫn</span>
+            </button>
+          </nav>
         </div>
-
-        <!-- Hành động nhanh Tải đề -->
-        <div class="sidebar-pad-collapsed px-4 pb-4 border-b border-[#E2D7BF]">
-          <label title="Tải đề mới (.PDF / .DOCX / .TXT)" class="sidebar-center-collapsed cursor-pointer w-full px-3 py-2 rounded-xl hover:bg-[#EBE3D3] text-[#3E1D27] text-[13px] font-medium transition flex items-center gap-2.5">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[#AA1342] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-            </svg>
-            <span class="sidebar-hide-collapsed whitespace-nowrap">Tải đề mới</span>
-            <input id="fileInputUploadHeader" type="file" accept=".pdf,.docx,.txt" multiple class="hidden" />
-          </label>
-        </div>
-
-        <!-- Danh sách điều hướng dọc với icon nét mảnh -->
-        <nav class="sidebar-pad-collapsed px-3.5 py-4 space-y-1">
-          <button type="button" data-nav-tab="overview" title="Tổng Quan" class="nav-tab-btn sidebar-center-collapsed w-full text-left px-3 py-2.5 rounded-xl text-[13px] font-semibold transition-all duration-200 flex items-center gap-3 bg-[#653040] text-[#FFFFFF]">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-[18px] h-[18px] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75A2.25 2.25 0 0 1 6 4.5h12a2.25 2.25 0 0 1 2.25 2.25v10.5A2.25 2.25 0 0 1 18 19.5H6a2.25 2.25 0 0 1-2.25-2.25V6.75Z" />
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 9.75h16.5M14.25 14.25h3" />
-            </svg>
-            <span class="sidebar-hide-collapsed whitespace-nowrap">Tổng Quan</span>
-          </button>
-
-          <button type="button" data-nav-tab="practice" title="Luyện Tập" class="nav-tab-btn sidebar-center-collapsed w-full text-left px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-200 flex items-center gap-3 text-[#7B5A64] hover:text-[#3E1D27] hover:bg-[#EBE3D3]">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-[18px] h-[18px] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
-            </svg>
-            <span class="sidebar-hide-collapsed whitespace-nowrap">Luyện Tập</span>
-          </button>
-
-          <button type="button" data-nav-tab="exam" title="Thi Thử" class="nav-tab-btn sidebar-center-collapsed w-full text-left px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-200 flex items-center gap-3 text-[#7B5A64] hover:text-[#3E1D27] hover:bg-[#EBE3D3]">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-[18px] h-[18px] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l3.75 2.25M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-            </svg>
-            <span class="sidebar-hide-collapsed whitespace-nowrap">Thi Thử</span>
-          </button>
-
-          <button type="button" data-nav-tab="bank" title="Ngân Hàng" class="nav-tab-btn sidebar-center-collapsed w-full text-left px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-200 flex items-center gap-3 text-[#7B5A64] hover:text-[#3E1D27] hover:bg-[#EBE3D3]">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-[18px] h-[18px] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z" />
-            </svg>
-            <span class="sidebar-hide-collapsed whitespace-nowrap">Ngân Hàng</span>
-          </button>
-
-          <button type="button" data-nav-tab="guide" title="Hướng Dẫn" class="nav-tab-btn sidebar-center-collapsed w-full text-left px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-200 flex items-center gap-3 text-[#7B5A64] hover:text-[#3E1D27] hover:bg-[#EBE3D3]">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-[18px] h-[18px] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
-              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-            </svg>
-            <span class="sidebar-hide-collapsed whitespace-nowrap">Hướng Dẫn</span>
-          </button>
-        </nav>
+        <!-- Khoảng trống phía dưới danh sách menu -->
+        <div class="flex-1 min-h-[24px]"></div>
       </div>
 
-      <!-- Chân thanh bên trái: Đồng hồ, thông số & Xóa tài liệu -->
-      <div class="sidebar-pad-collapsed p-4 border-t border-[#E2D7BF] space-y-3 bg-[#F4EFE6]">
-        <div class="sidebar-hide-collapsed flex items-center justify-between px-3 py-1.5 rounded-xl bg-[#FFFFFF] border border-[#E2D7BF] font-mono-code text-[11px] text-[#7B5A64] font-medium">
-          <span class="inline-flex items-center gap-1.5">
-            <span class="w-1.5 h-1.5 rounded-full bg-[#DDB247]"></span>
-            <span id="liveHeaderClock">VN || --:--:--</span>
-          </span>
+      <!-- Chân thanh bên trái tối giản -->
+      <div class="sidebar-pad-collapsed px-2.5 py-2.5 border-t border-[#E2D7BF]/80 space-y-1.5 bg-[#F4EFE6] shrink-0">
+        <!-- Đồng hồ thu gọn khi thanh bên đóng (60px) -->
+        <div id="liveSidebarClockCompactWrap" title="Thời gian hiện tại" class="sidebar-show-collapsed flex-col items-center justify-center w-10 h-10 mx-auto rounded-xl bg-[#FFFFFF] border border-[#E2D7BF]">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#DDB247] mb-0.5"></span>
+          <span id="liveSidebarClockCompact" class="font-mono-code text-[10px] font-bold tracking-tight text-[#3E1D27] leading-none">--:--</span>
         </div>
 
-        <div class="sidebar-hide-collapsed px-1 space-y-1.5 text-[11px] text-[#7B5A64]">
-          <div class="flex items-center justify-between">
-            <span>Công thức</span>
-            <span class="font-mono-code text-[#3E1D27] font-semibold">KaTeX</span>
+        <!-- Đồng hồ đầy đủ kèm ngày tháng khi thanh bên mở rộng -->
+        <div id="sidebarClockBox" class="sidebar-hide-collapsed px-3 py-2 rounded-2xl bg-[#FFFFFF] border border-[#E2D7BF] space-y-0.5">
+          <div class="flex items-center justify-between gap-2">
+            <span class="inline-flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#DDB247] shrink-0"></span>
+              <span id="liveHeaderClock" class="font-mono-code text-xs font-bold text-[#3E1D27] tracking-tight">--:--:--</span>
+            </span>
+            <span class="font-mono-code text-[9px] font-semibold text-[#AA1342] bg-[#FBF2F5] px-1.5 py-0.5 rounded-full">VN</span>
           </div>
-          <div class="flex items-center justify-between">
-            <span>Tự chia chương</span>
-            <span class="font-mono-code text-[#3E1D27] font-semibold">50 câu</span>
-          </div>
+          <div id="liveHeaderDate" class="font-mono-code text-[10px] text-[#7B5A64] pl-3">--/--/----</div>
         </div>
 
-        <button id="btnClearAllDocs" type="button" title="Xóa tất cả tài liệu" class="sidebar-center-collapsed w-full px-3 py-2 rounded-xl border border-[#E2D7BF] bg-[#FFFFFF] hover:bg-[#AA1342] hover:text-[#FFFFFF] hover:border-[#AA1342] text-[11px] font-semibold text-[#7B5A64] transition flex items-center justify-center gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+        <button id="btnClearAllDocs" type="button" title="Xóa tất cả tài liệu" class="sidebar-center-collapsed w-full px-3 py-2 rounded-full hover:bg-[#AA1342] hover:text-[#FFFFFF] text-[12px] font-medium text-[#7B5A64] transition flex items-center gap-3">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-[17px] h-[17px] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
             <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
           </svg>
-          <span class="sidebar-hide-collapsed whitespace-nowrap">Xóa tất cả tài liệu</span>
+          <span class="sidebar-hide-collapsed whitespace-nowrap">Xóa tài liệu</span>
         </button>
       </div>
     </aside>
@@ -746,45 +786,47 @@
              02 || KHÔNG GIAN LUYỆN TẬP
              ==================================================================== -->
         <section id="tab-practice" class="hidden space-y-5 animate-stage">
-      <div class="editorial-card rounded-2xl p-3.5 sm:px-5 flex flex-wrap items-center justify-between gap-3">
-        <div class="flex flex-wrap items-center gap-2.5">
-          <select id="practiceDocSelect" class="px-3 py-2 rounded-xl border border-[#E2D7BF] bg-[#FAF8F4] text-xs font-semibold text-[#3E1D27] focus:outline-none focus:border-[#653040]"></select>
-          <select id="practiceChapterSelect" class="px-3 py-2 rounded-xl border border-[#E2D7BF] bg-[#FAF8F4] text-xs font-semibold text-[#3E1D27] focus:outline-none focus:border-[#653040]"></select>
+      <!-- Thanh điều khiển Luyện Tập 2 tầng gọn gàng -->
+      <div class="editorial-card rounded-2xl p-4 sm:px-5 space-y-3.5">
+        <!-- Tầng 1: Chọn tài liệu, chương & làm lại -->
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-[#EFE8DA] pb-3.5">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 flex-1">
+            <select id="practiceDocSelect" class="w-full px-3.5 py-2.5 rounded-xl border border-[#E2D7BF] bg-[#FAF8F4] text-xs font-semibold text-[#3E1D27] focus:outline-none focus:border-[#653040] transition"></select>
+            <select id="practiceChapterSelect" class="w-full px-3.5 py-2.5 rounded-xl border border-[#E2D7BF] bg-[#FAF8F4] text-xs font-semibold text-[#3E1D27] focus:outline-none focus:border-[#653040] transition"></select>
+          </div>
+
+          <div class="flex items-center gap-2 shrink-0">
+            <button id="btnResetPracticeSession" type="button" class="px-3.5 py-2.5 rounded-full border border-[#E2D7BF] bg-[#FAF8F4] hover:bg-[#653040] hover:text-[#FFFFFF] hover:border-[#653040] text-xs font-semibold text-[#3E1D27] transition">
+              ♻️ Làm lại
+            </button>
+          </div>
         </div>
 
-        <div class="flex flex-wrap items-center gap-2">
-          <div class="inline-flex items-center bg-[#F4EFE6] p-0.5 rounded-full border border-[#E2D7BF]">
-            <button id="btnPracticeModeFocus" type="button" class="px-3 py-1.5 rounded-full text-xs font-semibold transition bg-[#653040] text-[#FFFFFF]">
-              🎯 Từng câu
-            </button>
-            <button id="btnPracticeModeStream" type="button" class="px-3 py-1.5 rounded-full text-xs font-semibold transition text-[#7B5A64] hover:text-[#3E1D27]">
-              📋 Danh sách
+        <!-- Tầng 2: Chế độ hiển thị & Cụm Đảo đề / Khôi phục gộp gọn -->
+        <div class="flex flex-wrap items-center justify-between gap-2.5">
+          <div class="flex flex-wrap items-center gap-2">
+            <div class="inline-flex items-center bg-[#F4EFE6] p-0.5 rounded-full border border-[#E2D7BF]">
+              <button id="btnPracticeModeFocus" type="button" class="px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-[#653040] text-[#FFFFFF]">
+                🎯 Từng câu
+              </button>
+              <button id="btnPracticeModeStream" type="button" class="px-3.5 py-1.5 rounded-full text-xs font-semibold transition text-[#7B5A64] hover:text-[#3E1D27]">
+                📋 Danh sách
+              </button>
+            </div>
+
+            <button id="btnToggleAutoAdvance" type="button" class="px-3.5 py-1.5 rounded-full border border-[#E2D7BF] bg-[#FFFFFF] hover:bg-[#F4EFE6] text-xs font-semibold text-[#7B5A64] transition" title="Tự động chuyển sang câu tiếp theo sau khi chọn đáp án">
+              ⚡ Tự chuyển: TẮT
             </button>
           </div>
 
-          <button id="btnToggleAutoAdvance" type="button" class="px-3 py-1.5 rounded-full border border-[#E2D7BF] bg-[#FFFFFF] hover:bg-[#F4EFE6] text-xs font-semibold text-[#7B5A64] transition" title="Tự động chuyển sang câu tiếp theo sau khi chọn đáp án">
-            ⚡ Tự chuyển: TẮT
-          </button>
-
-          <button id="btnSortSyncPracticeQuestions" type="button" class="px-3 py-1.5 rounded-full border border-[#E2D7BF] bg-[#FFFFFF] hover:bg-[#F4EFE6] text-xs font-semibold text-[#3E1D27] transition" title="Sắp xếp và đồng bộ lại đúng thứ tự câu hỏi theo file gốc">
-            🔢 Chuẩn thứ tự file
-          </button>
-
-          <button id="btnShufflePracticeQuestions" type="button" class="px-3 py-1.5 rounded-full border border-[#E2D7BF] bg-[#FFFFFF] hover:bg-[#F4EFE6] text-xs font-semibold text-[#3E1D27] transition">
-            🔀 Đảo câu
-          </button>
-
-          <button id="btnShufflePracticeOptions" type="button" class="px-3 py-1.5 rounded-full border border-[#653040] bg-[#653040] hover:bg-[#4E2330] text-xs font-semibold text-[#FFFFFF] transition">
-            🔁 Đảo đáp án
-          </button>
-
-          <button id="btnRestorePracticeOptionsOrder" type="button" class="hidden px-3 py-1.5 rounded-full border border-[#DDB247] bg-[#FBF4DE] hover:bg-[#F4E6BB] text-xs font-semibold text-[#3E1D27] transition">
-            ↩️ Gốc
-          </button>
-
-          <button id="btnResetPracticeSession" type="button" class="px-3 py-1.5 rounded-full border border-[#E2D7BF] bg-[#FAF8F4] hover:bg-[#AA1342] hover:text-[#FFFFFF] hover:border-[#AA1342] text-xs font-semibold text-[#3E1D27] transition">
-            ♻️ Làm lại
-          </button>
+          <div class="flex flex-wrap items-center gap-2">
+            <button id="btnShufflePracticeAll" type="button" class="px-4 py-1.5 rounded-full bg-[#653040] hover:bg-[#4E2330] disabled:opacity-45 text-xs font-semibold text-[#FFFFFF] transition flex items-center gap-1.5">
+              <span>🔀 Đảo câu &amp; đáp án</span>
+            </button>
+            <button id="btnRestorePracticeAll" type="button" disabled class="px-3.5 py-1.5 rounded-full border border-[#E2D7BF] bg-[#FAF8F4] hover:bg-[#FBF4DE] hover:border-[#DDB247] disabled:opacity-45 disabled:cursor-not-allowed text-xs font-semibold text-[#3E1D27] transition flex items-center gap-1.5" title="Khôi phục lại thứ tự câu hỏi và đáp án ban đầu">
+              <span>↩️ Khôi phục ban đầu</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -822,36 +864,69 @@
          03 || PHÒNG THI THỬ 60 PHÚT
          ==================================================================== -->
     <section id="tab-exam" class="hidden space-y-5 animate-stage">
-      <div class="editorial-card rounded-2xl p-3.5 sm:px-5 flex flex-wrap items-center justify-between gap-3">
-        <div class="flex flex-wrap items-center gap-2.5">
-          <select id="examDocSelect" class="px-3 py-2 rounded-xl border border-[#E2D7BF] bg-[#FAF8F4] text-xs font-semibold text-[#3E1D27]"></select>
-          <select id="examChapterSelect" class="px-3 py-2 rounded-xl border border-[#E2D7BF] bg-[#FAF8F4] text-xs font-semibold text-[#3E1D27]"></select>
-          <select id="examCountSelect" class="px-3 py-2 rounded-xl border border-[#E2D7BF] bg-[#FAF8F4] text-xs font-semibold text-[#3E1D27]">
-            <option value="20">20 câu</option>
-            <option value="40" selected>40 câu</option>
-            <option value="50">50 câu</option>
-            <option value="9999">Tất cả</option>
-          </select>
+      <!-- Thanh điều khiển Thi Thử 2 tầng đồng bộ -->
+      <div class="editorial-card rounded-2xl p-4 sm:px-5 space-y-3.5">
+        <!-- Tầng 1: Chọn đề, đồng hồ, Bắt đầu & Nộp bài -->
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-[#EFE8DA] pb-3.5">
+          <div class="grid grid-cols-1 sm:grid-cols-12 gap-2.5 flex-1">
+            <select id="examDocSelect" class="sm:col-span-5 px-3.5 py-2.5 rounded-xl border border-[#E2D7BF] bg-[#FAF8F4] text-xs font-semibold text-[#3E1D27] focus:outline-none focus:border-[#653040] transition"></select>
+            <select id="examChapterSelect" class="sm:col-span-5 px-3.5 py-2.5 rounded-xl border border-[#E2D7BF] bg-[#FAF8F4] text-xs font-semibold text-[#3E1D27] focus:outline-none focus:border-[#653040] transition"></select>
+            <select id="examCountSelect" class="sm:col-span-2 px-3 py-2.5 rounded-xl border border-[#E2D7BF] bg-[#FAF8F4] text-xs font-semibold text-[#3E1D27] focus:outline-none focus:border-[#653040] transition">
+              <option value="20">20 câu</option>
+              <option value="40" selected>40 câu</option>
+              <option value="50">50 câu</option>
+              <option value="9999">Tất cả</option>
+            </select>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2 shrink-0">
+            <div class="px-3.5 py-2 rounded-full bg-[#653040] text-[#FFFFFF] font-mono-code text-xs font-bold flex items-center gap-2">
+              <span id="examTimerDot" class="w-1.5 h-1.5 rounded-full bg-[#DDB247]"></span>
+              <span id="examTimerDisplay">60:00</span>
+            </div>
+            <button id="btnStartExamSession" type="button" class="px-4 py-2 rounded-full bg-[#AA1342] hover:bg-[#8E0F37] disabled:opacity-45 text-[#FFFFFF] text-xs font-bold transition flex items-center gap-1.5">
+              <span>▶ Bắt đầu làm bài</span>
+            </button>
+            <button id="btnSubmitExam" type="button" disabled class="px-4 py-2 rounded-full border border-[#AA1342] bg-[#FDF0F4] hover:bg-[#AA1342] hover:text-[#FFFFFF] disabled:opacity-40 disabled:cursor-not-allowed text-[#AA1342] text-xs font-bold transition">
+              Nộp bài
+            </button>
+          </div>
         </div>
 
-        <div class="flex flex-wrap items-center gap-2">
-          <button id="btnToggleExamDisplayLayout" type="button" class="px-3 py-1.5 rounded-full border border-[#E2D7BF] bg-[#FFFFFF] hover:bg-[#F4EFE6] text-xs font-semibold text-[#3E1D27] transition">
-            🎯 Bố cục: Từng câu
-          </button>
-          <button id="btnShuffleExamOptions" type="button" class="px-3 py-1.5 rounded-full border border-[#E2D7BF] bg-[#FFFFFF] hover:bg-[#F4EFE6] text-xs font-semibold text-[#3E1D27] transition">
-            🔁 Đảo đáp án
-          </button>
-          <div class="px-3.5 py-1.5 rounded-full bg-[#653040] text-[#FFFFFF] font-mono-code text-xs font-bold flex items-center gap-2">
-            <span class="w-1.5 h-1.5 rounded-full bg-[#DDB247] animate-pulse"></span>
-            <span id="examTimerDisplay">60:00</span>
+        <!-- Tầng 2: Chế độ hiển thị & Cụm Đảo đề / Khôi phục / Đề mới -->
+        <div class="flex flex-wrap items-center justify-between gap-2.5">
+          <div class="inline-flex items-center bg-[#F4EFE6] p-0.5 rounded-full border border-[#E2D7BF]">
+            <button id="btnExamModeFocus" type="button" class="px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-[#653040] text-[#FFFFFF]">
+              🎯 Từng câu
+            </button>
+            <button id="btnExamModeStream" type="button" class="px-3.5 py-1.5 rounded-full text-xs font-semibold transition text-[#7B5A64] hover:text-[#3E1D27]">
+              📋 Danh sách
+            </button>
           </div>
-          <button id="btnStartNewExam" type="button" class="px-3.5 py-1.5 rounded-full border border-[#E2D7BF] bg-[#FFFFFF] hover:bg-[#F4EFE6] text-xs font-semibold text-[#3E1D27] transition">
-            Đề mới
-          </button>
-          <button id="btnSubmitExam" type="button" class="px-4 py-1.5 rounded-full bg-[#AA1342] hover:bg-[#8E0F37] text-[#FFFFFF] text-xs font-semibold transition">
-            Nộp bài
-          </button>
+
+          <div class="flex flex-wrap items-center gap-2">
+            <button id="btnShuffleExamAll" type="button" class="px-4 py-1.5 rounded-full bg-[#653040] hover:bg-[#4E2330] disabled:opacity-45 text-xs font-semibold text-[#FFFFFF] transition">
+              🔀 Đảo câu &amp; đáp án
+            </button>
+            <button id="btnRestoreExamAll" type="button" disabled class="px-3.5 py-1.5 rounded-full border border-[#E2D7BF] bg-[#FAF8F4] hover:bg-[#FBF4DE] hover:border-[#DDB247] disabled:opacity-45 disabled:cursor-not-allowed text-xs font-semibold text-[#3E1D27] transition">
+              ↩️ Khôi phục ban đầu
+            </button>
+            <button id="btnStartNewExam" type="button" class="px-3.5 py-1.5 rounded-full border border-[#E2D7BF] bg-[#FFFFFF] hover:bg-[#F4EFE6] text-xs font-semibold text-[#3E1D27] transition">
+              ♻️ Đề mới
+            </button>
+          </div>
         </div>
+      </div>
+
+      <!-- Thông báo khóa đáp án khi chưa bấm Bắt đầu làm bài ở Thi Thử -->
+      <div id="examLockBanner" class="hidden rounded-2xl border border-[#DDB247]/70 bg-[#FBF6E8] px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-2.5 text-xs text-[#3E1D27]">
+          <span class="w-6 h-6 rounded-full bg-[#DDB247]/30 flex items-center justify-center text-xs shrink-0">🔒</span>
+          <span><strong>Phòng thi đang chờ bắt đầu.</strong> Đồng hồ 60 phút chưa chạy và đáp án đang được khóa. Nhấn <strong>Bắt đầu làm bài</strong> khi bạn đã sẵn sàng.</span>
+        </div>
+        <button id="btnStartExamInline" type="button" class="px-4 py-1.5 rounded-full bg-[#AA1342] hover:bg-[#8E0F37] text-[#FFFFFF] text-xs font-bold transition shrink-0">
+          ▶ Bắt đầu làm bài
+        </button>
       </div>
 
       <div id="examResultBanner" class="hidden editorial-card rounded-2xl p-5 border-[#DDB247] bg-[#FBF6E8] flex flex-wrap items-center justify-between gap-4">
@@ -968,38 +1043,96 @@
     </section>
 
     <!-- ====================================================================
-         05 || HƯỚNG DẪN NHANH & PHÍM TẮT
+         05 || VIDEO HƯỚNG DẪN SỬ DỤNG TÍCH HỢP (40 GIÂY • 4 BƯỚC CHI TIẾT)
          ==================================================================== -->
-    <section id="tab-guide" class="hidden space-y-5 animate-stage">
-      <div class="editorial-card rounded-2xl p-6 space-y-5">
-        <div class="border-b border-[#EFE8DA] pb-4">
-          <div class="font-mono-code text-[11px] uppercase tracking-wider text-[#AA1342] font-semibold">HƯỚNG DẪN SỬ DỤNG</div>
-          <h2 class="font-display text-xl font-semibold text-[#3E1D27] mt-1">Quy trình xử lý đề &amp; Luyện tập tốc độ cao</h2>
+    <section id="tab-guide" class="hidden space-y-4 animate-stage">
+      <!-- Thanh tiêu đề & nút thuyết minh / tải file video -->
+      <div class="editorial-card rounded-2xl px-4 sm:px-5 py-3.5 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 overflow-hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" class="w-full h-full" aria-hidden="true">
+              <rect x="2" y="2" width="60" height="60" rx="15" fill="#131B1C" stroke="#DBC696" stroke-width="2.6" />
+              <path d="M15 24 L24 41 L32.5 25.5 M15 24 H22.5 L27.5 34" fill="none" stroke="#DBC696" stroke-width="3.2" stroke-linejoin="miter" />
+              <circle cx="34.5" cy="20.5" r="2.2" fill="#DBC696" />
+              <path d="M26 47 L40.5 19.5 H44 L29.5 47 Z" fill="#FFFFFF" />
+              <path d="M33 47 L44.5 25 H48 L36.5 47 Z" fill="#FFFFFF" />
+              <path d="M46.5 10 Q47 14.8 51.5 15.5 Q47 16.2 46.5 21 Q46 16.2 41.5 15.5 Q46 14.8 46.5 10 Z" fill="#DBC696" />
+            </svg>
+          </div>
+          <div>
+            <h2 class="font-display text-sm sm:text-base font-bold text-[#3E1D27]">Video Hướng Dẫn Chi Tiết 40 Giây — viettulam</h2>
+            <p class="text-[11px] text-[#7B5A64]">Chuẩn HD 1280×720 • 4 bước trực quan • Làm rõ chi tiết từng tính năng phần Nhập nhanh đáp án</p>
+          </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div class="p-5 rounded-2xl bg-[#FAF8F4] border border-[#E2D7BF] space-y-2">
-            <span class="px-2.5 py-0.5 rounded-full bg-[#653040] text-[#FFFFFF] font-mono-code text-[10px] font-semibold">01 // NẠP ĐỀ</span>
-            <h3 class="font-display text-sm font-semibold text-[#3E1D27]">Tự động nhận diện câu &amp; đáp án</h3>
-            <p class="text-xs text-[#7B5A64] leading-relaxed">
-              Hỗ trợ file <strong>.PDF</strong> (cắt ảnh nguyên câu sắc nét &amp; giữ công thức), <strong>.DOCX</strong> và <strong>.TXT</strong> (nhận diện đáp án, khối lệnh C/C++ và đồng bộ đúng thứ tự câu theo file).
-            </p>
+        <div class="flex flex-wrap items-center gap-2">
+          <button id="btnGuideToggleVoice" type="button" class="px-3.5 py-2 rounded-full border border-[#E2D7BF] bg-[#FAF8F4] hover:bg-[#F4EFE6] text-[#3E1D27] text-xs font-semibold transition flex items-center gap-1.5" title="Bật hoặc tắt giọng đọc thuyết minh tiếng Việt">
+            <span id="guideVoiceIcon">🔇</span>
+            <span id="guideVoiceLabel">Thuyết minh: TẮT</span>
+          </button>
+
+          <button id="btnRecordGuideVideo" type="button" class="px-4 py-2 rounded-full bg-[#AA1342] hover:bg-[#8E0F37] disabled:opacity-50 text-[#FFFFFF] text-xs font-bold transition flex items-center gap-2 shadow-sm">
+            <span class="w-2 h-2 rounded-full bg-[#DDB247]"></span>
+            <span id="guideRecordBtnText">⬇ Xuất &amp; Tải Video 40s (.webm)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Khung Video Player 16:9 -->
+      <div class="relative rounded-2xl overflow-hidden border border-[#E2D7BF] bg-[#2D141C] shadow-xl">
+        <canvas id="guideTutorialCanvas" width="1280" height="720" class="w-full h-auto block bg-[#FAF8F4] cursor-pointer"></canvas>
+
+        <!-- Trạng thái đang xuất video -->
+        <div id="guideRecordingOverlay" class="hidden absolute top-3 right-3 px-3.5 py-1.5 rounded-full bg-[#AA1342]/95 text-[#FFFFFF] text-xs font-semibold flex items-center gap-2 shadow-lg">
+          <span class="w-2 h-2 rounded-full bg-[#FFFFFF] animate-ping"></span>
+          <span id="guideRecordingProgressText">Đang xuất video HD 40s... 0%</span>
+        </div>
+
+        <!-- Thanh điều khiển Player -->
+        <div class="bg-[#2D141C]/95 backdrop-blur-md px-4 sm:px-5 py-3 text-[#FFFFFF] space-y-2.5 border-t border-white/10">
+          <!-- Timeline 00:00 -> 00:40 -->
+          <div class="flex items-center gap-3">
+            <span id="guideTimeCurrent" class="font-mono-code text-[11px] text-[#E2D7BF] w-11">00:00</span>
+            <div class="relative flex-1 flex items-center">
+              <input id="guideTimelineSlider" type="range" min="0" max="40" step="0.02" value="0" class="timeline-slider w-full" />
+            </div>
+            <span class="font-mono-code text-[11px] text-[#E2D7BF] w-11 text-right">00:40</span>
           </div>
 
-          <div class="p-5 rounded-2xl bg-[#FAF8F4] border border-[#E2D7BF] space-y-2">
-            <span class="px-2.5 py-0.5 rounded-full bg-[#AA1342] text-[#FFFFFF] font-mono-code text-[10px] font-semibold">02 // PHÍM TẮT</span>
-            <h3 class="font-display text-sm font-semibold text-[#3E1D27]">Điều khiển bàn phím tức thì</h3>
-            <p class="text-xs text-[#7B5A64] leading-relaxed">
-              Trong chế độ <strong>🎯 Từng câu</strong>, nhấn phím <strong>A, B, C, D</strong> (hoặc <strong>1, 2, 3, 4</strong>) để chọn đáp án và phím mũi tên <strong>← / →</strong> để chuyển câu nhanh.
-            </p>
+          <!-- Nút điều khiển + Nhãn bước hiện tại -->
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <button id="btnGuidePlayPause" type="button" class="px-4 py-1.5 rounded-full bg-[#DDB247] hover:bg-[#E7C363] text-[#3E1D27] text-xs font-bold transition min-w-[106px]">
+                ⏸ Tạm dừng
+              </button>
+              <button id="btnGuidePrevScene" type="button" class="px-2.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-[#FFFFFF] text-xs font-semibold transition" title="Bước trước">
+                ⏮
+              </button>
+              <button id="btnGuideNextScene" type="button" class="px-2.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-[#FFFFFF] text-xs font-semibold transition" title="Bước tiếp theo">
+                ⏭
+              </button>
+              <button id="btnGuideReplay" type="button" class="px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-[#FFFFFF] text-xs font-semibold transition">
+                ↺ Xem lại
+              </button>
+              <select id="guideSpeedSelect" class="px-2.5 py-1.5 rounded-full bg-white/10 text-[#FFFFFF] text-xs font-mono-code font-semibold focus:outline-none border border-white/15">
+                <option value="0.75" class="text-black">0.75x</option>
+                <option value="1" class="text-black" selected>1.0x</option>
+                <option value="1.25" class="text-black">1.25x</option>
+                <option value="1.5" class="text-black">1.5x</option>
+              </select>
+            </div>
+
+            <span id="guideCurrentSceneLabel" class="font-mono-code text-[11px] text-[#DDB247] font-semibold">
+              BƯỚC 01 / 04 • Giới thiệu từng phần
+            </span>
           </div>
 
-          <div class="p-5 rounded-2xl bg-[#FAF8F4] border border-[#E2D7BF] space-y-2">
-            <span class="px-2.5 py-0.5 rounded-full bg-[#CE675D] text-[#FFFFFF] font-mono-code text-[10px] font-semibold">03 // GÁN ĐÁP ÁN</span>
-            <h3 class="font-display text-sm font-semibold text-[#3E1D27]">Nhập chuỗi liền mạch abcdcbad</h3>
-            <p class="text-xs text-[#7B5A64] leading-relaxed">
-              Tại mục <strong>Ngân Hàng</strong>, gõ trực tiếp chuỗi <code>abcdcbad</code> hoặc <code>1A 2B 3C</code> để gán đáp án hàng loạt và tìm kiếm sửa ngay từng câu.
-            </p>
+          <!-- 4 mốc chọn bước nhanh (tổng 40 giây) -->
+          <div class="flex flex-wrap items-center gap-1.5 text-[11px]">
+            <button type="button" data-guide-scene="0" class="guide-scene-chip px-3 py-1 rounded-full bg-[#653040] text-[#FFFFFF] font-semibold transition">01. Giới thiệu từng phần (0–8.5s)</button>
+            <button type="button" data-guide-scene="1" class="guide-scene-chip px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 text-[#E2D7BF] font-medium transition">02. Nạp file &amp; Làm bài (8.5–17.5s)</button>
+            <button type="button" data-guide-scene="2" class="guide-scene-chip px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 text-[#E2D7BF] font-medium transition">03. Chức năng Luyện tập &amp; Thi thử (17.5–26.5s)</button>
+            <button type="button" data-guide-scene="3" class="guide-scene-chip px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 text-[#E2D7BF] font-medium transition">04. Nhập nhanh đáp án chi tiết (26.5–40s)</button>
           </div>
         </div>
       </div>
@@ -4224,15 +4357,21 @@
           practiceQuestions: [],
           practiceAnswers: {},
           practiceOriginalSnapshot: {},
+          practiceOriginalOrderIds: [],
+          practiceIsShuffled: false,
           practiceDisplayLayout: 'SINGLE',
           practiceCurrentIndex: 0,
-          practiceSlideDirection: 'next',
+          practiceSlideDirection: null,
           autoAdvanceOnPick: false,
           openToolMenuQuestionId: null,
           examDoc: 'ALL',
           examChapter: 'ALL',
           examQuestions: [],
           examAnswers: {},
+          examOriginalSnapshot: {},
+          examOriginalOrderIds: [],
+          examIsShuffled: false,
+          examStarted: false,
           examSubmitted: false,
           examDisplayLayout: 'SINGLE',
           examCurrentIndex: 0,
@@ -4271,6 +4410,7 @@
           this.bindEvents();
           this.initSidebarCollapseState();
           this.initEditorialScrollReveals();
+          GuideVideoPlayer.init();
         },
 
         // Kích hoạt hiệu ứng rèm mở & trượt chữ khi cuộn tới các khối Editorial
@@ -4467,13 +4607,29 @@
 
         startLiveClock() {
           const updateClock = () => {
-            const el = document.getElementById('liveHeaderClock');
-            if (!el) return;
             const now = new Date();
             const hh = String(now.getHours()).padStart(2, '0');
             const mm = String(now.getMinutes()).padStart(2, '0');
             const ss = String(now.getSeconds()).padStart(2, '0');
-            el.textContent = `VN || ${hh}:${mm}:${ss}`;
+            const dayNames = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
+            const dayLabel = dayNames[now.getDay()];
+            const dd = String(now.getDate()).padStart(2, '0');
+            const mo = String(now.getMonth() + 1).padStart(2, '0');
+            const yyyy = now.getFullYear();
+
+            const el = document.getElementById('liveHeaderClock');
+            if (el) el.textContent = `${hh}:${mm}:${ss}`;
+
+            const dateEl = document.getElementById('liveHeaderDate');
+            if (dateEl) dateEl.textContent = `${dayLabel}, ${dd}/${mo}/${yyyy}`;
+
+            const compactEl = document.getElementById('liveSidebarClockCompact');
+            if (compactEl) compactEl.textContent = `${hh}:${mm}`;
+
+            const compactWrap = document.getElementById('liveSidebarClockCompactWrap');
+            if (compactWrap) {
+              compactWrap.title = `${hh}:${mm}:${ss} • ${dayLabel}, ${dd}/${mo}/${yyyy}`;
+            }
           };
           updateClock();
           setInterval(updateClock, 1000);
@@ -4609,9 +4765,9 @@
           document.querySelectorAll('.nav-tab-btn').forEach(btn => {
             const target = btn.getAttribute('data-nav-tab');
             if (target === tabName) {
-              btn.className = 'nav-tab-btn sidebar-center-collapsed w-full text-left px-3 py-2.5 rounded-xl text-[13px] font-semibold transition-all duration-200 flex items-center gap-3 bg-[#653040] text-[#FFFFFF]';
+              btn.className = 'nav-tab-btn sidebar-center-collapsed w-full text-left px-3 py-2 rounded-full text-[13px] font-semibold transition-all duration-200 flex items-center gap-3 bg-[#653040] text-[#FFFFFF]';
             } else {
-              btn.className = 'nav-tab-btn sidebar-center-collapsed w-full text-left px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-200 flex items-center gap-3 text-[#7B5A64] hover:text-[#3E1D27] hover:bg-[#EBE3D3]';
+              btn.className = 'nav-tab-btn sidebar-center-collapsed w-full text-left px-3 py-2 rounded-full text-[13px] font-medium transition-all duration-200 flex items-center gap-3 text-[#7B5A64] hover:text-[#3E1D27] hover:bg-[#EBE3D3]';
             }
           });
 
@@ -4638,28 +4794,20 @@
           } else if (tabName === 'bank') {
             this.renderBankView();
           }
-        },
 
-        setLeftSidebarMobileOpen(isOpen) {
-          const sidebar = document.getElementById('leftNavSidebar');
-          const backdrop = document.getElementById('leftSidebarBackdrop');
-          if (!sidebar) return;
-          if (isOpen) {
-            sidebar.classList.remove('-translate-x-full');
-            if (backdrop) backdrop.classList.remove('hidden');
-          } else {
-            sidebar.classList.add('-translate-x-full');
-            if (backdrop) backdrop.classList.add('hidden');
+          if (typeof GuideVideoPlayer !== 'undefined') {
+            GuideVideoPlayer.setTabActive(tabName === 'guide');
           }
         },
 
         initSidebarCollapseState() {
           try {
-            const saved = localStorage.getItem('viettulam_sidebar_collapsed');
-            if (saved === '1') {
-              this.setLeftSidebarCollapsed(true, false);
-            }
-          } catch (e) {}
+            const saved = localStorage.getItem('viettulam_sidebar_gemini_v1');
+            const shouldCollapse = saved === null ? true : saved === '1';
+            this.setLeftSidebarCollapsed(shouldCollapse, false);
+          } catch (e) {
+            this.setLeftSidebarCollapsed(true, false);
+          }
         },
 
         setLeftSidebarCollapsed(collapsed, persist = true) {
@@ -4667,12 +4815,13 @@
           const toggleBtn = document.getElementById('btnCollapseLeftSidebar');
           if (!sidebar) return;
           sidebar.classList.toggle('is-collapsed', Boolean(collapsed));
+          sidebar.title = collapsed ? 'Nhấn vào bất kỳ đâu trên thanh bên để mở rộng' : '';
           if (toggleBtn) {
-            toggleBtn.title = collapsed ? 'Mở rộng thanh bên' : 'Thu gọn thanh bên';
+            toggleBtn.title = collapsed ? 'Mở rộng menu' : 'Thu gọn menu';
           }
           if (persist) {
             try {
-              localStorage.setItem('viettulam_sidebar_collapsed', collapsed ? '1' : '0');
+              localStorage.setItem('viettulam_sidebar_gemini_v1', collapsed ? '1' : '0');
             } catch (e) {}
           }
         },
@@ -4684,15 +4833,16 @@
           this.setLeftSidebarCollapsed(willCollapse, true);
         },
 
-        setRightSidebarOpen(isOpen) {
-          const sidebar = document.getElementById('rightNavSidebar');
-          const backdrop = document.getElementById('rightSidebarBackdrop');
+        // Đóng / mở ngăn kéo thanh điều hướng bên trái trên màn hình di động (< lg)
+        setLeftSidebarMobileOpen(isOpen) {
+          const sidebar = document.getElementById('leftNavSidebar');
+          const backdrop = document.getElementById('leftSidebarBackdrop');
           if (!sidebar) return;
           if (isOpen) {
-            sidebar.classList.remove('translate-x-full');
+            sidebar.classList.remove('-translate-x-full');
             if (backdrop) backdrop.classList.remove('hidden');
           } else {
-            sidebar.classList.add('translate-x-full');
+            sidebar.classList.add('-translate-x-full');
             if (backdrop) backdrop.classList.add('hidden');
           }
         },
@@ -4839,24 +4989,33 @@
             return okDoc && okCh;
           });
 
+          // Đảm bảo danh sách ban đầu chuẩn theo thứ tự file gốc
+          window.sortQuestionsByFileSequence(filtered);
           this.state.practiceQuestions = [...filtered];
+          this.state.practiceOriginalOrderIds = filtered.map(q => q.id);
           this.state.practiceOriginalSnapshot = {};
+
           for (const q of filtered) {
+            if (!q._originalOptions) {
+              q._originalOptions = JSON.parse(JSON.stringify(q.options || []));
+            }
+            if (q.croppedQuestionImage && !q._originalCroppedImage) {
+              q._originalCroppedImage = q.croppedQuestionImage;
+            }
             this.state.practiceOriginalSnapshot[q.id] = {
-              croppedQuestionImage: q.croppedQuestionImage || null,
-              options: JSON.parse(JSON.stringify(q.options || []))
+              croppedQuestionImage: q._originalCroppedImage || q.croppedQuestionImage || null,
+              options: JSON.parse(JSON.stringify(q._originalOptions || q.options || []))
             };
           }
 
           if (resetAnswers) {
             this.state.practiceAnswers = {};
             this.state.practiceCurrentIndex = 0;
+            this.state.practiceIsShuffled = false;
+            this.state.practiceSlideDirection = null;
           } else if (this.state.practiceCurrentIndex >= filtered.length) {
             this.state.practiceCurrentIndex = Math.max(0, filtered.length - 1);
           }
-
-          const restoreBtn = document.getElementById('btnRestorePracticeOptionsOrder');
-          if (restoreBtn) restoreBtn.classList.add('hidden');
 
           if (this.state.activeTab === 'practice') {
             this.renderPracticeView();
@@ -4876,6 +5035,10 @@
 
         renderOptionsGridHtml(q, context = 'practice') {
           const isPdfImg = Boolean(q.croppedQuestionImage);
+          const isStarted =
+            context === 'practice'
+              ? true
+              : Boolean(this.state.examStarted);
           const pickedLetter =
             context === 'practice'
               ? this.state.practiceAnswers[q.id]
@@ -4891,12 +5054,14 @@
             : 'grid grid-cols-1 gap-2.5';
 
           return `
-            <div class="${gridClass}">
+            <div data-options-container="${AppUtils.escapeHtml(q.id)}" class="${gridClass}">
               ${(q.options || []).map(opt => {
                 const isPicked = pickedLetter === opt.label;
                 const isCorrect = Boolean(opt.isCorrect);
 
-                let cardStyle = 'border-[#E2D7BF] bg-[#FAF8F4] hover:bg-[#F3ECE0] hover:border-[#653040] text-[#3E1D27]';
+                let cardStyle = isStarted
+                  ? 'border-[#E2D7BF] bg-[#FAF8F4] hover:bg-[#F3ECE0] hover:border-[#653040] text-[#3E1D27]'
+                  : 'border-[#E2D7BF]/80 bg-[#FAF8F4]/70 text-[#7B5A64] opacity-75 cursor-not-allowed';
                 let badgeStyle = 'bg-[#FFFFFF] border border-[#E2D7BF] text-[#3E1D27]';
 
                 if (showResult) {
@@ -4919,7 +5084,7 @@
                   : VietnameseFontRepairEngine.normalizeCodeOptionText(opt.text);
 
                 return `
-                  <button type="button" data-action="${actionName}" data-qid="${AppUtils.escapeHtml(q.id)}" data-opt="${opt.label}"
+                  <button type="button" data-action="${actionName}" data-qid="${AppUtils.escapeHtml(q.id)}" data-opt="${opt.label}" aria-disabled="${!isStarted}"
                     class="opt-btn-transition text-left p-3 sm:p-3.5 rounded-xl border flex items-start gap-3 ${cardStyle}">
                     <span class="w-7 h-7 rounded-lg font-mono-code text-xs font-bold flex items-center justify-center shrink-0 ${badgeStyle}">
                       ${opt.label}
@@ -5002,19 +5167,32 @@
           const accText = document.getElementById('practiceAccuracyText');
           const progCountText = document.getElementById('practiceProgressCountText');
           const progBar = document.getElementById('practiceProgressBar');
+          const btnShuffleAll = document.getElementById('btnShufflePracticeAll');
+          const btnRestoreAll = document.getElementById('btnRestorePracticeAll');
 
           const questions = this.state.practiceQuestions;
           const total = questions.length;
+
+          // Đồng bộ trạng thái các nút điều khiển Luyện Tập
+          if (btnShuffleAll) {
+            btnShuffleAll.disabled = total === 0;
+          }
+          if (btnRestoreAll) {
+            btnRestoreAll.disabled = !this.state.practiceIsShuffled || total === 0;
+            btnRestoreAll.className = this.state.practiceIsShuffled
+              ? 'px-3.5 py-1.5 rounded-full border border-[#DDB247] bg-[#FBF4DE] hover:bg-[#F4E6BB] text-xs font-semibold text-[#3E1D27] transition flex items-center gap-1.5'
+              : 'px-3.5 py-1.5 rounded-full border border-[#E2D7BF] bg-[#FAF8F4] disabled:opacity-45 disabled:cursor-not-allowed text-xs font-semibold text-[#3E1D27] transition flex items-center gap-1.5';
+          }
 
           const btnFocus = document.getElementById('btnPracticeModeFocus');
           const btnStream = document.getElementById('btnPracticeModeStream');
           if (btnFocus && btnStream) {
             if (this.state.practiceDisplayLayout === 'SINGLE') {
-              btnFocus.className = 'px-3 py-1.5 rounded-full text-xs font-semibold transition bg-[#653040] text-[#FFFFFF]';
-              btnStream.className = 'px-3 py-1.5 rounded-full text-xs font-semibold transition text-[#7B5A64] hover:text-[#3E1D27]';
+              btnFocus.className = 'px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-[#653040] text-[#FFFFFF]';
+              btnStream.className = 'px-3.5 py-1.5 rounded-full text-xs font-semibold transition text-[#7B5A64] hover:text-[#3E1D27]';
             } else {
-              btnStream.className = 'px-3 py-1.5 rounded-full text-xs font-semibold transition bg-[#653040] text-[#FFFFFF]';
-              btnFocus.className = 'px-3 py-1.5 rounded-full text-xs font-semibold transition text-[#7B5A64] hover:text-[#3E1D27]';
+              btnStream.className = 'px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-[#653040] text-[#FFFFFF]';
+              btnFocus.className = 'px-3.5 py-1.5 rounded-full text-xs font-semibold transition text-[#7B5A64] hover:text-[#3E1D27]';
             }
           }
 
@@ -5031,33 +5209,18 @@
             return;
           }
 
-          let answeredCount = 0;
-          let correctCount = 0;
-          for (const q of questions) {
-            const ans = this.state.practiceAnswers[q.id];
-            if (ans) {
-              answeredCount++;
-              const rightOpt = (q.options || []).find(o => o.isCorrect);
-              if (rightOpt && rightOpt.label === ans) correctCount++;
-            }
-          }
+          this.updatePracticeSidebarStatsAndNav();
 
-          const pctDone = Math.round((answeredCount / total) * 100);
-          const pctAcc = answeredCount > 0 ? Math.round((correctCount / answeredCount) * 100) : 0;
-
-          if (scoreBadge) scoreBadge.textContent = `${correctCount} / ${answeredCount}`;
-          if (accText) accText.textContent = `Độ chính xác: ${pctAcc}%`;
-          if (progCountText) progCountText.textContent = `${answeredCount}/${total}`;
-          if (progBar) progBar.style.width = `${pctDone}%`;
+          // Không dùng hiệu ứng nhảy trang khi chọn đáp án; chỉ giữ bố cục tĩnh mượt mà
+          this.state.practiceSlideDirection = null;
 
           if (this.state.practiceDisplayLayout === 'SINGLE') {
             const idx = Math.max(0, Math.min(total - 1, this.state.practiceCurrentIndex));
             this.state.practiceCurrentIndex = idx;
             const curQ = questions[idx];
-            const slideCls = this.state.practiceSlideDirection === 'prev' ? 'animate-slide-prev' : 'animate-slide-next';
 
             listEl.innerHTML = `
-              <div class="${slideCls} space-y-4">
+              <div class="space-y-4">
                 ${this.renderQuestionCardHtml(curQ, idx, 'practice')}
 
                 <div class="editorial-card rounded-2xl p-3.5 flex items-center justify-between gap-3">
@@ -5080,6 +5243,39 @@
               .map((q, idx) => this.renderQuestionCardHtml(q, idx, 'practice'))
               .join('');
           }
+
+          AppUtils.triggerMathTypeset(listEl);
+        },
+
+        updatePracticeSidebarStatsAndNav() {
+          const navGrid = document.getElementById('practiceNavGrid');
+          const scoreBadge = document.getElementById('practiceScoreBadge');
+          const accText = document.getElementById('practiceAccuracyText');
+          const progCountText = document.getElementById('practiceProgressCountText');
+          const progBar = document.getElementById('practiceProgressBar');
+
+          const questions = this.state.practiceQuestions;
+          const total = questions.length;
+          if (total === 0) return;
+
+          let answeredCount = 0;
+          let correctCount = 0;
+          for (const q of questions) {
+            const ans = this.state.practiceAnswers[q.id];
+            if (ans) {
+              answeredCount++;
+              const rightOpt = (q.options || []).find(o => o.isCorrect);
+              if (rightOpt && rightOpt.label === ans) correctCount++;
+            }
+          }
+
+          const pctDone = Math.round((answeredCount / total) * 100);
+          const pctAcc = answeredCount > 0 ? Math.round((correctCount / answeredCount) * 100) : 0;
+
+          if (scoreBadge) scoreBadge.textContent = `${correctCount} / ${answeredCount}`;
+          if (accText) accText.textContent = `Độ chính xác: ${pctAcc}%`;
+          if (progCountText) progCountText.textContent = `${answeredCount}/${total}`;
+          if (progBar) progBar.style.width = `${pctDone}%`;
 
           if (navGrid) {
             navGrid.innerHTML = questions.map((q, idx) => {
@@ -5108,14 +5304,27 @@
               `;
             }).join('');
           }
-
-          AppUtils.triggerMathTypeset(listEl);
         },
 
         pickPracticeOption(questionId, optionLabel) {
           this.state.practiceAnswers[questionId] = optionLabel;
           this.persistPracticeResumeState();
-          this.renderPracticeView();
+
+          // Cập nhật tại chỗ chỉ khu vực đáp án và bảng thống kê — tuyệt đối không nhảy/chớp trang
+          const q = this.state.practiceQuestions.find(item => item.id === questionId);
+          const optContainer = document.querySelector(`#practiceQuestionsList [data-options-container="${CSS.escape(questionId)}"]`);
+          if (q && optContainer) {
+            const tempWrap = document.createElement('div');
+            tempWrap.innerHTML = this.renderOptionsGridHtml(q, 'practice');
+            const newGrid = tempWrap.firstElementChild;
+            if (newGrid) {
+              optContainer.replaceWith(newGrid);
+              AppUtils.triggerMathTypeset(newGrid);
+            }
+            this.updatePracticeSidebarStatsAndNav();
+          } else {
+            this.renderPracticeView();
+          }
 
           if (
             this.state.autoAdvanceOnPick &&
@@ -5123,7 +5332,6 @@
             this.state.practiceCurrentIndex < this.state.practiceQuestions.length - 1
           ) {
             setTimeout(() => {
-              this.state.practiceSlideDirection = 'next';
               this.state.practiceCurrentIndex += 1;
               this.renderPracticeView();
             }, 420);
@@ -5132,6 +5340,13 @@
 
         async shuffleSingleQuestionOptions(q) {
           if (!q || !Array.isArray(q.options) || q.options.length < 2) return;
+          if (!q._originalOptions) {
+            q._originalOptions = JSON.parse(JSON.stringify(q.options));
+          }
+          if (q.croppedQuestionImage && !q._originalCroppedImage) {
+            q._originalCroppedImage = q.croppedQuestionImage;
+          }
+
           const labels = ['A', 'B', 'C', 'D'];
           const perm = [...labels];
           for (let i = perm.length - 1; i > 0; i--) {
@@ -5144,7 +5359,6 @@
 
           if (q.croppedQuestionImage) {
             const baseImg = q._originalCroppedImage || q.croppedQuestionImage;
-            if (!q._originalCroppedImage) q._originalCroppedImage = baseImg;
             const res = await PdfImageOptionShufflerV8.buildPermutedQuestionImage(baseImg, perm);
             if (res && res.success) {
               q.croppedQuestionImage = res.dataUrl;
@@ -5152,7 +5366,7 @@
           }
 
           const origOptionsMap = {};
-          for (const opt of q.options) {
+          for (const opt of q._originalOptions) {
             origOptionsMap[opt.label] = { ...opt };
           }
 
@@ -5167,33 +5381,65 @@
           });
         },
 
-        async shufflePracticeOptions() {
-          for (const q of this.state.practiceQuestions) {
+        // Gộp đảo toàn bộ câu hỏi VÀ toàn bộ đáp án trong Luyện Tập
+        async shufflePracticeAll() {
+          const arr = this.state.practiceQuestions;
+          if (arr.length === 0) return;
+
+          if (arr.length > 1) {
+            for (let i = arr.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+          }
+
+          for (const q of arr) {
             await this.shuffleSingleQuestionOptions(q);
           }
+
           this.state.practiceAnswers = {};
-          const restoreBtn = document.getElementById('btnRestorePracticeOptionsOrder');
-          if (restoreBtn) restoreBtn.classList.remove('hidden');
+          this.state.practiceCurrentIndex = 0;
+          this.state.practiceIsShuffled = true;
+          this.persistPracticeResumeState();
           this.renderPracticeView();
-          AppUtils.showToast('Đã đảo ngẫu nhiên vị trí phương án A, B, C, D!', 'success');
+          AppUtils.showToast('Đã đảo toàn bộ thứ tự câu hỏi và đáp án A, B, C, D!', 'success');
         },
 
-        restorePracticeOptionsOrder() {
+        // Khôi phục lại cả thứ tự câu hỏi gốc lẫn đáp án ban đầu
+        restorePracticeAll() {
+          const byId = new Map(this.state.practiceQuestions.map(q => [q.id, q]));
+          const restoredList = [];
+          for (const id of this.state.practiceOriginalOrderIds) {
+            if (byId.has(id)) {
+              restoredList.push(byId.get(id));
+              byId.delete(id);
+            }
+          }
+          for (const leftover of byId.values()) {
+            restoredList.push(leftover);
+          }
+          window.sortQuestionsByFileSequence(restoredList);
+          this.state.practiceQuestions = restoredList;
+
           for (const q of this.state.practiceQuestions) {
             const snap = this.state.practiceOriginalSnapshot[q.id];
             if (snap) {
               if (snap.croppedQuestionImage) {
                 q.croppedQuestionImage = snap.croppedQuestionImage;
-                delete q._originalCroppedImage;
               }
               q.options = JSON.parse(JSON.stringify(snap.options));
+            } else if (q._originalOptions) {
+              if (q._originalCroppedImage) q.croppedQuestionImage = q._originalCroppedImage;
+              q.options = JSON.parse(JSON.stringify(q._originalOptions));
             }
           }
+
           this.state.practiceAnswers = {};
-          const restoreBtn = document.getElementById('btnRestorePracticeOptionsOrder');
-          if (restoreBtn) restoreBtn.classList.add('hidden');
+          this.state.practiceCurrentIndex = 0;
+          this.state.practiceIsShuffled = false;
+          this.persistPracticeResumeState();
           this.renderPracticeView();
-          AppUtils.showToast('Đã khôi phục thứ tự phương án gốc.', 'info');
+          AppUtils.showToast('Đã khôi phục toàn bộ thứ tự câu hỏi và đáp án ban đầu.', 'info');
         },
 
         /* ==================================================================
@@ -5215,15 +5461,29 @@
             return okDoc && okCh;
           });
 
-          pool = [...pool];
-          for (let i = pool.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [pool[i], pool[j]] = [pool[j], pool[i]];
+          window.sortQuestionsByFileSequence(pool);
+          const selectedPool = pool.slice(0, countLimit);
+
+          this.state.examQuestions = [...selectedPool];
+          this.state.examOriginalOrderIds = selectedPool.map(q => q.id);
+          this.state.examOriginalSnapshot = {};
+          for (const q of selectedPool) {
+            if (!q._originalOptions) {
+              q._originalOptions = JSON.parse(JSON.stringify(q.options || []));
+            }
+            if (q.croppedQuestionImage && !q._originalCroppedImage) {
+              q._originalCroppedImage = q.croppedQuestionImage;
+            }
+            this.state.examOriginalSnapshot[q.id] = {
+              croppedQuestionImage: q._originalCroppedImage || q.croppedQuestionImage || null,
+              options: JSON.parse(JSON.stringify(q._originalOptions || q.options || []))
+            };
           }
 
-          this.state.examQuestions = pool.slice(0, countLimit);
           this.state.examAnswers = {};
           this.state.examSubmitted = false;
+          this.state.examStarted = false;
+          this.state.examIsShuffled = false;
           this.state.examCurrentIndex = 0;
           this.state.examSecondsLeft = 3600;
 
@@ -5231,18 +5491,86 @@
           if (resBanner) resBanner.classList.add('hidden');
 
           this.updateExamTimerDisplay();
-          if (this.state.examQuestions.length > 0) {
-            this.state.examTimerId = setInterval(() => {
-              if (this.state.examSecondsLeft <= 1) {
-                this.submitExam();
-                return;
-              }
-              this.state.examSecondsLeft -= 1;
-              this.updateExamTimerDisplay();
-            }, 1000);
+          this.renderExamView();
+        },
+
+        startExamSession() {
+          if (this.state.examQuestions.length === 0) {
+            AppUtils.showToast('Chưa có dữ liệu đề thi để bắt đầu.', 'warning');
+            return;
           }
+          if (this.state.examStarted || this.state.examSubmitted) return;
+
+          this.state.examStarted = true;
+          if (this.state.examTimerId) {
+            clearInterval(this.state.examTimerId);
+          }
+          this.state.examTimerId = setInterval(() => {
+            if (this.state.examSecondsLeft <= 1) {
+              this.submitExam();
+              return;
+            }
+            this.state.examSecondsLeft -= 1;
+            this.updateExamTimerDisplay();
+          }, 1000);
 
           this.renderExamView();
+          AppUtils.showToast('Bắt đầu tính giờ thi thử 60 phút! Chúc bạn làm bài tốt.', 'success');
+        },
+
+        async shuffleExamAll() {
+          if (this.state.examSubmitted) {
+            AppUtils.showToast('Bài thi đã nộp. Nhấn "Đề mới" để tạo bài thi khác.', 'warning');
+            return;
+          }
+          const arr = this.state.examQuestions;
+          if (arr.length === 0) return;
+
+          if (arr.length > 1) {
+            for (let i = arr.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+          }
+          for (const q of arr) {
+            await this.shuffleSingleQuestionOptions(q);
+          }
+
+          this.state.examAnswers = {};
+          this.state.examCurrentIndex = 0;
+          this.state.examIsShuffled = true;
+          this.renderExamView();
+          AppUtils.showToast('Đã đảo toàn bộ câu hỏi và đáp án của đề thi!', 'success');
+        },
+
+        restoreExamAll() {
+          if (this.state.examSubmitted) return;
+          const byId = new Map(this.state.examQuestions.map(q => [q.id, q]));
+          const restoredList = [];
+          for (const id of this.state.examOriginalOrderIds) {
+            if (byId.has(id)) {
+              restoredList.push(byId.get(id));
+              byId.delete(id);
+            }
+          }
+          for (const leftover of byId.values()) {
+            restoredList.push(leftover);
+          }
+          this.state.examQuestions = restoredList;
+
+          for (const q of this.state.examQuestions) {
+            const snap = this.state.examOriginalSnapshot[q.id];
+            if (snap) {
+              if (snap.croppedQuestionImage) q.croppedQuestionImage = snap.croppedQuestionImage;
+              q.options = JSON.parse(JSON.stringify(snap.options));
+            }
+          }
+
+          this.state.examAnswers = {};
+          this.state.examCurrentIndex = 0;
+          this.state.examIsShuffled = false;
+          this.renderExamView();
+          AppUtils.showToast('Đã khôi phục đề thi về thứ tự câu hỏi và đáp án ban đầu.', 'info');
         },
 
         updateExamTimerDisplay() {
@@ -5254,6 +5582,7 @@
         },
 
         submitExam() {
+          if (!this.state.examStarted || this.state.examSubmitted) return;
           if (this.state.examTimerId) {
             clearInterval(this.state.examTimerId);
             this.state.examTimerId = null;
@@ -5285,12 +5614,63 @@
         renderExamView() {
           const container = document.getElementById('examQuestionsContainer');
           const navGrid = document.getElementById('examNavGrid');
-          const progBadge = document.getElementById('examProgressBadge');
+          const lockBanner = document.getElementById('examLockBanner');
+          const btnStartExam = document.getElementById('btnStartExamSession');
+          const btnSubmit = document.getElementById('btnSubmitExam');
+          const btnShuffleExam = document.getElementById('btnShuffleExamAll');
+          const btnRestoreExam = document.getElementById('btnRestoreExamAll');
+          const timerDot = document.getElementById('examTimerDot');
+          const btnExamFocus = document.getElementById('btnExamModeFocus');
+          const btnExamStream = document.getElementById('btnExamModeStream');
+
           const questions = this.state.examQuestions;
           const total = questions.length;
 
-          const answeredCount = questions.filter(q => Boolean(this.state.examAnswers[q.id])).length;
-          if (progBadge) progBadge.textContent = `${answeredCount} / ${total}`;
+          // Đồng bộ trạng thái nút điều khiển Thi Thử
+          if (btnStartExam) {
+            btnStartExam.disabled = total === 0 || this.state.examStarted || this.state.examSubmitted;
+            if (this.state.examSubmitted) {
+              btnStartExam.innerHTML = `<span>✓ Đã nộp bài</span>`;
+              btnStartExam.className = 'px-4 py-2 rounded-full bg-[#F4EFE6] border border-[#E2D7BF] text-[#7B5A64] text-xs font-bold transition flex items-center gap-1.5 cursor-default';
+            } else if (this.state.examStarted) {
+              btnStartExam.innerHTML = `<span class="w-2 h-2 rounded-full bg-[#DDB247]"></span><span>Đang thi</span>`;
+              btnStartExam.className = 'px-4 py-2 rounded-full bg-[#F4EFE6] border border-[#DDB247] text-[#3E1D27] text-xs font-bold transition flex items-center gap-1.5 cursor-default';
+            } else {
+              btnStartExam.innerHTML = `<span>▶ Bắt đầu làm bài</span>`;
+              btnStartExam.className = 'px-4 py-2 rounded-full bg-[#AA1342] hover:bg-[#8E0F37] disabled:opacity-45 text-[#FFFFFF] text-xs font-bold transition flex items-center gap-1.5';
+            }
+          }
+
+          if (btnSubmit) {
+            btnSubmit.disabled = !this.state.examStarted || this.state.examSubmitted || total === 0;
+          }
+          if (btnShuffleExam) {
+            btnShuffleExam.disabled = total === 0 || this.state.examSubmitted;
+          }
+          if (btnRestoreExam) {
+            btnRestoreExam.disabled = !this.state.examIsShuffled || total === 0 || this.state.examSubmitted;
+            btnRestoreExam.className = this.state.examIsShuffled && !this.state.examSubmitted
+              ? 'px-3.5 py-1.5 rounded-full border border-[#DDB247] bg-[#FBF4DE] hover:bg-[#F4E6BB] text-xs font-semibold text-[#3E1D27] transition'
+              : 'px-3.5 py-1.5 rounded-full border border-[#E2D7BF] bg-[#FAF8F4] disabled:opacity-45 disabled:cursor-not-allowed text-xs font-semibold text-[#3E1D27] transition';
+          }
+          if (timerDot) {
+            timerDot.classList.toggle('animate-pulse', this.state.examStarted && !this.state.examSubmitted);
+          }
+          if (lockBanner) {
+            lockBanner.classList.toggle('hidden', total === 0 || this.state.examStarted || this.state.examSubmitted);
+          }
+
+          if (btnExamFocus && btnExamStream) {
+            if (this.state.examDisplayLayout === 'SINGLE') {
+              btnExamFocus.className = 'px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-[#653040] text-[#FFFFFF]';
+              btnExamStream.className = 'px-3.5 py-1.5 rounded-full text-xs font-semibold transition text-[#7B5A64] hover:text-[#3E1D27]';
+            } else {
+              btnExamStream.className = 'px-3.5 py-1.5 rounded-full text-xs font-semibold transition bg-[#653040] text-[#FFFFFF]';
+              btnExamFocus.className = 'px-3.5 py-1.5 rounded-full text-xs font-semibold transition text-[#7B5A64] hover:text-[#3E1D27]';
+            }
+          }
+
+          this.updateExamSidebarNav();
 
           if (!container) return;
           if (total === 0) {
@@ -5332,6 +5712,18 @@
               .join('');
           }
 
+          AppUtils.triggerMathTypeset(container);
+        },
+
+        updateExamSidebarNav() {
+          const navGrid = document.getElementById('examNavGrid');
+          const progBadge = document.getElementById('examProgressBadge');
+          const questions = this.state.examQuestions;
+          const total = questions.length;
+
+          const answeredCount = questions.filter(q => Boolean(this.state.examAnswers[q.id])).length;
+          if (progBadge) progBadge.textContent = `${answeredCount} / ${total}`;
+
           if (navGrid) {
             navGrid.innerHTML = questions.map((q, idx) => {
               const ans = this.state.examAnswers[q.id];
@@ -5359,8 +5751,31 @@
               `;
             }).join('');
           }
+        },
 
-          AppUtils.triggerMathTypeset(container);
+        pickExamOption(questionId, optionLabel) {
+          if (this.state.examSubmitted) return;
+          if (!this.state.examStarted) {
+            AppUtils.showToast('Hãy nhấn nút "Bắt đầu làm bài" trước khi chọn đáp án!', 'warning');
+            return;
+          }
+          this.state.examAnswers[questionId] = optionLabel;
+
+          // Cập nhật đáp án tại chỗ — không nhảy hay chớp màn hình
+          const q = this.state.examQuestions.find(item => item.id === questionId);
+          const optContainer = document.querySelector(`#examQuestionsContainer [data-options-container="${CSS.escape(questionId)}"]`);
+          if (q && optContainer) {
+            const tempWrap = document.createElement('div');
+            tempWrap.innerHTML = this.renderOptionsGridHtml(q, 'exam');
+            const newGrid = tempWrap.firstElementChild;
+            if (newGrid) {
+              optContainer.replaceWith(newGrid);
+              AppUtils.triggerMathTypeset(newGrid);
+            }
+            this.updateExamSidebarNav();
+          } else {
+            this.renderExamView();
+          }
         },
 
         openExamReviewModal() {
@@ -6068,11 +6483,24 @@
           document.getElementById('btnCollapseLeftSidebar')?.addEventListener('click', () => {
             this.toggleLeftSidebarCollapse();
           });
-          document.getElementById('btnCloseRightSidebar')?.addEventListener('click', () => {
-            this.setRightSidebarOpen(false);
+          // Nhấn vào khoảng trống trên thanh bên:
+          // - Khi đang đóng (thu gọn 60px): nhấn ở bất kỳ khoảng trống nào trên thanh đều mở rộng bình thường
+          // - Khi đang mở rộng: nhấn vào vùng menu phía trên (#sidebarMenuZone) hoặc ô đồng hồ sẽ KHÔNG tự thụt vào
+          document.getElementById('leftNavSidebar')?.addEventListener('click', e => {
+            if (window.innerWidth < 1024) return;
+            if (e.target.closest('button, a, label, input')) return;
+            const sidebar = e.currentTarget;
+            if (sidebar.classList.contains('is-collapsed')) {
+              this.setLeftSidebarCollapsed(false, true);
+              return;
+            }
+            if (e.target.closest('#sidebarMenuZone, #sidebarClockBox')) return;
+            this.setLeftSidebarCollapsed(true, true);
           });
-          document.getElementById('rightSidebarBackdrop')?.addEventListener('click', () => {
-            this.setRightSidebarOpen(false);
+          // Nhấn vào bất kỳ khoảng trống nào trên thanh ngang đầu trang (mobile) để mở thanh bên
+          document.getElementById('mobileTopHeader')?.addEventListener('click', e => {
+            if (e.target.closest('button, a, label, input')) return;
+            this.setLeftSidebarMobileOpen(true);
           });
 
           // Hỗ trợ kéo thả file trực tiếp vào khung Kho Ôn Luyện
@@ -6171,34 +6599,18 @@
             e.currentTarget.classList.toggle('text-[#FFFFFF]', this.state.autoAdvanceOnPick);
           });
 
-          document.getElementById('btnSortSyncPracticeQuestions')?.addEventListener('click', () => {
-            window.sortQuestionsByFileSequence(this.state.practiceQuestions);
-            this.state.practiceCurrentIndex = 0;
-            this.renderPracticeView();
-            AppUtils.showToast('Đã sắp xếp câu hỏi khớp thứ tự file gốc.', 'success');
+          document.getElementById('btnShufflePracticeAll')?.addEventListener('click', async () => {
+            await this.shufflePracticeAll();
           });
-          document.getElementById('btnShufflePracticeQuestions')?.addEventListener('click', () => {
-            const arr = this.state.practiceQuestions;
-            for (let i = arr.length - 1; i > 0; i--) {
-              const j = Math.floor(Math.random() * (i + 1));
-              [arr[i], arr[j]] = [arr[j], arr[i]];
-            }
-            this.state.practiceCurrentIndex = 0;
-            this.renderPracticeView();
-            AppUtils.showToast('Đã đảo ngẫu nhiên thứ tự câu hỏi.', 'info');
-          });
-          document.getElementById('btnShufflePracticeOptions')?.addEventListener('click', async () => {
-            await this.shufflePracticeOptions();
-          });
-          document.getElementById('btnRestorePracticeOptionsOrder')?.addEventListener('click', () => {
-            this.restorePracticeOptionsOrder();
+          document.getElementById('btnRestorePracticeAll')?.addEventListener('click', () => {
+            this.restorePracticeAll();
           });
           document.getElementById('btnResetPracticeSession')?.addEventListener('click', () => {
             this.state.practiceAnswers = {};
             this.state.practiceCurrentIndex = 0;
             this.persistPracticeResumeState();
             this.renderPracticeView();
-            AppUtils.showToast('Đã đặt lại bài luyện tập.', 'info');
+            AppUtils.showToast('Đã đặt lại bài luyện tập!', 'info');
           });
 
           document.getElementById('examDocSelect')?.addEventListener('change', e => {
@@ -6214,19 +6626,25 @@
           document.getElementById('examCountSelect')?.addEventListener('change', () => {
             this.startNewExam();
           });
-          document.getElementById('btnToggleExamDisplayLayout')?.addEventListener('click', e => {
-            this.state.examDisplayLayout = this.state.examDisplayLayout === 'SINGLE' ? 'LIST' : 'SINGLE';
-            e.currentTarget.textContent =
-              this.state.examDisplayLayout === 'SINGLE' ? '🎯 Bố cục: Từng câu' : '📋 Bố cục: Danh sách';
+          document.getElementById('btnStartExamSession')?.addEventListener('click', () => {
+            this.startExamSession();
+          });
+          document.getElementById('btnStartExamInline')?.addEventListener('click', () => {
+            this.startExamSession();
+          });
+          document.getElementById('btnExamModeFocus')?.addEventListener('click', () => {
+            this.state.examDisplayLayout = 'SINGLE';
             this.renderExamView();
           });
-          document.getElementById('btnShuffleExamOptions')?.addEventListener('click', async () => {
-            for (const q of this.state.examQuestions) {
-              await this.shuffleSingleQuestionOptions(q);
-            }
-            this.state.examAnswers = {};
+          document.getElementById('btnExamModeStream')?.addEventListener('click', () => {
+            this.state.examDisplayLayout = 'LIST';
             this.renderExamView();
-            AppUtils.showToast('Đã đảo đáp án đề thi.', 'info');
+          });
+          document.getElementById('btnShuffleExamAll')?.addEventListener('click', async () => {
+            await this.shuffleExamAll();
+          });
+          document.getElementById('btnRestoreExamAll')?.addEventListener('click', () => {
+            this.restoreExamAll();
           });
           document.getElementById('btnStartNewExam')?.addEventListener('click', () => {
             this.startNewExam();
@@ -6464,7 +6882,6 @@
 
             if (action === 'practice-prev-q') {
               if (this.state.practiceCurrentIndex > 0) {
-                this.state.practiceSlideDirection = 'prev';
                 this.state.practiceCurrentIndex -= 1;
                 this.renderPracticeView();
               }
@@ -6473,7 +6890,6 @@
 
             if (action === 'practice-next-q') {
               if (this.state.practiceCurrentIndex < this.state.practiceQuestions.length - 1) {
-                this.state.practiceSlideDirection = 'next';
                 this.state.practiceCurrentIndex += 1;
                 this.renderPracticeView();
               }
@@ -6482,7 +6898,6 @@
 
             if (action === 'jump-practice-q') {
               const idx = parseInt(btn.getAttribute('data-idx') || '0', 10);
-              this.state.practiceSlideDirection = idx >= this.state.practiceCurrentIndex ? 'next' : 'prev';
               this.state.practiceCurrentIndex = idx;
               this.renderPracticeView();
               if (this.state.practiceDisplayLayout === 'LIST') {
@@ -6493,12 +6908,10 @@
             }
 
             if (action === 'pick-exam-opt') {
-              if (this.state.examSubmitted) return;
               const qId = btn.getAttribute('data-qid');
               const opt = btn.getAttribute('data-opt');
               if (qId && opt) {
-                this.state.examAnswers[qId] = opt;
-                this.renderExamView();
+                this.pickExamOption(qId, opt);
               }
               return;
             }
@@ -6532,7 +6945,8 @@
 
             if (action === 'toggle-q-tools-menu') {
               const qId = btn.getAttribute('data-qid');
-              this.state.openToolMenuQuestionId = this.state.openToolMenuQuestionId === qId ? null : qId;
+              this.state.openToolMenuQuestionId =
+                this.state.openToolMenuQuestionId === qId ? null : qId;
               if (this.state.activeTab === 'practice') this.renderPracticeView();
               else if (this.state.activeTab === 'exam') this.renderExamView();
               return;
@@ -6541,14 +6955,19 @@
             if (action === 'shuffle-single-q-options') {
               const qId = btn.getAttribute('data-qid');
               const q = this.state.allQuestions.find(item => item.id === qId);
+              this.state.openToolMenuQuestionId = null;
               if (q) {
                 await this.shuffleSingleQuestionOptions(q);
-                delete this.state.practiceAnswers[qId];
-                this.state.openToolMenuQuestionId = null;
-                document.getElementById('btnRestorePracticeOptionsOrder')?.classList.remove('hidden');
-                if (this.state.activeTab === 'practice') this.renderPracticeView();
-                else if (this.state.activeTab === 'exam') this.renderExamView();
-                AppUtils.showToast('Đã đảo phương án của câu này!', 'success');
+                if (this.state.activeTab === 'practice') {
+                  delete this.state.practiceAnswers[qId];
+                  this.state.practiceIsShuffled = true;
+                  this.renderPracticeView();
+                } else if (this.state.activeTab === 'exam') {
+                  delete this.state.examAnswers[qId];
+                  this.state.examIsShuffled = true;
+                  this.renderExamView();
+                }
+                AppUtils.showToast('Đã đảo đáp án A, B, C, D của câu này!', 'success');
               }
               return;
             }
@@ -6581,18 +7000,9 @@
               return;
             }
 
-            if (action === 'edit-bulk-slot') {
-              const seq = parseInt(btn.getAttribute('data-seq') || '0', 10);
-              const letter = btn.getAttribute('data-letter') || '-';
-              if (seq > 0) {
-                this.editSingleBulkSlot(seq, letter);
-              }
-              return;
-            }
-
             if (action === 'set-bulk-filter') {
-              const filter = btn.getAttribute('data-filter') || 'SEARCH';
-              this.state.bulkEditorFilter = filter;
+              const f = btn.getAttribute('data-filter') || 'SEARCH';
+              this.state.bulkEditorFilter = f;
               this.updateBulkAnswerLivePreview();
               return;
             }
@@ -6606,6 +7016,13 @@
               return;
             }
 
+            if (action === 'edit-bulk-slot') {
+              const seq = parseInt(btn.getAttribute('data-seq') || '0', 10);
+              const letter = btn.getAttribute('data-letter') || '-';
+              if (seq > 0) this.editSingleBulkSlot(seq, letter);
+              return;
+            }
+
             if (action === 'set-correct-opt') {
               const qId = btn.getAttribute('data-qid');
               const optLetter = btn.getAttribute('data-opt');
@@ -6614,10 +7031,15 @@
                 (q.options || []).forEach(o => {
                   o.isCorrect = o.label === optLetter;
                 });
+                if (q._originalOptions) {
+                  q._originalOptions.forEach(o => {
+                    o.isCorrect = o.label === optLetter;
+                  });
+                }
                 const docObj = this.state.documents.find(d => d.docName === q.docName);
                 if (docObj) await ViettulamDb.saveDocument(docObj);
                 this.renderBankView();
-                AppUtils.showToast(`Đã đặt đáp án ${optLetter} cho ${q.code || 'câu hỏi'}.`, 'success');
+                AppUtils.showToast(`Đã cập nhật đáp án đúng: ${optLetter}`, 'success');
               }
               return;
             }
@@ -6627,13 +7049,13 @@
               const q = this.state.allQuestions.find(item => item.id === qId);
               if (q) {
                 const docObj = this.state.documents.find(d => d.docName === q.docName);
-                if (docObj) {
-                  docObj.questions = (docObj.questions || []).filter(item => item.id !== qId);
+                if (docObj && Array.isArray(docObj.questions)) {
+                  docObj.questions = docObj.questions.filter(item => item.id !== qId);
                   await ViettulamDb.saveDocument(docObj);
+                  this.setDocuments(this.state.documents);
+                  this.renderBankView();
+                  AppUtils.showToast('Đã xóa câu hỏi khỏi ngân hàng.', 'info');
                 }
-                this.setDocuments(this.state.documents);
-                this.renderBankView();
-                AppUtils.showToast('Đã xóa câu hỏi khỏi ngân hàng.', 'info');
               }
               return;
             }
@@ -6647,9 +7069,1559 @@
         }
       };
 
-      window.addEventListener('DOMContentLoaded', () => {
+      /* ====================================================================
+       * 12. TRÌNH PHÁT VIDEO HƯỚNG DẪN TÍCH HỢP 40 GIÂY (4 BƯỚC CHI TIẾT)
+       * ==================================================================== */
+      const GuideVideoPlayer = {
+        W: 1280,
+        H: 720,
+        DURATION: 40.0,
+        C: {
+          bg: '#FAF8F4',
+          sidebar: '#F4EFE6',
+          surface: '#FFFFFF',
+          sangria: '#653040',
+          sangriaDark: '#4E2330',
+          raspberry: '#AA1342',
+          raspberrySoft: '#FDF0F4',
+          copper: '#CE675D',
+          sunflower: '#DDB247',
+          sunflowerSoft: '#FBF4DE',
+          blonde: '#E2D7BF',
+          hairline: '#EFE8DA',
+          ink: '#3E1D27',
+          muted: '#7B5A64'
+        },
+        SCENES: [
+          {
+            id: 0, start: 0, end: 8.5, tag: 'BƯỚC 01 / 04', shortName: 'Giới thiệu từng phần',
+            title: 'Giới thiệu lần lượt chức năng của từng phân khu trên viettulam',
+            sub: '1. Tổng Quan (Nạp đề & chia chương) • 2. Luyện Tập • 3. Thi Thử 60p • 4. Ngân Hàng • 5. Hướng Dẫn & Thanh bên.',
+            voice: 'Bước một. Giới thiệu từng phần của viettulam. Tổng Quan để nạp đề và chia chương. Luyện Tập để học trực tiếp. Thi Thử để làm bài sáu mươi phút. Ngân Hàng để nhập và sửa đáp án. Cuối cùng là Hướng Dẫn và thanh bên thu gọn.'
+          },
+          {
+            id: 1, start: 8.5, end: 17.5, tag: 'BƯỚC 02 / 04', shortName: 'Nạp file & Làm bài',
+            title: 'Quy chuẩn file tự nhận đáp án (không cần nhập tay) & Cách làm bài',
+            sub: 'File chuẩn có "Câu 1:" + tô đỏ/highlight/in đậm/* hoặc "Đáp án: B" → Kéo thả vào Kho → Chọn đáp án ngay không nhảy trang.',
+            voice: 'Bước hai. Để web tự có đáp án mà không cần nhập tay, file P D F cần có lớp chữ kèm tô đỏ hoặc highlight; file Word tô màu, dấu sao hoặc bảng đáp án cuối file; file T X T dùng dấu sao hoặc hai dấu bằng. Kéo thả file rồi bấm Luyện tập và chọn đáp án trực tiếp.'
+          },
+          {
+            id: 2, start: 17.5, end: 26.5, tag: 'BƯỚC 03 / 04', shortName: 'Chức năng Luyện tập & Thi thử',
+            title: 'Các chức năng của Luyện Tập (Làm bài) và Thi Thử (Bài kiểm tra)',
+            sub: 'Luyện Tập: Từng câu/Danh sách, Đảo câu+đáp án, Khôi phục, Cắt PDF • Thi Thử: Khóa đáp án → Bắt đầu 60p → Nộp bài chấm điểm.',
+            voice: 'Bước ba. Ở phần Luyện Tập có chế độ từng câu hoặc danh sách, nút gộp đảo toàn bộ câu và đáp án, nút khôi phục gốc và tùy chỉnh cắt ảnh P D F. Ở phần Thi Thử, đáp án bị khóa tới khi bấm Bắt đầu làm bài, chạy đồng hồ sáu mươi phút và bấm Nộp bài chấm thang mười.'
+          },
+          {
+            id: 3, start: 26.5, end: 40.0, tag: 'BƯỚC 04 / 04', shortName: 'Nhập nhanh đáp án chi tiết',
+            title: 'Chi tiết tính năng Nhập nhanh & Sửa đáp án hàng loạt trong Ngân Hàng',
+            sub: '① Phạm vi, Từ câu số & Nạp ĐA cũ • ② Dán chuỗi ABCD- / 1A 2B • ③ Lọc Chưa gán (-) • ④ Tìm câu sửa 2 chiều • ⑤ Rà soát Đã sửa & Lưu.',
+            voice: 'Bước bốn. Chi tiết phần nhập nhanh đáp án trong Ngân Hàng. Chọn phạm vi tài liệu, đặt từ câu số hoặc bấm Nạp đáp án hiện có. Dán chuỗi liền mạch có dấu gạch ngang bỏ qua, hoặc cú pháp một A hai B. Bấm lọc Chưa gán để điền nhanh câu trống, dùng ô Tìm câu sửa theo số, khoảng câu hoặc từ khóa để bấm đổi đáp án đồng bộ hai chiều, rà soát mục Đã sửa rồi bấm Áp dụng và Lưu tất cả.'
+          }
+        ],
+        canvas: null,
+        ctx: null,
+        rafId: null,
+        state: {
+          tabActive: false,
+          playing: false,
+          currentTime: 0,
+          speed: 1,
+          lastTs: null,
+          isRecording: false,
+          mediaRecorder: null,
+          recordedChunks: [],
+          voiceEnabled: false,
+          lastSpokenSceneId: -1
+        },
+
+        init() {
+          this.canvas = document.getElementById('guideTutorialCanvas');
+          if (!this.canvas) return;
+          this.ctx = this.canvas.getContext('2d');
+          this.bindEvents();
+          this.renderFrame(0);
+          this.syncUiControls();
+        },
+
+        setTabActive(isActive) {
+          this.state.tabActive = Boolean(isActive);
+          if (isActive) {
+            this.state.playing = true;
+            this.state.lastTs = null;
+            const playBtn = document.getElementById('btnGuidePlayPause');
+            if (playBtn) playBtn.textContent = '⏸ Tạm dừng';
+            this.renderFrame(this.state.currentTime);
+            this.syncUiControls();
+            if (!this.rafId) {
+              this.rafId = requestAnimationFrame(ts => this.animateLoop(ts));
+            }
+          } else {
+            this.state.playing = false;
+            if (this.rafId) {
+              cancelAnimationFrame(this.rafId);
+              this.rafId = null;
+            }
+            if ('speechSynthesis' in window) {
+              try { window.speechSynthesis.cancel(); } catch (e) {}
+            }
+          }
+        },
+
+        clamp(v, a, b) { return Math.max(a, Math.min(b, v)); },
+        lerp(a, b, t) { return a + (b - a) * this.clamp(t, 0, 1); },
+        easeOut(t) { const x = this.clamp(t, 0, 1); return 1 - Math.pow(1 - x, 3); },
+        easeInOut(t) { const x = this.clamp(t, 0, 1); return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; },
+        seg(t, a, b) { return b <= a ? (t >= b ? 1 : 0) : this.clamp((t - a) / (b - a), 0, 1); },
+
+        formatClock(sec) {
+          const s = Math.max(0, Math.floor(sec));
+          return `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
+        },
+
+        roundRectPath(x, y, w, h, r) {
+          const ctx = this.ctx;
+          const rr = Math.min(r, w / 2, h / 2);
+          ctx.beginPath();
+          ctx.moveTo(x + rr, y);
+          ctx.arcTo(x + w, y, x + w, y + h, rr);
+          ctx.arcTo(x + w, y + h, x, y + h, rr);
+          ctx.arcTo(x, y + h, x, y, rr);
+          ctx.arcTo(x, y, x + w, y, rr);
+          ctx.closePath();
+        },
+
+        fillRoundRect(x, y, w, h, r, fill, stroke = null, lw = 1) {
+          const ctx = this.ctx;
+          this.roundRectPath(x, y, w, h, r);
+          if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+          if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = lw; ctx.stroke(); }
+        },
+
+        drawText(text, x, y, opts = {}) {
+          const ctx = this.ctx;
+          const { size = 14, weight = '500', color = this.C.ink, align = 'left', baseline = 'middle', mono = false } = opts;
+          ctx.font = `${weight} ${size}px ${mono ? '"JetBrains Mono", monospace' : '"Be Vietnam Pro", sans-serif'}`;
+          ctx.fillStyle = color;
+          ctx.textAlign = align;
+          ctx.textBaseline = baseline;
+          ctx.fillText(String(text || ''), x, y);
+        },
+
+        // Vẽ Logo mới của viettulam sắc nét bằng vector trực tiếp trên Canvas
+        drawBrandLogo(x, y, size) {
+          const ctx = this.ctx;
+          const s = size / 64;
+          ctx.save();
+          ctx.translate(x, y);
+          ctx.scale(s, s);
+
+          this.fillRoundRect(2, 2, 60, 60, 15, '#131B1C', '#DBC696', 2.8);
+
+          // Chữ V cách điệu vàng kim
+          ctx.beginPath();
+          ctx.moveTo(15, 24);
+          ctx.lineTo(24, 41);
+          ctx.lineTo(32.5, 25.5);
+          ctx.moveTo(15, 24);
+          ctx.lineTo(22.5, 24);
+          ctx.lineTo(27.5, 34);
+          ctx.strokeStyle = '#DBC696';
+          ctx.lineWidth = 3.2;
+          ctx.lineJoin = 'miter';
+          ctx.stroke();
+
+          // Chấm tròn vàng kim
+          ctx.beginPath();
+          ctx.arc(34.5, 20.5, 2.2, 0, Math.PI * 2);
+          ctx.fillStyle = '#DBC696';
+          ctx.fill();
+
+          // 2 gạch chéo song song màu trắng
+          ctx.fillStyle = '#FFFFFF';
+          ctx.beginPath();
+          ctx.moveTo(26, 47); ctx.lineTo(40.5, 19.5); ctx.lineTo(44, 19.5); ctx.lineTo(29.5, 47);
+          ctx.closePath();
+          ctx.fill();
+
+          ctx.beginPath();
+          ctx.moveTo(33, 47); ctx.lineTo(44.5, 25); ctx.lineTo(48, 25); ctx.lineTo(36.5, 47);
+          ctx.closePath();
+          ctx.fill();
+
+          // Ngôi sao 4 cánh vàng kim
+          ctx.fillStyle = '#DBC696';
+          ctx.beginPath();
+          ctx.moveTo(46.5, 10);
+          ctx.quadraticCurveTo(47, 14.8, 51.5, 15.5);
+          ctx.quadraticCurveTo(47, 16.2, 46.5, 21);
+          ctx.quadraticCurveTo(46, 16.2, 41.5, 15.5);
+          ctx.quadraticCurveTo(46, 14.8, 46.5, 10);
+          ctx.closePath();
+          ctx.fill();
+
+          ctx.restore();
+        },
+
+        drawSpotlightRing(x, y, w, h, r, t, color) {
+          const ctx = this.ctx;
+          const pulse = (Math.sin(t * 7.2) + 1) / 2;
+          const pad = 2.5 + pulse * 4;
+          ctx.save();
+          this.roundRectPath(x - pad, y - pad, w + pad * 2, h + pad * 2, r + pad);
+          ctx.strokeStyle = color || this.C.sunflower;
+          ctx.globalAlpha = 0.52 + pulse * 0.48;
+          ctx.lineWidth = 2.6;
+          ctx.stroke();
+          ctx.restore();
+        },
+
+        drawStepCallout(x, y, numStr, text, bg, alpha = 1) {
+          if (alpha <= 0.02) return;
+          const ctx = this.ctx;
+          const C = this.C;
+          ctx.save();
+          ctx.globalAlpha = this.clamp(alpha, 0, 1);
+          ctx.font = '700 12px "Be Vietnam Pro", sans-serif';
+          const tw = ctx.measureText(text).width;
+          const boxW = tw + 46;
+          const boxH = 30;
+          const rx = this.clamp(x, 12, this.W - boxW - 12);
+          const ry = this.clamp(y, 12, this.H - 115);
+
+          ctx.shadowColor = 'rgba(45, 20, 28, 0.28)';
+          ctx.shadowBlur = 12;
+          ctx.shadowOffsetY = 4;
+          this.fillRoundRect(rx, ry, boxW, boxH, 15, bg || C.sangria, C.sunflower, 1.4);
+          ctx.shadowBlur = 0;
+
+          ctx.beginPath();
+          ctx.arc(rx + 15, ry + 15, 9.5, 0, Math.PI * 2);
+          ctx.fillStyle = C.sunflower;
+          ctx.fill();
+          this.drawText(numStr, rx + 15, ry + 15.5, { size: 10, weight: '800', color: C.ink, align: 'center', mono: true });
+          this.drawText(text, rx + 31, ry + 15.5, { size: 12, weight: '700', color: '#FFFFFF' });
+          ctx.restore();
+        },
+
+        drawKeycap(x, y, label, pressed = false, w = 38) {
+          const C = this.C;
+          const h = 34;
+          const offsetY = pressed ? 2 : 0;
+          if (!pressed) this.fillRoundRect(x, y + 3, w, h, 8, '#D7C9AE');
+          this.fillRoundRect(x, y + offsetY, w, h, 8, pressed ? C.sangria : C.surface, pressed ? C.sangriaDark : C.blonde, 1.4);
+          this.drawText(label, x + w / 2, y + offsetY + h / 2 + 0.5, {
+            size: 12.5, weight: '800', color: pressed ? '#FFFFFF' : C.ink, align: 'center', mono: true
+          });
+        },
+
+        drawCursor(x, y, clickP = 0) {
+          const ctx = this.ctx;
+          const C = this.C;
+          ctx.save();
+          if (clickP > 0 && clickP < 1) {
+            const rad = 8 + this.easeOut(clickP) * 26;
+            ctx.beginPath();
+            ctx.arc(x, y, rad, 0, Math.PI * 2);
+            ctx.strokeStyle = C.raspberry;
+            ctx.globalAlpha = 1 - clickP;
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(x, y, rad * 0.52, 0, Math.PI * 2);
+            ctx.fillStyle = C.sunflower;
+            ctx.globalAlpha = (1 - clickP) * 0.35;
+            ctx.fill();
+          }
+          ctx.globalAlpha = 1;
+          ctx.translate(x, y);
+          if (clickP > 0.08 && clickP < 0.45) ctx.scale(0.88, 0.88);
+          ctx.shadowColor = 'rgba(45, 20, 28, 0.35)';
+          ctx.shadowBlur = 7;
+          ctx.shadowOffsetY = 3;
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.lineTo(0, 22);
+          ctx.lineTo(5.8, 17);
+          ctx.lineTo(10.5, 26);
+          ctx.lineTo(13.8, 24.2);
+          ctx.lineTo(9.2, 15.2);
+          ctx.lineTo(16.8, 15.2);
+          ctx.closePath();
+          ctx.fillStyle = '#FFFFFF';
+          ctx.fill();
+          ctx.lineWidth = 1.9;
+          ctx.strokeStyle = C.ink;
+          ctx.stroke();
+          ctx.restore();
+        },
+
+        drawSidebar(width, activeNavIdx, t) {
+          const ctx = this.ctx;
+          const C = this.C;
+          const H = this.H;
+          const expanded = width > 130;
+
+          ctx.fillStyle = C.sidebar;
+          ctx.fillRect(0, 0, width, H - 96);
+          ctx.strokeStyle = C.blonde;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(width, 0);
+          ctx.lineTo(width, H - 96);
+          ctx.stroke();
+
+          const btnX = expanded ? 14 : (width - 36) / 2;
+          ctx.strokeStyle = C.muted;
+          ctx.lineWidth = 2;
+          [34, 40, 46].forEach(ly => {
+            ctx.beginPath();
+            ctx.moveTo(btnX + 10, ly);
+            ctx.lineTo(btnX + 26, ly);
+            ctx.stroke();
+          });
+
+          if (expanded) {
+            this.drawBrandLogo(58, 25, 28);
+            this.drawText('VIETTULAM', 94, 40, { size: 13.5, weight: '800', color: C.ink });
+          }
+
+          if (expanded) {
+            this.fillRoundRect(14, 74, width - 28, 36, 18, '#ECE3D3', C.blonde, 1);
+            this.drawText('＋', 32, 92, { size: 16, weight: '700', color: C.raspberry, align: 'center' });
+            this.drawText('Tải đề mới', 50, 92, { size: 12.5, weight: '700', color: C.ink });
+          } else {
+            this.fillRoundRect((width - 36) / 2, 74, 36, 36, 18, '#ECE3D3', C.blonde, 1);
+            this.drawText('＋', width / 2, 92, { size: 16, weight: '700', color: C.raspberry, align: 'center' });
+          }
+
+          const navs = [
+            { icon: '🗂', label: 'Tổng Quan' },
+            { icon: '📖', label: 'Luyện Tập' },
+            { icon: '⏱', label: 'Thi Thử' },
+            { icon: '≡', label: 'Ngân Hàng' },
+            { icon: '⚙', label: 'Hướng Dẫn' }
+          ];
+          navs.forEach((n, idx) => {
+            const y = 128 + idx * 44;
+            const isAct = idx === activeNavIdx;
+            if (expanded) {
+              this.fillRoundRect(14, y, width - 28, 36, 18, isAct ? C.sangria : 'transparent');
+              this.drawText(n.icon, 32, y + 18, { size: 14, color: isAct ? '#FFFFFF' : C.muted, align: 'center' });
+              this.drawText(n.label, 50, y + 18, { size: 12.5, weight: isAct ? '700' : '500', color: isAct ? '#FFFFFF' : C.muted });
+            } else {
+              this.fillRoundRect((width - 36) / 2, y, 36, 36, 18, isAct ? C.sangria : 'transparent');
+              this.drawText(n.icon, width / 2, y + 18, { size: 14, color: isAct ? '#FFFFFF' : C.muted, align: 'center' });
+            }
+          });
+
+          const secNow = 10 + Math.floor(t);
+          const clockFull = `20:32:${String(secNow % 60).padStart(2, '0')}`;
+          const footY = H - 196;
+          ctx.strokeStyle = C.blonde;
+          ctx.beginPath();
+          ctx.moveTo(0, footY);
+          ctx.lineTo(width, footY);
+          ctx.stroke();
+
+          if (expanded) {
+            this.fillRoundRect(14, footY + 10, width - 28, 46, 14, C.surface, C.blonde, 1);
+            ctx.beginPath();
+            ctx.arc(28, footY + 26, 3.2, 0, Math.PI * 2);
+            ctx.fillStyle = C.sunflower;
+            ctx.fill();
+            this.drawText(clockFull, 38, footY + 26, { size: 11.5, weight: '700', color: C.ink, mono: true });
+            this.fillRoundRect(width - 48, footY + 18, 24, 15, 7, C.raspberrySoft);
+            this.drawText('VN', width - 36, footY + 26, { size: 9, weight: '700', color: C.raspberry, align: 'center', mono: true });
+            this.drawText('T2, 23/11/2026', 38, footY + 43, { size: 9.5, weight: '500', color: C.muted, mono: true });
+            this.drawText('🗑  Xóa tài liệu', 26, footY + 76, { size: 11.5, weight: '500', color: C.muted });
+          } else {
+            this.fillRoundRect((width - 38) / 2, footY + 12, 38, 38, 10, C.surface, C.blonde, 1);
+            ctx.beginPath();
+            ctx.arc(width / 2, footY + 23, 2.5, 0, Math.PI * 2);
+            ctx.fillStyle = C.sunflower;
+            ctx.fill();
+            this.drawText('20:32', width / 2, footY + 37, { size: 9, weight: '700', color: C.ink, align: 'center', mono: true });
+            this.drawText('🗑', width / 2, footY + 72, { size: 14, color: C.muted, align: 'center' });
+          }
+        },
+
+        drawMiniDropZone(x, y, w, h, upProg, done, dragPos) {
+          const ctx = this.ctx;
+          const C = this.C;
+          this.fillRoundRect(x, y, w, h, 18, C.surface, C.blonde, 1.2);
+          this.fillRoundRect(x, y, w, 36, 18, C.bg, C.hairline, 1);
+          [C.raspberry, C.sunflower, C.copper].forEach((col, i) => {
+            ctx.beginPath();
+            ctx.arc(x + 20 + i * 14, y + 18, 4.5, 0, Math.PI * 2);
+            ctx.fillStyle = col;
+            ctx.fill();
+          });
+          this.drawText('Kho Ôn Luyện • Kéo thả hoặc chọn file (.PDF, .DOCX, .TXT)', x + 70, y + 18, { size: 12, weight: '700', color: C.ink });
+
+          const dzX = x + 20, dzY = y + 48, dzW = w - 40, dzH = 68;
+          ctx.save();
+          this.roundRectPath(dzX, dzY, dzW, dzH, 14);
+          ctx.fillStyle = dragPos ? '#F3ECE0' : C.bg;
+          ctx.fill();
+          ctx.setLineDash([7, 5]);
+          ctx.strokeStyle = dragPos ? C.sangria : C.blonde;
+          ctx.lineWidth = dragPos ? 2 : 1.4;
+          ctx.stroke();
+          ctx.restore();
+
+          if (upProg > 0 && !done) {
+            this.drawText('Đang tách câu, nhận diện đáp án đỏ/highlight & khử màu chống lộ...', dzX + 18, dzY + 23, { size: 12, weight: '700', color: C.ink });
+            this.drawText(`${Math.round(upProg * 100)}%`, dzX + dzW - 18, dzY + 23, { size: 12, weight: '800', color: C.raspberry, align: 'right', mono: true });
+            this.fillRoundRect(dzX + 18, dzY + 42, dzW - 36, 10, 5, C.hairline);
+            this.fillRoundRect(dzX + 18, dzY + 42, (dzW - 36) * upProg, 10, 5, C.sunflower);
+          } else {
+            this.drawText('📄  Thả tệp .PDF / .DOCX / .TXT vào đây để web tự đọc câu hỏi & đáp án', dzX + 18, dzY + 34, { size: 12.5, weight: '600', color: C.ink });
+            this.fillRoundRect(dzX + dzW - 148, dzY + 18, 132, 32, 16, C.sangria);
+            this.drawText('＋ Nạp file đề', dzX + dzW - 82, dzY + 34, { size: 11.5, weight: '700', color: '#FFFFFF', align: 'center' });
+          }
+
+          if (done) {
+            const cardW = (w - 60) / 3;
+            const chapters = [
+              { tag: 'CH 01', name: 'Chương 1 (Câu 1 - 50)', cnt: '50 câu • Đã nhận ĐA' },
+              { tag: 'CH 02', name: 'Chương 2 (Câu 51 - 100)', cnt: '50 câu • Đã nhận ĐA' },
+              { tag: 'CH 03', name: 'Chương 3 (Câu 101 - 120)', cnt: '20 câu • Đã nhận ĐA' }
+            ];
+            chapters.forEach((ch, idx) => {
+              const cx = x + 20 + idx * (cardW + 10);
+              const cy = y + 130;
+              this.fillRoundRect(cx, cy, cardW, 190, 14, C.bg, idx === 0 ? C.sangria : C.blonde, idx === 0 ? 1.8 : 1);
+              this.fillRoundRect(cx + 14, cy + 14, 52, 22, 11, C.raspberrySoft);
+              this.drawText(ch.tag, cx + 40, cy + 25, { size: 10, weight: '800', color: C.raspberry, align: 'center', mono: true });
+              this.drawText(ch.name, cx + 14, cy + 56, { size: 13.5, weight: '800', color: C.ink });
+              this.drawText(ch.cnt, cx + 14, cy + 80, { size: 11.5, weight: '600', color: C.muted });
+              this.drawText('De_Ky_Thuat_Dien.pdf', cx + 14, cy + 104, { size: 11, weight: '500', color: '#9A7E87', mono: true });
+
+              this.fillRoundRect(cx + 14, cy + 142, cardW / 2 - 18, 34, 17, C.sangria);
+              this.drawText('Luyện tập', cx + 14 + (cardW / 2 - 18) / 2, cy + 159, { size: 11.5, weight: '700', color: '#FFFFFF', align: 'center' });
+              this.fillRoundRect(cx + cardW / 2 + 4, cy + 142, cardW / 2 - 18, 34, 17, C.surface, C.blonde, 1);
+              this.drawText('Thi thử', cx + cardW / 2 + 4 + (cardW / 2 - 18) / 2, cy + 159, { size: 11.5, weight: '700', color: C.ink, align: 'center' });
+            });
+          }
+
+          if (dragPos) {
+            ctx.save();
+            ctx.shadowColor = 'rgba(45, 20, 28, 0.25)';
+            ctx.shadowBlur = 14;
+            this.fillRoundRect(dragPos.x - 110, dragPos.y - 20, 224, 40, 12, C.sangria, C.sunflower, 1.5);
+            this.drawText('📕 De_Ky_Thuat_Dien.pdf', dragPos.x + 2, dragPos.y, { size: 12, weight: '700', color: '#FFFFFF', align: 'center' });
+            ctx.restore();
+          }
+        },
+
+        drawScene1(lt, t) {
+          const C = this.C;
+          const expandP = this.easeOut(this.seg(lt, 0.0, 0.55));
+          const sbW = this.lerp(60, 220, expandP);
+          const focusIdx = Math.min(4, Math.floor(lt / 1.7));
+          this.drawSidebar(sbW, focusIdx, t);
+
+          const mainX = sbW + 30;
+          const mainW = this.W - sbW - 56;
+
+          this.fillRoundRect(mainX, 24, mainW, 64, 18, C.surface, C.blonde, 1.2);
+          this.fillRoundRect(mainX + 18, 40, 134, 30, 15, C.sangria);
+          this.drawText('5 PHÂN KHU CHÍNH', mainX + 85, 55, { size: 11, weight: '800', color: '#FFFFFF', align: 'center', mono: true });
+          this.drawText('Giới thiệu lần lượt chức năng từng mục trên thanh điều hướng viettulam', mainX + 166, 55, { size: 15, weight: '800', color: C.ink });
+
+          const sections = [
+            {
+              idx: 0, badge: '01 • TỔNG QUAN', title: 'Kho Ôn Luyện & Nạp File Đề', accent: C.sangria,
+              bullets: [
+                '• Kéo thả nhiều file .PDF, .DOCX, .TXT cùng lúc',
+                '• Tự nhận diện câu hỏi, đáp án & chia 50 câu/chương',
+                '• Bấm trực tiếp vào từng chương để vào học hoặc thi'
+              ]
+            },
+            {
+              idx: 1, badge: '02 • LUYỆN TẬP', title: 'Học Trực Tiếp Không Nhảy Trang', accent: C.copper,
+              bullets: [
+                '• Chọn đáp án trực tiếp ngay khi mở, báo đúng/sai tức thì',
+                '• Chế độ Từng câu (phím tắt A–D, ←/→) hoặc Danh sách',
+                '• 1 nút Đảo câu & đáp án (cả ảnh PDF) + Khôi phục gốc'
+              ]
+            },
+            {
+              idx: 2, badge: '03 • THI THỬ', title: 'Phòng Kiểm Tra 60 Phút Chuyên Nghiệp', accent: C.raspberry,
+              bullets: [
+                '• Chọn số câu (20/40/50/Tất cả) & đảo đề trước khi thi',
+                '• Khóa đáp án cho tới khi nhấn ▶ Bắt đầu làm bài',
+                '• Đếm ngược 60 phút, nộp bài chấm thang 10 & xem chi tiết'
+              ]
+            },
+            {
+              idx: 3, badge: '04 • NGÂN HÀNG', title: 'Quản Lý & Nhập Nhanh Đáp Án 2 Chiều', accent: C.sangria,
+              bullets: [
+                '• Tìm kiếm câu hỏi, sửa lẻ hoặc xóa câu nhanh gọn',
+                '• Dán chuỗi ABCD / 1A 2B để gán hàng loạt siêu tốc',
+                '• Lọc Chưa gán (-), Tìm câu sửa 2 chiều & lưu IndexedDB'
+              ]
+            },
+            {
+              idx: 4, badge: '05 • HƯỚNG DẪN & THANH BÊN', title: 'Video Trực Quan & Điều Hướng Kiểu Gemini', accent: C.sunflower,
+              bullets: [
+                '• Xem lại video hướng dẫn trực tiếp ngay trong web',
+                '• Bấm ☰ hoặc vùng trống khi thanh đóng để mở rộng',
+                '• Đồng hồ thời gian thực VN & nút Xóa toàn bộ dữ liệu'
+              ]
+            }
+          ];
+
+          const cardW = (mainW - 16) / 2;
+          sections.forEach(sc => {
+            const isFocus = sc.idx === focusIdx;
+            const isWide = sc.idx === 4;
+            const cx = isWide ? mainX : mainX + (sc.idx % 2) * (cardW + 16);
+            const cy = isWide ? 470 : 106 + Math.floor(sc.idx / 2) * 182;
+            const cw = isWide ? mainW : cardW;
+            const ch = isWide ? 140 : 166;
+
+            this.fillRoundRect(cx, cy, cw, ch, 16, isFocus ? '#FFFDF8' : C.surface, isFocus ? sc.accent : C.blonde, isFocus ? 2.4 : 1);
+            if (isFocus) this.drawSpotlightRing(cx, cy, cw, ch, 16, t, C.sunflower);
+
+            this.fillRoundRect(cx + 16, cy + 14, isWide ? 196 : 136, 24, 12, isFocus ? sc.accent : C.sidebar);
+            this.drawText(sc.badge, cx + 16 + (isWide ? 98 : 68), cy + 26, {
+              size: 10.5, weight: '800', color: isFocus ? (sc.accent === C.sunflower ? C.ink : '#FFFFFF') : C.ink, align: 'center', mono: true
+            });
+            this.drawText(sc.title, cx + 16, cy + 56, { size: 14.5, weight: '800', color: isFocus ? C.sangria : C.ink });
+
+            if (isWide) {
+              sc.bullets.forEach((b, bi) => {
+                this.drawText(b, cx + 16 + bi * ((cw - 32) / 3), cy + 96, { size: 11.5, weight: isFocus ? '600' : '500', color: isFocus ? C.ink : C.muted });
+              });
+            } else {
+              sc.bullets.forEach((b, bi) => {
+                this.drawText(b, cx + 16, cy + 88 + bi * 25, { size: 12, weight: isFocus ? '600' : '500', color: isFocus ? C.ink : C.muted });
+              });
+            }
+          });
+
+          if (expandP > 0.7) this.drawSpotlightRing(14, 128 + focusIdx * 44, sbW - 28, 36, 18, t, C.sunflower);
+
+          const prevIdx = Math.max(0, focusIdx - 1);
+          const subSeg = (lt - focusIdx * 1.7) / 1.7;
+          const targetNavY = 128 + focusIdx * 44 + 19;
+          const prevNavY = 128 + prevIdx * 44 + 19;
+          const cursorY = focusIdx === 0
+            ? this.lerp(44, targetNavY, this.easeOut(this.seg(subSeg, 0, 0.35)))
+            : this.lerp(prevNavY, targetNavY, this.easeInOut(this.seg(subSeg, 0, 0.28)));
+          this.drawCursor(132, cursorY, this.seg(subSeg, 0.25, 0.55));
+        },
+
+        drawScene2(lt, t) {
+          const ctx = this.ctx;
+          const C = this.C;
+          const sbW = 60;
+          const mainX = sbW + 30;
+          const mainW = this.W - sbW - 56;
+
+          if (lt < 5.0) {
+            this.drawSidebar(sbW, 0, t);
+            this.fillRoundRect(mainX, 18, mainW, 242, 18, C.surface, C.sangria, 1.5);
+            this.fillRoundRect(mainX + 18, 32, 232, 26, 13, C.sangria);
+            this.drawText('📌 GHI CHÚ FILE TỰ NHẬN ĐÁP ÁN', mainX + 134, 45, { size: 11, weight: '800', color: '#FFFFFF', align: 'center', mono: true });
+            this.drawText('Để web tự có đáp án luôn (không cần nhập tay), file cần đúng 1 trong các dấu hiệu sau:', mainX + 264, 45, { size: 12.5, weight: '700', color: C.ink });
+
+            const colW = (mainW - 60) / 3;
+            const specs = [
+              {
+                ext: '📕 FILE .PDF', tag: 'CÓ LỚP CHỮ', bg: C.raspberry,
+                lines: [
+                  '• Bắt đầu mỗi câu: "Câu 1:" / "Bài 1:"',
+                  '• Đáp án đúng tô CHỮ ĐỎ hoặc',
+                  '  HIGHLIGHT NỀN (vàng/xanh/hồng)',
+                  '• Hoặc in đậm riêng nhãn A./B., *A.',
+                  '✓ Web tự khử màu đỏ/highlight chống lộ!'
+                ]
+              },
+              {
+                ext: '📘 FILE .DOCX', tag: 'WORD CHUẨN', bg: C.sangria,
+                lines: [
+                  '• Bắt đầu câu: "Câu 1:" hoặc số thứ tự',
+                  '• Đáp án đúng tô highlight / màu chữ',
+                  '• Hoặc in đậm, gạch chân nhãn A./B.',
+                  '• Hoặc đặt *A. / bảng 1A 2B cuối file',
+                  '✓ Giữ nguyên thụt dòng code C/C++!'
+                ]
+              },
+              {
+                ext: '📄 FILE .TXT', tag: 'UTF-8', bg: C.copper,
+                lines: [
+                  '• Mỗi câu bắt đầu bằng "Câu 1:"',
+                  '• Đánh dấu đúng bằng *A. hoặc ==ĐA==',
+                  '• Hoặc dòng "Đáp án: B" ngay dưới câu',
+                  '• Hỗ trợ công thức LaTeX ($...$)',
+                  '✓ Nhẹ, nạp hàng trăm câu dưới 1 giây!'
+                ]
+              }
+            ];
+
+            const specHighlight = lt < 1.65 ? Math.min(2, Math.floor(lt / 0.55)) : -1;
+            specs.forEach((sp, i) => {
+              const sx = mainX + 18 + i * (colW + 12);
+              const hl = specHighlight === i;
+              this.fillRoundRect(sx, 72, colW, 174, 14, C.bg, hl ? C.sunflower : C.blonde, hl ? 2.2 : 1);
+              this.fillRoundRect(sx + 12, 84, 134, 24, 8, sp.bg);
+              this.drawText(sp.ext, sx + 79, 96, { size: 11, weight: '800', color: '#FFFFFF', align: 'center', mono: true });
+              this.drawText(sp.tag, sx + colW - 12, 96, { size: 9, weight: '700', color: C.muted, align: 'right', mono: true });
+              sp.lines.forEach((ln, li) => {
+                this.drawText(ln, sx + 12, 128 + li * 25, { size: 11.5, weight: li === 4 ? '700' : '500', color: li === 4 ? C.sangria : C.ink });
+              });
+            });
+
+            const dragging = lt >= 1.35 && lt < 2.65;
+            const dragP = this.easeInOut(this.seg(lt, 1.35, 2.6));
+            const dragPos = dragging ? { x: this.lerp(1040, 560, dragP), y: this.lerp(290, 354, dragP) } : null;
+            const upProg = lt >= 2.65 && lt < 3.75 ? this.easeOut(this.seg(lt, 2.65, 3.7)) : (lt >= 3.75 ? 1 : 0);
+            const done = lt >= 3.75;
+
+            this.drawMiniDropZone(mainX, 274, mainW, 336, upProg, done, dragPos);
+
+            if (dragging) {
+              this.drawSpotlightRing(mainX + 20, 322, mainW - 40, 68, 14, t, C.sunflower);
+              this.drawCursor(dragPos.x + 12, dragPos.y + 8, 0);
+            } else if (upProg > 0 && !done) {
+              this.drawStepCallout(mainX + 610, 320, '2', 'Tự đọc đáp án & khử màu chống lộ!', C.raspberry, 1);
+              this.drawCursor(560, 354, this.seg(lt, 2.62, 2.95));
+            } else if (done) {
+              this.drawSpotlightRing(mainX + 20, 404, (mainW - 60) / 3, 190, 12, t, C.sunflower);
+              this.drawStepCallout(mainX + 410, 466, '3', 'Tự chia 50 câu/chương — Bấm Luyện tập!', C.sangria, 1);
+              const p = this.easeInOut(this.seg(lt, 3.8, 4.55));
+              this.drawCursor(this.lerp(560, mainX + 100, p), this.lerp(354, 575, p), this.seg(lt, 4.58, 4.92));
+            }
+            return;
+          }
+
+          const slt = lt - 5.0;
+          this.drawSidebar(sbW, 1, t);
+          const qW = mainW * 0.72, qY = 24, qH = 516;
+          const isQ2 = slt >= 2.2;
+          const q1PickedWrong = slt >= 0.9 && !isQ2;
+          const q2PickedRight = slt >= 3.1 && isQ2;
+
+          this.fillRoundRect(mainX, qY, qW, qH, 18, C.surface, C.blonde, 1.2);
+          this.fillRoundRect(mainX + 20, qY + 18, 52, 26, 13, C.sangria);
+          this.drawText(isQ2 ? '#02' : '#01', mainX + 46, qY + 31, { size: 12, weight: '800', color: '#FFFFFF', align: 'center', mono: true });
+          this.drawText(isQ2 ? 'Câu 2 • Chương 1 (Câu 1 - 50)' : 'Câu 1 • Chương 1 (Câu 1 - 50)', mainX + 86, qY + 31, { size: 14, weight: '700' });
+
+          this.fillRoundRect(mainX + qW - 234, qY + 18, 214, 26, 13, C.sunflowerSoft, C.sunflower, 1);
+          this.drawText('✓ Chọn trực tiếp • Không nhảy trang', mainX + qW - 127, qY + 31, { size: 10.5, weight: '700', color: C.ink, align: 'center' });
+
+          this.fillRoundRect(mainX + 20, qY + 62, qW - 40, 146, 14, C.bg, C.hairline, 1);
+          this.drawText(
+            isQ2
+              ? 'Câu 2: Đơn vị chuẩn đo điện dung C của tụ điện trong hệ đo lường quốc tế SI là gì?'
+              : 'Câu 1: Định luật Ohm cho đoạn mạch chỉ có điện trở thuần R được viết như thế nào?',
+            mainX + 38, qY + 106, { size: 15.5, weight: '700' }
+          );
+          this.drawText(
+            isQ2
+              ? '(Nhấn phím → để sang câu tiếp, nhấn phím B hoặc 2 để chọn đáp án tức thì)'
+              : '(Mở Luyện Tập là làm bài ngay, không cần bấm bắt đầu — đáp án sai hiện đỏ, đúng hiện vàng)',
+            mainX + 38, qY + 148, { size: 12.5, weight: '500', color: C.muted }
+          );
+
+          const opts = isQ2
+            ? [
+                { l: 'A', t: 'Ohm (Ω)', right: false }, { l: 'B', t: 'Farad (F)', right: true },
+                { l: 'C', t: 'Henry (H)', right: false }, { l: 'D', t: 'Volt (V)', right: false }
+              ]
+            : [
+                { l: 'A', t: 'I = U / R', right: true }, { l: 'B', t: 'I = U · R', right: false },
+                { l: 'C', t: 'I = R / U', right: false }, { l: 'D', t: 'I = U² / R', right: false }
+              ];
+
+          opts.forEach((ob, i) => {
+            const col = i % 2, row = Math.floor(i / 2);
+            const ow = (qW - 52) / 2;
+            const ox = mainX + 20 + col * (ow + 12);
+            const oy = qY + 230 + row * 80;
+            let bg = C.bg, brd = C.blonde, lw = 1.2, bBg = C.surface, bTxt = C.ink;
+
+            if (q1PickedWrong) {
+              if (ob.l === 'C') { bg = C.raspberrySoft; brd = C.raspberry; lw = 2; bBg = C.raspberry; bTxt = '#FFFFFF'; }
+              else if (ob.right) { bg = C.sunflowerSoft; brd = C.sunflower; lw = 2; bBg = C.sunflower; bTxt = C.ink; }
+            } else if (q2PickedRight && ob.right) {
+              bg = C.sunflowerSoft; brd = C.sunflower; lw = 2.2; bBg = C.sunflower; bTxt = C.ink;
+            }
+
+            this.fillRoundRect(ox, oy, ow, 66, 12, bg, brd, lw);
+            this.fillRoundRect(ox + 14, oy + 17, 32, 32, 8, bBg, brd, 1);
+            this.drawText(ob.l, ox + 30, oy + 33, { size: 13, weight: '800', color: bTxt, align: 'center', mono: true });
+            this.drawText(ob.t, ox + 58, oy + 33, { size: 15, weight: '700', mono: true });
+          });
+
+          this.fillRoundRect(mainX, qY + qH + 14, qW, 48, 14, C.surface, C.blonde, 1);
+          this.fillRoundRect(mainX + 14, qY + qH + 22, 110, 32, 16, C.bg, C.blonde, 1);
+          this.drawText('← Câu trước', mainX + 69, qY + qH + 38, { size: 12, weight: '600', color: C.muted, align: 'center' });
+          this.drawText(isQ2 ? 'Câu 2 / 50' : 'Câu 1 / 50', mainX + qW / 2, qY + qH + 38, { size: 12, weight: '700', color: C.muted, align: 'center', mono: true });
+          this.fillRoundRect(mainX + qW - 146, qY + qH + 22, 132, 32, 16, C.sangria);
+          this.drawText('Câu tiếp theo →', mainX + qW - 80, qY + qH + 38, { size: 12, weight: '700', color: '#FFFFFF', align: 'center' });
+
+          const navX = mainX + qW + 18, navW = mainW - qW - 18;
+          this.fillRoundRect(navX, qY, navW, 386, 18, C.surface, C.blonde, 1.2);
+          this.drawText('BẢNG CÂU HỎI', navX + 18, qY + 26, { size: 11, weight: '800', mono: true });
+          const rightCnt = q2PickedRight ? 1 : 0;
+          const ansCnt = q2PickedRight ? 2 : (q1PickedWrong ? 1 : 0);
+          this.fillRoundRect(navX + navW - 66, qY + 14, 48, 22, 8, C.sidebar);
+          this.drawText(`${rightCnt} / ${ansCnt}`, navX + navW - 42, qY + 25, { size: 11, weight: '700', align: 'center', mono: true });
+
+          const accPct = ansCnt > 0 ? Math.round((rightCnt / ansCnt) * 100) : 0;
+          this.drawText(`Độ chính xác: ${accPct}%`, navX + 18, qY + 56, { size: 10.5, weight: '600', color: C.muted, mono: true });
+          this.fillRoundRect(navX + 18, qY + 70, navW - 36, 7, 4, C.hairline);
+          this.fillRoundRect(navX + 18, qY + 70, (navW - 36) * (ansCnt / 20), 7, 4, C.sunflower);
+
+          for (let n = 0; n < 20; n++) {
+            const r = Math.floor(n / 5), c = n % 5;
+            const bw = (navW - 36 - 24) / 5;
+            const bx = navX + 18 + c * (bw + 6), by = qY + 96 + r * 42;
+            let bg = C.bg, tc = C.ink, brd = C.blonde;
+            if (n === 0 && (q1PickedWrong || isQ2)) { bg = C.raspberry; tc = '#FFFFFF'; brd = C.raspberry; }
+            else if (n === 1 && q2PickedRight) { bg = C.sunflower; tc = C.ink; brd = C.sunflower; }
+            const isCur = (n === 0 && !isQ2) || (n === 1 && isQ2);
+            this.fillRoundRect(bx, by, bw, 34, 8, bg, isCur ? C.sangria : brd, isCur ? 2.2 : 1);
+            this.drawText(n + 1, bx + bw / 2, by + 17, { size: 11.5, weight: '700', color: tc, align: 'center', mono: true });
+          }
+
+          ctx.beginPath(); ctx.arc(navX + 26, qY + 356, 5, 0, Math.PI * 2); ctx.fillStyle = C.sunflower; ctx.fill();
+          this.drawText('Đúng', navX + 38, qY + 356, { size: 11.5, weight: '600', color: C.muted });
+          ctx.beginPath(); ctx.arc(navX + 94, qY + 356, 5, 0, Math.PI * 2); ctx.fillStyle = C.raspberry; ctx.fill();
+          this.drawText('Sai', navX + 106, qY + 356, { size: 11.5, weight: '600', color: C.muted });
+
+          this.fillRoundRect(navX, qY + 402, navW, 176, 18, C.surface, C.sangria, 1.5);
+          this.drawText('PHÍM TẮT LÀM BÀI', navX + navW / 2, qY + 428, { size: 11, weight: '800', color: C.sangria, align: 'center', mono: true });
+          const pressRight = slt >= 2.02 && slt < 2.55;
+          const pressB = slt >= 2.95 && slt < 3.55;
+          this.drawKeycap(navX + 18, qY + 452, 'A', false, 38);
+          this.drawKeycap(navX + 62, qY + 452, 'B', pressB, 38);
+          this.drawKeycap(navX + 106, qY + 452, 'C', false, 38);
+          this.drawKeycap(navX + 150, qY + 452, 'D', false, 38);
+          this.drawKeycap(navX + 200, qY + 452, '←', false, 40);
+          this.drawKeycap(navX + 246, qY + 452, '→', pressRight, 40);
+          this.drawText('A–D / 1–4: Chọn đáp án tức thì', navX + navW / 2, qY + 516, { size: 11.5, weight: '600', color: C.ink, align: 'center' });
+          this.drawText('← / →: Chuyển câu không giật trang', navX + navW / 2, qY + 542, { size: 11.5, weight: '500', color: C.muted, align: 'center' });
+
+          if (slt < 1.95) {
+            const p = this.easeInOut(this.seg(slt, 0.08, 0.78));
+            this.drawCursor(this.lerp(mainX + 520, mainX + 210, p), this.lerp(qY + 420, qY + 324, p), this.seg(slt, 0.82, 1.18));
+            if (q1PickedWrong) this.drawStepCallout(mainX + 250, qY + 232, '4', 'Cập nhật đúng/sai tại chỗ, không nhảy trang!', C.sangria, 1);
+          }
+        },
+
+        drawScene3(lt, t) {
+          const ctx = this.ctx;
+          const C = this.C;
+          const sbW = 60;
+          const mainX = sbW + 30;
+          const mainW = this.W - sbW - 56;
+
+          if (lt < 4.5) {
+            this.drawSidebar(sbW, 1, t);
+            const shuffled = lt >= 1.05 && lt < 2.55;
+            const restored = lt >= 2.55;
+            const menuOpen = lt >= 3.25;
+            const tbY = 20;
+
+            this.fillRoundRect(mainX, tbY, mainW, 100, 18, C.surface, C.blonde, 1.2);
+            this.fillRoundRect(mainX + 18, tbY + 12, 340, 32, 10, C.bg, C.blonde, 1);
+            this.drawText('De_Ky_Thuat_Dien.pdf (120 câu)     ▾', mainX + 32, tbY + 28, { size: 12, weight: '600' });
+            this.fillRoundRect(mainX + 370, tbY + 12, 280, 32, 10, C.bg, C.blonde, 1);
+            this.drawText('Chương 1 (Câu 1 - 50)            ▾', mainX + 384, tbY + 28, { size: 12, weight: '600' });
+            this.fillRoundRect(mainX + mainW - 116, tbY + 12, 98, 32, 16, C.bg, C.blonde, 1);
+            this.drawText('♻️ Làm lại', mainX + mainW - 67, tbY + 28, { size: 11.5, weight: '700', align: 'center' });
+
+            ctx.strokeStyle = C.hairline;
+            ctx.beginPath(); ctx.moveTo(mainX + 18, tbY + 52); ctx.lineTo(mainX + mainW - 18, tbY + 52); ctx.stroke();
+
+            this.fillRoundRect(mainX + 18, tbY + 60, 186, 28, 14, C.sidebar, C.blonde, 1);
+            this.fillRoundRect(mainX + 21, tbY + 62, 92, 24, 12, C.sangria);
+            this.drawText('🎯 Từng câu', mainX + 67, tbY + 74, { size: 11, weight: '700', color: '#FFFFFF', align: 'center' });
+            this.drawText('📋 Danh sách', mainX + 156, tbY + 74, { size: 11, weight: '600', color: C.muted, align: 'center' });
+
+            this.fillRoundRect(mainX + 214, tbY + 60, 134, 28, 14, C.surface, C.blonde, 1);
+            this.drawText('⚡ Tự chuyển: TẮT', mainX + 281, tbY + 74, { size: 11, weight: '600', color: C.muted, align: 'center' });
+
+            const shufX = mainX + mainW - 352, restX = mainX + mainW - 174;
+            this.fillRoundRect(shufX, tbY + 60, 170, 28, 14, C.sangria);
+            this.drawText('🔀 Đảo câu & đáp án', shufX + 85, tbY + 74, { size: 11.5, weight: '700', color: '#FFFFFF', align: 'center' });
+
+            this.fillRoundRect(restX, tbY + 60, 156, 28, 14, shuffled ? C.sunflowerSoft : C.bg, shuffled ? C.sunflower : C.blonde, shuffled ? 1.8 : 1);
+            this.drawText('↩️ Khôi phục ban đầu', restX + 78, tbY + 74, { size: 11, weight: '700', color: shuffled ? C.ink : C.muted, align: 'center' });
+
+            const qY = 136;
+            this.fillRoundRect(mainX, qY, mainW, 470, 18, C.surface, C.blonde, 1.2);
+            const qNum = shuffled ? '#27' : '#01';
+            const qTitle = shuffled ? 'Câu 27 • Đã đảo vị trí câu & xáo trộn 4 phương án A/B/C/D' : (restored ? 'Câu 1 • Đã khôi phục nguyên thứ tự & đáp án ban đầu' : 'Câu 1 • Chương 1 (Câu 1 - 50)');
+
+            this.fillRoundRect(mainX + 22, qY + 18, 52, 26, 13, shuffled ? C.raspberry : C.sangria);
+            this.drawText(qNum, mainX + 48, qY + 31, { size: 12, weight: '800', color: '#FFFFFF', align: 'center', mono: true });
+            this.drawText(qTitle, mainX + 86, qY + 31, { size: 14, weight: '700', color: shuffled ? C.raspberry : C.ink });
+
+            const toolX = mainX + mainW - 132, toolY = qY + 17;
+            this.fillRoundRect(toolX, toolY, 110, 28, 14, C.bg, C.blonde, 1);
+            this.drawText('⋯ Tùy chỉnh', toolX + 55, toolY + 14, { size: 11.5, weight: '700', align: 'center' });
+
+            this.fillRoundRect(mainX + 22, qY + 62, mainW - 44, 290, 14, '#FFFFFF', C.hairline, 1.2);
+            this.drawText(
+              shuffled
+                ? 'Câu 27 (PDF cắt sắc nét): Hệ phương trình trạng thái dạng A của mạng hai cửa tuyến tính:'
+                : 'Câu 1 (PDF cắt sắc nét): Hệ phương trình trạng thái dạng A của mạng hai cửa tuyến tính:',
+              mainX + 46, qY + 104, { size: 15, weight: '700' }
+            );
+            const eqs = shuffled
+              ? ['a. Ů₁ = A₁₁İ₁ + A₁₂İ₂', 'b. Ů₁ = A₁₁Ů₂ - A₁₂İ₂', 'c. Ů₁ = A₁₁Ů₂ + A₁₂İ₂  (Đúng)', 'd. Ů₁ = A₁₁Ů₂ + A₂₁İ₂']
+              : ['a. Ů₁ = A₁₁Ů₂ + A₁₂İ₂  (Đúng)', 'b. Ů₁ = A₁₁Ů₂ + A₂₁İ₂', 'c. Ů₁ = A₁₁Ů₂ - A₁₂İ₂', 'd. Ů₁ = A₁₁İ₁ + A₁₂İ₂'];
+            eqs.forEach((eq, idx) => {
+              const ex = mainX + 58 + (idx % 2) * 480, ey = qY + 168 + Math.floor(idx / 2) * 78;
+              this.fillRoundRect(ex - 14, ey - 22, 430, 48, 10, C.bg, C.hairline, 1);
+              this.drawText(eq, ex + 4, ey + 2, { size: 14, weight: '600', color: C.ink, mono: true });
+            });
+
+            const bw = (mainW - 44 - 36) / 4;
+            ['A', 'B', 'C', 'D'].forEach((ltr, idx) => {
+              const bx = mainX + 22 + idx * (bw + 12);
+              this.fillRoundRect(bx, qY + 378, bw, 62, 12, C.bg, C.blonde, 1.2);
+              this.fillRoundRect(bx + 14, qY + 394, 30, 30, 8, C.surface, C.blonde, 1);
+              this.drawText(ltr, bx + 29, qY + 409, { size: 12.5, weight: '800', align: 'center', mono: true });
+              this.drawText(`Đáp án ${ltr}`, bx + 56, qY + 409, { size: 13.5, weight: '700' });
+            });
+
+            if (lt < 1.05) {
+              this.drawSpotlightRing(shufX, tbY + 60, 170, 28, 14, t, C.sunflower);
+              this.drawStepCallout(shufX - 310, tbY + 104, '1', '1 nút đảo toàn bộ câu hỏi + đáp án (cả PDF)', C.raspberry, 1);
+            } else if (lt < 2.55) {
+              this.drawSpotlightRing(restX, tbY + 60, 156, 28, 14, t, C.sunflower);
+              this.drawStepCallout(restX - 285, tbY + 104, '2', 'Bấm Khôi phục trả lại nguyên thứ tự gốc', C.sangria, 1);
+            } else {
+              this.drawSpotlightRing(toolX, toolY, 110, 28, 14, t, C.sunflower);
+              if (menuOpen) {
+                const mx = toolX - 114, my = toolY + 34;
+                ctx.save();
+                ctx.shadowColor = 'rgba(45, 20, 28, 0.25)';
+                ctx.shadowBlur = 18;
+                this.fillRoundRect(mx, my, 224, 156, 14, C.surface, C.blonde, 1.2);
+                ctx.restore();
+                ['🔀 Đảo đáp án câu này', '🧹 Gọt dòng lẹm đáy PDF', '⬆️ Mở rộng đỉnh (+16px)', '✂️ Cắt lại khung PDF'].forEach((m, idx) => {
+                  const iy = my + 8 + idx * 36;
+                  if (idx === 1 || idx === 3) this.fillRoundRect(mx + 8, iy, 208, 32, 8, idx === 3 ? C.sunflowerSoft : C.bg);
+                  this.drawText(m, mx + 18, iy + 16, { size: 12, weight: (idx === 1 || idx === 3) ? '700' : '500' });
+                });
+                this.drawStepCallout(mx - 315, my + 48, '3', 'Gọt lẹm đáy hoặc mở Studio cắt khung PDF', C.sangria, 1);
+              }
+            }
+
+            if (lt < 1.45) {
+              const p = this.easeInOut(this.seg(lt, 0.08, 0.9));
+              this.drawCursor(this.lerp(mainX + 440, shufX + 85, p), this.lerp(qY + 140, tbY + 74, p), this.seg(lt, 0.94, 1.28));
+            } else if (lt < 2.85) {
+              const p = this.easeInOut(this.seg(lt, 1.5, 2.4));
+              this.drawCursor(this.lerp(shufX + 85, restX + 78, p), tbY + 74, this.seg(lt, 2.44, 2.76));
+            } else {
+              const p = this.easeInOut(this.seg(lt, 2.85, 3.22));
+              this.drawCursor(this.lerp(restX + 78, toolX + 55, p), this.lerp(tbY + 74, toolY + 14, p), this.seg(lt, 3.24, 3.58));
+            }
+            return;
+          }
+
+          const slt = lt - 4.5;
+          this.drawSidebar(sbW, 2, t);
+          const started = slt >= 1.35, pickedA = slt >= 2.35, submitted = slt >= 3.25;
+          const tbY = 20;
+
+          this.fillRoundRect(mainX, tbY, mainW, 98, 18, C.surface, C.blonde, 1.2);
+          this.fillRoundRect(mainX + 18, tbY + 12, 270, 32, 10, C.bg, C.blonde, 1);
+          this.drawText('De_Ky_Thuat_Dien.pdf (120) ▾', mainX + 30, tbY + 28, { size: 11.5, weight: '600' });
+          this.fillRoundRect(mainX + 298, tbY + 12, 188, 32, 10, C.bg, C.blonde, 1);
+          this.drawText('Tất cả chương        ▾', mainX + 310, tbY + 28, { size: 11.5, weight: '600' });
+          this.fillRoundRect(mainX + 496, tbY + 12, 92, 32, 10, C.bg, C.blonde, 1);
+          this.drawText('40 câu  ▾', mainX + 510, tbY + 28, { size: 11.5, weight: '600' });
+
+          const timerX = mainX + mainW - 376, startX = mainX + mainW - 266, subX = mainX + mainW - 96;
+          this.fillRoundRect(timerX, tbY + 12, 98, 32, 16, C.sangria);
+          ctx.beginPath(); ctx.arc(timerX + 18, tbY + 28, 3.5, 0, Math.PI * 2); ctx.fillStyle = C.sunflower; ctx.fill();
+          const remSec = started ? Math.max(0, 3600 - Math.floor((slt - 1.35) * 18)) : 3600;
+          this.drawText(this.formatClock(remSec), timerX + 60, tbY + 28, { size: 12, weight: '800', color: '#FFFFFF', align: 'center', mono: true });
+
+          this.fillRoundRect(startX, tbY + 12, 160, 32, 16, started ? C.sidebar : C.raspberry, started ? C.sunflower : null, 1.5);
+          this.drawText(submitted ? '✓ Đã nộp bài' : (started ? '● Đang thi' : '▶ Bắt đầu làm bài'), startX + 80, tbY + 28, {
+            size: 11.5, weight: '700', color: started ? C.ink : '#FFFFFF', align: 'center'
+          });
+
+          this.fillRoundRect(subX, tbY + 12, 82, 32, 16, started && !submitted ? C.raspberry : C.raspberrySoft, C.raspberry, 1);
+          this.drawText('Nộp bài', subX + 41, tbY + 28, { size: 11.5, weight: '700', color: started && !submitted ? '#FFFFFF' : C.raspberry, align: 'center' });
+
+          this.fillRoundRect(mainX + 18, tbY + 58, 178, 28, 14, C.sidebar, C.blonde, 1);
+          this.fillRoundRect(mainX + 21, tbY + 60, 88, 24, 12, C.sangria);
+          this.drawText('🎯 Từng câu', mainX + 65, tbY + 72, { size: 10.5, weight: '700', color: '#FFFFFF', align: 'center' });
+          this.drawText('📋 Danh sách', mainX + 150, tbY + 72, { size: 10.5, weight: '600', color: C.muted, align: 'center' });
+
+          this.fillRoundRect(mainX + mainW - 420, tbY + 58, 158, 28, 14, C.sangria);
+          this.drawText('🔀 Đảo câu & đáp án', mainX + mainW - 341, tbY + 72, { size: 11, weight: '700', color: '#FFFFFF', align: 'center' });
+          this.fillRoundRect(mainX + mainW - 252, tbY + 58, 144, 28, 14, C.bg, C.blonde, 1);
+          this.drawText('↩️ Khôi phục ban đầu', mainX + mainW - 180, tbY + 72, { size: 10.5, weight: '600', color: C.muted, align: 'center' });
+          this.fillRoundRect(mainX + mainW - 98, tbY + 58, 84, 28, 14, C.surface, C.blonde, 1);
+          this.drawText('♻️ Đề mới', mainX + mainW - 56, tbY + 72, { size: 10.5, weight: '600', color: C.ink, align: 'center' });
+
+          let cardY = 132;
+          if (!started) {
+            this.fillRoundRect(mainX, cardY, mainW, 48, 14, '#FBF6E8', C.sunflower, 1.5);
+            this.drawText('🔒 Phòng thi đang chờ bắt đầu — Đáp án đang KHÓA & đồng hồ 60:00 chưa chạy. Bấm ▶ Bắt đầu làm bài!', mainX + 22, cardY + 24, { size: 12.5, weight: '700' });
+            this.drawSpotlightRing(startX, tbY + 12, 160, 32, 16, t, C.sunflower);
+            cardY = 194;
+          } else if (submitted) {
+            this.fillRoundRect(mainX, cardY, mainW, 74, 16, '#FBF6E8', C.sunflower, 2);
+            this.drawText('KẾT QUẢ BÀI THI THỬ', mainX + 24, cardY + 20, { size: 10.5, weight: '800', color: C.raspberry, mono: true });
+            this.drawText('Điểm: 9.25 / 10   •   Đúng 37 / 40 câu hỏi', mainX + 24, cardY + 48, { size: 19, weight: '800' });
+            this.fillRoundRect(mainX + mainW - 220, cardY + 19, 198, 36, 18, C.sangria);
+            this.drawText('Xem chi tiết bài làm →', mainX + mainW - 121, cardY + 37, { size: 12, weight: '700', color: '#FFFFFF', align: 'center' });
+            cardY = 222;
+          }
+
+          this.fillRoundRect(mainX, cardY, mainW, 608 - cardY, 18, C.surface, C.blonde, 1.2);
+          this.drawText('Câu 1/40: Trong mạch RLC nối tiếp xảy ra hiện tượng cộng hưởng điện áp khi nào?', mainX + 26, cardY + 36, { size: 15, weight: '700' });
+
+          const exOpts = [
+            { l: 'A', t: 'ZL = ZC  (Cảm kháng bằng dung kháng)', right: true },
+            { l: 'B', t: 'ZL > ZC', right: false },
+            { l: 'C', t: 'R = 0', right: false },
+            { l: 'D', t: 'ZL < ZC', right: false }
+          ];
+          exOpts.forEach((ob, i) => {
+            const ow = (mainW - 64) / 2;
+            const ox = mainX + 26 + (i % 2) * (ow + 12), oy = cardY + 66 + Math.floor(i / 2) * 72;
+            let bg = started ? C.bg : '#F7F4ED', brd = C.blonde, lw = 1.2;
+            if (submitted && ob.right) { bg = C.sunflowerSoft; brd = C.sunflower; lw = 2.2; }
+            else if (pickedA && ob.l === 'A') { bg = '#F7EEF1'; brd = C.sangria; lw = 2; }
+            ctx.save();
+            if (!started) ctx.globalAlpha = 0.62;
+            this.fillRoundRect(ox, oy, ow, 58, 12, bg, brd, lw);
+            this.fillRoundRect(ox + 12, oy + 15, 28, 28, 7, (pickedA && ob.l === 'A') ? C.sangria : C.surface, brd, 1);
+            this.drawText(ob.l, ox + 26, oy + 29, { size: 12, weight: '800', color: (pickedA && ob.l === 'A') ? '#FFFFFF' : C.ink, align: 'center', mono: true });
+            this.drawText(ob.t, ox + 52, oy + 29, { size: 13.5, weight: '600' });
+            ctx.restore();
+          });
+
+          if (started && !submitted) {
+            this.drawSpotlightRing(subX, tbY + 12, 82, 32, 16, t, C.sunflower);
+            this.drawStepCallout(subX - 245, tbY + 52, '4', 'Làm xong bấm Nộp bài để chấm điểm thang 10!', C.raspberry, 1);
+          }
+
+          let cx = startX + 80, cy = tbY + 28, clickP = 0;
+          if (slt < 1.6) {
+            const p = this.easeInOut(this.seg(slt, 0.1, 1.25));
+            cx = this.lerp(mainX + 250, startX + 80, p); cy = this.lerp(cardY + 120, tbY + 28, p); clickP = this.seg(slt, 1.28, 1.58);
+          } else if (slt < 2.6) {
+            const p = this.easeInOut(this.seg(slt, 1.65, 2.25));
+            cx = this.lerp(startX + 80, mainX + 200, p); cy = this.lerp(tbY + 28, cardY + 83, p); clickP = this.seg(slt, 2.28, 2.58);
+          } else {
+            const p = this.easeInOut(this.seg(slt, 2.62, 3.16));
+            cx = this.lerp(mainX + 200, subX + 44, p); cy = this.lerp(cardY + 83, tbY + 28, p); clickP = this.seg(slt, 3.2, 3.58);
+          }
+          this.drawCursor(cx, cy, clickP);
+        },
+
+        drawScene4(lt, t) {
+          const ctx = this.ctx;
+          const C = this.C;
+          const sbW = 60;
+          this.drawSidebar(sbW, 3, t);
+
+          const mainX = sbW + 30;
+          const mainW = this.W - sbW - 56;
+          const phase = lt < 2.2 ? 0 : (lt < 4.8 ? 1 : (lt < 7.4 ? 2 : (lt < 10.2 ? 3 : 4)));
+
+          const subSteps = ['① Phạm vi & Nạp ĐA cũ', '② Dán chuỗi / Dấu "-"', '③ Lọc Chưa gán (-)', '④ Tìm & Sửa 2 chiều', '⑤ Rà soát & Lưu tất cả'];
+          const sw = (mainW - 32) / 5;
+          subSteps.forEach((txt, i) => {
+            const sx = mainX + i * (sw + 8), act = i === phase, past = i < phase;
+            this.fillRoundRect(sx, 18, sw, 34, 11, act ? C.sangria : (past ? C.sunflowerSoft : C.surface), act ? C.sangria : (past ? C.sunflower : C.blonde), act ? 1.5 : 1);
+            this.drawText(txt, sx + sw / 2, 35, { size: 11, weight: act || past ? '700' : '600', color: act ? '#FFFFFF' : C.ink, align: 'center' });
+          });
+
+          const boxY = 62;
+          this.fillRoundRect(mainX, boxY, mainW, 556, 18, C.surface, C.blonde, 1.2);
+
+          const loadedOldDemo = lt >= 1.05 && lt < 2.2;
+          const baseKey = 'ABCD-BADAB';
+          const typedLen = lt < 2.2 ? 0 : Math.min(baseKey.length, Math.floor(this.seg(lt, 2.2, 3.85) * baseKey.length));
+          const fixedSlot5 = lt >= 6.45;
+          const fixedSlot3 = lt >= 9.35;
+          const savedAll = lt >= 11.45;
+
+          let activeFilter = 'SEARCH';
+          if (phase === 2) activeFilter = 'UNASSIGNED';
+          else if (phase === 4 && lt < 11.15) activeFilter = 'EDITED';
+
+          let currentChars = [];
+          if (loadedOldDemo) currentChars = 'ABCDBCA-AB'.split('');
+          else if (typedLen > 0) {
+            currentChars = baseKey.slice(0, typedLen).split('');
+            if (fixedSlot5 && currentChars.length >= 5) currentChars[4] = 'B';
+            if (fixedSlot3 && currentChars.length >= 3) currentChars[2] = 'D';
+          }
+          const shownKey = currentChars.join('');
+
+          this.fillRoundRect(mainX + 20, boxY + 12, 300, 32, 10, C.bg, phase === 0 ? C.sangria : C.blonde, phase === 0 ? 1.8 : 1);
+          this.drawText('De_Ky_Thuat_Dien.pdf (120 câu) ▾', mainX + 32, boxY + 28, { size: 11.5, weight: '600' });
+          this.fillRoundRect(mainX + 330, boxY + 12, 236, 32, 10, C.bg, C.blonde, 1);
+          this.drawText('Chương 1 (Câu 1 - 50)       ▾', mainX + 342, boxY + 28, { size: 11.5, weight: '600' });
+
+          const loadBtnX = mainX + mainW - 348;
+          this.fillRoundRect(loadBtnX, boxY + 12, 174, 32, 16, phase === 0 ? C.sunflowerSoft : C.surface, phase === 0 ? C.sunflower : C.blonde, phase === 0 ? 1.8 : 1);
+          this.drawText('📥 Nạp đáp án hiện có', loadBtnX + 87, boxY + 28, { size: 11, weight: '700', align: 'center' });
+
+          const startNumBoxX = mainX + mainW - 82;
+          this.drawText('Từ câu số:', mainX + mainW - 156, boxY + 28, { size: 11, weight: '600', color: C.muted });
+          this.fillRoundRect(startNumBoxX, boxY + 12, 62, 32, 10, phase === 0 ? C.sunflowerSoft : C.bg, phase === 0 ? C.sangria : C.blonde, phase === 0 ? 1.6 : 1);
+          this.drawText('1', startNumBoxX + 31, boxY + 28, { size: 12, weight: '800', align: 'center', mono: true });
+
+          if (phase === 0) {
+            this.drawSpotlightRing(loadBtnX, boxY + 12, 174, 32, 16, t, C.sunflower);
+            this.drawSpotlightRing(startNumBoxX, boxY + 12, 62, 32, 10, t, C.copper);
+          }
+
+          this.drawText('NHẬP NHANH & SỬA TRỰC TIẾP ĐÁP ÁN HÀNG LOẠT (VD: ABCD-BAD HOẶC 1A 2B • NHẤN ENTER ĐỂ LƯU)', mainX + 20, boxY + 58, {
+            size: 10.5, weight: '800', color: C.sangria, mono: true
+          });
+
+          const inputX = mainX + 20, inputY = boxY + 72, inputW = mainW - 238;
+          const highlightInput = phase === 1 || (phase === 2 && fixedSlot5) || (phase === 3 && fixedSlot3);
+          this.fillRoundRect(inputX, inputY, inputW, 44, 12, C.bg, highlightInput ? C.sangria : C.blonde, highlightInput ? 2 : 1.2);
+
+          if (shownKey) {
+            ctx.font = '800 18px "JetBrains Mono", monospace';
+            let curCharX = inputX + 16;
+            for (let ci = 0; ci < currentChars.length; ci++) {
+              const ch = currentChars[ci];
+              const cw = ctx.measureText(ch).width;
+              const isJustFixed5 = ci === 4 && fixedSlot5 && phase === 2;
+              const isJustFixed3 = ci === 2 && fixedSlot3 && phase === 3;
+              const isDash = ch === '-';
+              if (isJustFixed5 || isJustFixed3) {
+                this.fillRoundRect(curCharX - 4, inputY + 7, cw + 8, 30, 7, C.sunflowerSoft, C.raspberry, 2);
+                this.drawSpotlightRing(curCharX - 4, inputY + 7, cw + 8, 30, 7, t, C.raspberry);
+              } else if (isDash) {
+                this.fillRoundRect(curCharX - 4, inputY + 7, cw + 8, 30, 7, C.raspberrySoft, C.raspberry, 1.2);
+              }
+              this.drawText(ch, curCharX, inputY + 22.5, { size: 18, weight: '800', color: (isJustFixed5 || isJustFixed3 || isDash) ? C.raspberry : C.ink, mono: true });
+              curCharX += cw + 3;
+            }
+            if (loadedOldDemo) {
+              this.fillRoundRect(inputX + inputW - 220, inputY + 10, 206, 24, 12, C.sunflowerSoft, C.sunflower, 1);
+              this.drawText('✓ Đã nạp chuỗi ĐA cũ từ đề', inputX + inputW - 117, inputY + 22, { size: 10.5, weight: '700', color: C.ink, align: 'center' });
+            } else if (phase === 1 && typedLen >= baseKey.length) {
+              this.fillRoundRect(inputX + inputW - 246, inputY + 10, 232, 24, 12, C.raspberrySoft, C.raspberry, 1);
+              this.drawText('Lưu ý: Dấu "-" ở #5 = chưa gán / bỏ qua', inputX + inputW - 130, inputY + 22, { size: 10.5, weight: '700', color: C.raspberry, align: 'center' });
+            }
+          } else {
+            this.drawText('Gõ liền mạch đáp án: abcd-bad... hoặc 1A 2B 5D (Nhấn Enter để lưu)', inputX + 16, inputY + 22, { size: 12.5, weight: '500', color: '#9A7E87' });
+          }
+
+          if (phase === 1) this.drawSpotlightRing(inputX, inputY, inputW, 44, 12, t, C.sunflower);
+
+          const saveX = mainX + mainW - 204;
+          this.fillRoundRect(saveX, inputY, 184, 44, 22, savedAll ? C.sunflower : C.sangria);
+          this.drawText(savedAll ? '✓ Đã lưu 10 câu!' : '💾 Áp dụng & Lưu tất cả', saveX + 92, inputY + 22, {
+            size: 12, weight: '700', color: savedAll ? C.ink : '#FFFFFF', align: 'center'
+          });
+          if (phase === 4 && !savedAll) this.drawSpotlightRing(saveX, inputY, 184, 44, 22, t, C.sunflower);
+
+          const panelY = boxY + 128;
+          this.fillRoundRect(mainX + 20, panelY, mainW - 40, 414, 16, C.bg, C.blonde, 1);
+
+          const editedCount = (fixedSlot5 ? 1 : 0) + (fixedSlot3 ? 1 : 0);
+          const unassignedCount = typedLen >= 5 ? (fixedSlot5 ? 0 : 1) : 0;
+          const assignedCount = loadedOldDemo ? 9 : Math.max(0, typedLen - unassignedCount);
+
+          const summaryTxt = loadedOldDemo
+            ? 'Đã nạp 10 đáp án hiện có (9 có ĐA • 1 chưa gán "-") • Sẵn sàng chỉnh sửa'
+            : (typedLen > 0
+              ? `Đã nhận diện ${typedLen} đáp án (${assignedCount} có ĐA • ${unassignedCount} chưa gán • từ câu 1)`
+              : 'Bước ①: Chọn Tài liệu / Chương & đặt "Từ câu số" hoặc bấm 📥 Nạp đáp án hiện có');
+          this.drawText(summaryTxt, mainX + 38, panelY + 24, { size: 11.5, weight: '700', color: (typedLen > 0 || loadedOldDemo) ? C.ink : C.muted });
+
+          if (editedCount > 0) {
+            this.fillRoundRect(mainX + 548, panelY + 13, 114, 22, 11, C.raspberry);
+            this.drawText(`ĐÃ SỬA: ${editedCount} CÂU`, mainX + 605, panelY + 24, { size: 10, weight: '800', color: '#FFFFFF', align: 'center', mono: true });
+          }
+
+          const filterBoxX = mainX + mainW - 324;
+          this.fillRoundRect(filterBoxX, panelY + 10, 286, 28, 14, C.surface, C.blonde, 1);
+          const filterBtns = [
+            { key: 'SEARCH', label: '🔍 Tìm câu sửa', x: filterBoxX + 3, w: 108 },
+            { key: 'EDITED', label: `Đã sửa${editedCount > 0 ? ` (${editedCount})` : ''}`, x: filterBoxX + 113, w: 80 },
+            { key: 'UNASSIGNED', label: `Chưa gán (${unassignedCount})`, x: filterBoxX + 195, w: 88 }
+          ];
+          filterBtns.forEach(fb => {
+            const isAct = activeFilter === fb.key;
+            if (isAct) this.fillRoundRect(fb.x, panelY + 13, fb.w, 22, 11, C.sangria);
+            this.drawText(fb.label, fb.x + fb.w / 2, panelY + 24, { size: 10, weight: isAct ? '700' : '600', color: isAct ? '#FFFFFF' : C.muted, align: 'center' });
+          });
+
+          if (phase === 2 && !fixedSlot5) this.drawSpotlightRing(filterBoxX + 195, panelY + 13, 88, 22, 11, t, C.sunflower);
+          else if (phase === 4 && lt < 11.15) this.drawSpotlightRing(filterBoxX + 113, panelY + 13, 80, 22, 11, t, C.sunflower);
+
+          const searchTypedQ3 = phase === 3 && lt >= 7.75;
+          this.fillRoundRect(mainX + 38, panelY + 46, mainW - 76, 36, 10, C.surface, searchTypedQ3 ? C.sangria : C.blonde, searchTypedQ3 ? 1.8 : 1);
+          this.drawText(
+            searchTypedQ3 ? '🔍   3' : '🔍   Gõ câu cần sửa: số câu (3), khoảng câu (1-5), danh sách (3, 5) hoặc từ khóa nội dung...',
+            mainX + 52, panelY + 64, { size: 12.5, weight: searchTypedQ3 ? '700' : '400', color: searchTypedQ3 ? C.ink : C.muted }
+          );
+          if (phase === 3) {
+            ['Số: 3', 'Khoảng: 1-5', 'Nhiều: 3,5', 'Từ khóa'].forEach((tag, ti) => {
+              const tx = mainX + mainW - 368 + ti * 82;
+              this.fillRoundRect(tx, panelY + 53, 76, 22, 11, ti === 0 ? C.sunflowerSoft : C.bg, ti === 0 ? C.sunflower : C.blonde, 1);
+              this.drawText(tag, tx + 38, panelY + 64, { size: 9.5, weight: '700', color: C.ink, align: 'center', mono: true });
+            });
+          }
+
+          const cY = panelY + 92, cW = mainW - 76, cH = 308;
+
+          if (phase === 0 || phase === 1) {
+            const cw3 = (cW - 28) / 3;
+            const cards = [
+              {
+                step: 'TÍNH NĂNG 01', title: 'Chọn phạm vi & Nạp ĐA cũ', active: phase === 0, accent: C.sangria,
+                lines: ['• Lọc đúng Tài liệu / Chương cần gán ĐA', '• Đặt "Từ câu số" (VD: 1 hoặc 51) để gán tiếp', '• Bấm 📥 Nạp đáp án hiện có để đổ toàn bộ', '  đáp án đang lưu lên ô chuỗi mà không cần', '  gõ lại từ đầu!']
+              },
+              {
+                step: 'TÍNH NĂNG 02', title: '2 kiểu cú pháp & Dấu "-" bỏ qua', active: phase === 1, accent: C.raspberry,
+                lines: ['• Kiểu liền mạch:  ABCD-BADAB', '  → Tự gán nối tiếp từ "Từ câu số"', '• Kiểu kèm số câu:  1A 2B 5D 12C', '  → Gán thẳng đúng số thứ tự câu chỉ định', '• Ký tự "-" hoặc "?": giữ nguyên, không ghi đè']
+              },
+              {
+                step: 'TÍNH NĂNG 03', title: 'Lọc, Tìm & Sửa đồng bộ 2 chiều', active: false, accent: C.copper,
+                lines: ['• Tab Chưa gán (-): lọc ngay câu còn trống', '• Tìm câu sửa: gõ 3, 1-5, 3,5 hoặc từ khóa', '• Bấm đổi A/B/C/D ngay trên thẻ câu hỏi', '  → Tự cập nhật ký tự tương ứng trên chuỗi!', '• Bấm 💾 Lưu hoặc Enter → Lưu vào IndexedDB']
+              }
+            ];
+            cards.forEach((cd, idx) => {
+              const x0 = mainX + 38 + idx * (cw3 + 14);
+              this.fillRoundRect(x0, cY, cw3, cH, 14, cd.active ? '#FFFDF8' : C.surface, cd.active ? cd.accent : C.blonde, cd.active ? 2 : 1);
+              this.fillRoundRect(x0 + 16, cY + 16, 108, 24, 12, cd.active ? cd.accent : C.sidebar);
+              this.drawText(cd.step, x0 + 70, cY + 28, { size: 10, weight: '800', color: cd.active ? '#FFFFFF' : C.ink, align: 'center', mono: true });
+              this.drawText(cd.title, x0 + 16, cY + 60, { size: 13.5, weight: '800', color: cd.active ? cd.accent : C.ink });
+              ctx.strokeStyle = C.hairline;
+              ctx.beginPath(); ctx.moveTo(x0 + 16, cY + 78); ctx.lineTo(x0 + cw3 - 16, cY + 78); ctx.stroke();
+              cd.lines.forEach((ln, li) => {
+                this.drawText(ln, x0 + 16, cY + 106 + li * 36, { size: 12, weight: (li === 0 || li === 2 || li === 4) ? '600' : '500', color: cd.active ? C.ink : C.muted });
+              });
+            });
+            if (phase === 0) this.drawStepCallout(loadBtnX - 245, boxY + 50, '1', 'Nạp lại chuỗi ĐA cũ hoặc đặt Từ câu số!', C.sangria, 1);
+            else this.drawStepCallout(inputX + 260, inputY + 50, '2', 'Hỗ trợ cả ABCD-BAD & 1A 2B 5D (dấu "-" bỏ qua)', C.raspberry, 1);
+          } else if (phase === 2) {
+            const curLtr5 = fixedSlot5 ? 'B' : '-';
+            this.fillRoundRect(mainX + 38, cY, cW, cH, 14, C.surface, fixedSlot5 ? C.sangria : C.raspberry, 2);
+            this.fillRoundRect(mainX + 56, cY + 16, 44, 24, 12, C.sangria);
+            this.drawText('#5', mainX + 78, cY + 28, { size: 12, weight: '800', color: '#FFFFFF', align: 'center', mono: true });
+            this.drawText('Câu 5 • Chương 1 (Câu 1 - 50)', mainX + 112, cY + 28, { size: 13, weight: '700' });
+            this.fillRoundRect(mainX + 328, cY + 17, 134, 22, 11, fixedSlot5 ? C.sunflowerSoft : C.raspberrySoft, fixedSlot5 ? C.sunflower : C.raspberry, 1);
+            this.drawText(fixedSlot5 ? 'ĐÃ SỬA: - → B' : 'Đáp án gán: - (Trống)', mainX + 395, cY + 28, { size: 10.5, weight: '800', color: fixedSlot5 ? C.ink : C.raspberry, align: 'center', mono: true });
+
+            ['A', 'B', 'C', 'D', '-'].forEach((ltr, idx) => {
+              const lx = mainX + mainW - 266 + idx * 40, sel = ltr === curLtr5;
+              this.fillRoundRect(lx, cY + 14, 32, 28, 8, sel ? C.sangria : C.bg, sel ? C.sangria : C.blonde, 1);
+              this.drawText(ltr, lx + 16, cY + 28, { size: 12, weight: '800', color: sel ? '#FFFFFF' : C.ink, align: 'center', mono: true });
+            });
+
+            this.drawText('Câu 5: Trong mạch điện xoay chiều thuần cảm (chỉ có cuộn dây L), dòng điện i so với điện áp u sẽ:', mainX + 56, cY + 74, { size: 14, weight: '700' });
+            [
+              { l: 'A', t: 'Sớm pha góc π/2' }, { l: 'B', t: 'Chậm pha góc π/2' },
+              { l: 'C', t: 'Cùng pha với điện áp u' }, { l: 'D', t: 'Ngược pha góc π' }
+            ].forEach((ob, i) => {
+              const ow = (cW - 48) / 2, ox = mainX + 56 + (i % 2) * (ow + 12), oy = cY + 106 + Math.floor(i / 2) * 72, sel = ob.l === curLtr5;
+              this.fillRoundRect(ox, oy, ow, 56, 11, sel ? '#F7EEF1' : C.bg, sel ? C.sangria : C.blonde, sel ? 2.2 : 1);
+              if (!fixedSlot5 && ob.l === 'B') this.drawSpotlightRing(ox, oy, ow, 56, 11, t, C.sunflower);
+              this.fillRoundRect(ox + 12, oy + 14, 28, 28, 7, sel ? C.sangria : C.surface, sel ? C.sangria : C.blonde, 1);
+              this.drawText(ob.l, ox + 26, oy + 28, { size: 12, weight: '800', color: sel ? '#FFFFFF' : C.ink, align: 'center', mono: true });
+              this.drawText(ob.t, ox + 52, oy + 28, { size: 13.5, weight: sel ? '700' : '500' });
+            });
+            this.drawText(fixedSlot5 ? '✓ Đồng bộ 2 chiều: Ô chuỗi phía trên lập tức đổi dấu "-" ở vị trí #5 thành "B"!' : '💡 Mẹo: Khi dán chuỗi thiếu đáp án, dùng bộ lọc "Chưa gán (-)" để tìm & điền ngay câu trống!', mainX + 56, cY + 276, { size: 12.5, weight: '700', color: fixedSlot5 ? C.sangria : C.muted });
+            if (fixedSlot5) this.drawStepCallout(inputX + 215, inputY + 48, '3', 'Ký tự #5 tự đổi "-" → "B" tức thì!', C.raspberry, 1);
+          } else if (phase === 3) {
+            const curLtr3 = fixedSlot3 ? 'D' : 'C';
+            this.fillRoundRect(mainX + 38, cY, cW, cH, 14, C.surface, fixedSlot3 ? C.sangria : C.blonde, fixedSlot3 ? 2 : 1.2);
+            this.fillRoundRect(mainX + 56, cY + 16, 44, 24, 12, C.sangria);
+            this.drawText('#3', mainX + 78, cY + 28, { size: 12, weight: '800', color: '#FFFFFF', align: 'center', mono: true });
+            this.drawText('Câu 3 • Chương 1 (Câu 1 - 50)', mainX + 112, cY + 28, { size: 13, weight: '700' });
+            this.fillRoundRect(mainX + 328, cY + 17, 134, 22, 11, fixedSlot3 ? C.sunflowerSoft : C.sidebar, fixedSlot3 ? C.sunflower : C.blonde, 1);
+            this.drawText(fixedSlot3 ? 'ĐÃ SỬA: C → D' : 'Đáp án gán: C', mainX + 395, cY + 28, { size: 10.5, weight: '800', color: C.ink, align: 'center', mono: true });
+
+            ['A', 'B', 'C', 'D', '-'].forEach((ltr, idx) => {
+              const lx = mainX + mainW - 266 + idx * 40, sel = ltr === curLtr3;
+              this.fillRoundRect(lx, cY + 14, 32, 28, 8, sel ? C.sangria : C.bg, sel ? C.sangria : C.blonde, 1);
+              this.drawText(ltr, lx + 16, cY + 28, { size: 12, weight: '800', color: sel ? '#FFFFFF' : C.ink, align: 'center', mono: true });
+            });
+
+            this.drawText('Câu 3: Công suất tác dụng P của mạch điện xoay chiều 1 pha được tính bằng công thức nào?', mainX + 56, cY + 74, { size: 14, weight: '700' });
+            [
+              { l: 'A', t: 'P = U · I · sin(φ)' }, { l: 'B', t: 'P = U · I' },
+              { l: 'C', t: 'P = U² / Z' }, { l: 'D', t: 'P = U · I · cos(φ)' }
+            ].forEach((ob, i) => {
+              const ow = (cW - 48) / 2, ox = mainX + 56 + (i % 2) * (ow + 12), oy = cY + 106 + Math.floor(i / 2) * 72, sel = ob.l === curLtr3;
+              this.fillRoundRect(ox, oy, ow, 56, 11, sel ? '#F7EEF1' : C.bg, sel ? C.sangria : C.blonde, sel ? 2.2 : 1);
+              if (!fixedSlot3 && ob.l === 'D') this.drawSpotlightRing(ox, oy, ow, 56, 11, t, C.sunflower);
+              this.fillRoundRect(ox + 12, oy + 14, 28, 28, 7, sel ? C.sangria : C.surface, sel ? C.sangria : C.blonde, 1);
+              this.drawText(ob.l, ox + 26, oy + 28, { size: 12, weight: '800', color: sel ? '#FFFFFF' : C.ink, align: 'center', mono: true });
+              this.drawText(ob.t, ox + 52, oy + 28, { size: 13.5, weight: sel ? '700' : '500', mono: true });
+            });
+            this.drawText(fixedSlot3 ? '✓ Bấm trực tiếp vào nội dung phương án D → Ô chuỗi đổi vị trí #3 thành "D" (đồng bộ 2 chiều)!' : '🔍 Gõ số câu, khoảng (1-5) hoặc từ khóa để đối chiếu cả đề bài lẫn đáp án trước khi sửa.', mainX + 56, cY + 276, { size: 12.5, weight: '700', color: fixedSlot3 ? C.sangria : C.muted });
+            if (fixedSlot3) this.drawStepCallout(inputX + 185, inputY + 48, '4', 'Ký tự #3 tự đổi "C" → "D" đồng bộ 2 chiều!', C.raspberry, 1);
+          } else {
+            this.fillRoundRect(mainX + 38, cY, cW, cH, 14, C.surface, savedAll ? C.sunflower : C.sangria, 1.8);
+            this.drawText(savedAll ? '✅ ĐÃ LƯU THÀNH CÔNG TOÀN BỘ 10 ĐÁP ÁN VÀO BỘ NHỚ TRÌNH DUYỆT (INDEXEDDB)' : '📋 RÀ SOÁT CÁC CÂU VỪA CHỈNH SỬA (TAB "ĐÃ SỬA") TRƯỚC KHI LƯU TẤT CẢ', mainX + 58, cY + 30, { size: 12.5, weight: '800', color: savedAll ? C.sangria : C.ink });
+
+            [
+              { num: '#3', title: 'Câu 3 • Công suất tác dụng P của mạch điện xoay chiều 1 pha...', change: 'C  →  D', badge: 'ĐÃ SỬA' },
+              { num: '#5', title: 'Câu 5 • Trong mạch điện xoay chiều thuần cảm (chỉ có cuộn dây L)...', change: '-  →  B', badge: 'ĐÃ ĐIỀN' }
+            ].forEach((it, idx) => {
+              const ry = cY + 60 + idx * 78;
+              this.fillRoundRect(mainX + 58, ry, cW - 40, 64, 12, savedAll ? C.sunflowerSoft : C.bg, savedAll ? C.sunflower : C.blonde, 1.2);
+              this.fillRoundRect(mainX + 74, ry + 18, 44, 28, 10, C.sangria);
+              this.drawText(it.num, mainX + 96, ry + 32, { size: 12, weight: '800', color: '#FFFFFF', align: 'center', mono: true });
+              this.drawText(it.title, mainX + 132, ry + 32, { size: 13, weight: '600', color: C.ink });
+              this.fillRoundRect(mainX + cW - 196, ry + 18, 86, 28, 10, C.surface, C.sangria, 1.2);
+              this.drawText(it.change, mainX + cW - 153, ry + 32, { size: 12, weight: '800', color: C.raspberry, align: 'center', mono: true });
+              this.fillRoundRect(mainX + cW - 100, ry + 18, 76, 28, 14, savedAll ? C.sunflower : C.raspberry);
+              this.drawText(savedAll ? '✓ ĐÃ LƯU' : it.badge, mainX + cW - 62, ry + 32, { size: 10, weight: '800', color: savedAll ? C.ink : '#FFFFFF', align: 'center', mono: true });
+            });
+
+            this.fillRoundRect(mainX + 58, cY + 226, cW - 40, 56, 12, C.sidebar, C.blonde, 1);
+            this.drawText('💾  Nhấn "Áp dụng & Lưu tất cả" (hoặc phím Enter ở ô chuỗi) → Tự đồng bộ sang Luyện Tập & Thi Thử ngay lập tức!', mainX + 78, cY + 254, { size: 12.5, weight: '700', color: C.sangria });
+            if (!savedAll) this.drawStepCallout(saveX - 275, inputY + 50, '5', 'Bấm Lưu tất cả (hoặc nhấn Enter) để hoàn tất!', C.sangria, 1);
+          }
+
+          if (lt < 12.0) {
+            const optB5X = mainX + 56 + (cW - 48) / 2 + 12 + 120, optB5Y = cY + 106 + 28;
+            const optD3X = mainX + 56 + (cW - 48) / 2 + 12 + 120, optD3Y = cY + 106 + 72 + 28;
+            let cx = loadBtnX + 87, cy = boxY + 28, clickP = 0;
+
+            if (lt < 2.2) {
+              const p = this.easeInOut(this.seg(lt, 0.1, 0.95));
+              cx = this.lerp(mainX + 260, loadBtnX + 87, p); cy = this.lerp(boxY + 180, boxY + 28, p); clickP = this.seg(lt, 0.98, 1.32);
+            } else if (lt < 4.8) {
+              const p = this.easeInOut(this.seg(lt, 2.2, 2.75));
+              cx = this.lerp(loadBtnX + 87, inputX + 220, p); cy = this.lerp(boxY + 28, inputY + 22, p);
+            } else if (lt < 5.7) {
+              const p = this.easeInOut(this.seg(lt, 4.8, 5.3));
+              cx = this.lerp(inputX + 220, filterBoxX + 239, p); cy = this.lerp(inputY + 22, panelY + 24, p); clickP = this.seg(lt, 5.32, 5.65);
+            } else if (lt < 7.4) {
+              const p = this.easeInOut(this.seg(lt, 5.7, 6.38));
+              cx = this.lerp(filterBoxX + 239, optB5X, p); cy = this.lerp(panelY + 24, optB5Y, p); clickP = this.seg(lt, 6.4, 6.76);
+            } else if (lt < 8.4) {
+              const p = this.easeInOut(this.seg(lt, 7.4, 7.9));
+              cx = this.lerp(optB5X, mainX + 160, p); cy = this.lerp(optB5Y, panelY + 64, p); clickP = this.seg(lt, 7.92, 8.2);
+            } else if (lt < 10.2) {
+              const p = this.easeInOut(this.seg(lt, 8.5, 9.28));
+              cx = this.lerp(mainX + 160, optD3X, p); cy = this.lerp(panelY + 64, optD3Y, p); clickP = this.seg(lt, 9.3, 9.68);
+            } else {
+              const p = this.easeInOut(this.seg(lt, 10.55, 11.35));
+              cx = this.lerp(optD3X, saveX + 92, p); cy = this.lerp(optD3Y, inputY + 22, p); clickP = this.seg(lt, 11.4, 11.82);
+            }
+            this.drawCursor(cx, cy, clickP);
+          }
+
+          if (lt >= 12.1) {
+            const oa = this.easeOut(this.seg(lt, 12.1, 12.55));
+            ctx.save();
+            ctx.globalAlpha = oa;
+            ctx.fillStyle = 'rgba(19, 27, 28, 0.92)';
+            ctx.fillRect(0, 0, this.W, this.H);
+
+            const sc = this.lerp(0.95, 1, oa);
+            ctx.translate(this.W / 2, this.H / 2 - 28);
+            ctx.scale(sc, sc);
+            this.drawBrandLogo(-40, -128, 80);
+            this.drawText('SẴN SÀNG ÔN LUYỆN CÙNG VIETTULAM', 0, -20, { size: 26, weight: '800', color: '#FFFFFF', align: 'center' });
+
+            ['📄 Tự nhận ĐA từ file', '🔀 Đảo câu + đáp án', '⚡ Nhập nhanh ĐA 2 chiều'].forEach((pTxt, i) => {
+              const px = -345 + i * 238;
+              this.fillRoundRect(px, 16, 214, 38, 19, 'rgba(255,255,255,0.12)', '#DBC696', 1.2);
+              this.drawText(pTxt, px + 107, 35, { size: 12.5, weight: '700', color: '#FAF8F4', align: 'center' });
+            });
+            this.drawText('Nạp tài liệu ở mục Tổng Quan để bắt đầu ôn tập hiệu quả ngay hôm nay!', 0, 84, { size: 14, weight: '500', color: '#E2D7BF', align: 'center' });
+            ctx.restore();
+          }
+        },
+
+        drawSceneChrome(scene, t) {
+          const ctx = this.ctx;
+          const C = this.C;
+          const gap = 4;
+          const usableW = this.W - 24 - gap * (this.SCENES.length - 1);
+          let xCur = 12;
+          this.SCENES.forEach(sc => {
+            const segW = ((sc.end - sc.start) / this.DURATION) * usableW;
+            this.fillRoundRect(xCur, 5, segW, 4, 2, 'rgba(62, 29, 39, 0.14)');
+            const fillRatio = t >= sc.end ? 1 : (t <= sc.start ? 0 : (t - sc.start) / (sc.end - sc.start));
+            if (fillRatio > 0) this.fillRoundRect(xCur, 5, segW * fillRatio, 4, 2, sc.id === scene.id ? C.raspberry : C.sangria);
+            xCur += segW + gap;
+          });
+
+          const subY = this.H - 96;
+          ctx.fillStyle = 'rgba(45, 20, 28, 0.94)';
+          ctx.fillRect(0, subY, this.W, 96);
+          ctx.fillStyle = C.sunflower;
+          ctx.fillRect(0, subY, this.W, 2.5);
+
+          this.fillRoundRect(24, subY + 16, 124, 26, 13, C.sangria, C.sunflower, 1.2);
+          this.drawText(scene.tag, 86, subY + 29.5, { size: 11, weight: '800', color: '#FAF8F4', align: 'center', mono: true });
+          this.drawText(scene.title, 162, subY + 30, { size: 16.5, weight: '800', color: '#FFFFFF' });
+          this.drawText(scene.sub, 24, subY + 66, { size: 13.5, weight: '500', color: '#E2D7BF' });
+          this.drawText(`${this.formatClock(t)} / 00:40`, this.W - 24, subY + 30, { size: 12, weight: '700', color: C.sunflower, align: 'right', mono: true });
+        },
+
+        getSceneAt(t) {
+          for (const sc of this.SCENES) {
+            if (t >= sc.start && t < sc.end) return sc;
+          }
+          return this.SCENES[this.SCENES.length - 1];
+        },
+
+        speakSceneIfNeeded(scene) {
+          if (!this.state.voiceEnabled || this.state.isRecording || !this.state.playing || !this.state.tabActive) return;
+          if (this.state.lastSpokenSceneId === scene.id) return;
+          this.state.lastSpokenSceneId = scene.id;
+          if ('speechSynthesis' in window) {
+            try {
+              window.speechSynthesis.cancel();
+              const utter = new SpeechSynthesisUtterance(scene.voice);
+              utter.lang = 'vi-VN';
+              utter.rate = Math.min(1.35, 1.08 * this.state.speed);
+              window.speechSynthesis.speak(utter);
+            } catch (e) {}
+          }
+        },
+
+        renderFrame(t) {
+          if (!this.ctx) return;
+          this.ctx.clearRect(0, 0, this.W, this.H);
+          this.ctx.fillStyle = this.C.bg;
+          this.ctx.fillRect(0, 0, this.W, this.H);
+
+          const scene = this.getSceneAt(t);
+          const lt = t - scene.start;
+          if (scene.id === 0) this.drawScene1(lt, t);
+          else if (scene.id === 1) this.drawScene2(lt, t);
+          else if (scene.id === 2) this.drawScene3(lt, t);
+          else this.drawScene4(lt, t);
+
+          this.drawSceneChrome(scene, t);
+          this.speakSceneIfNeeded(scene);
+        },
+
+        syncUiControls() {
+          const scene = this.getSceneAt(this.state.currentTime);
+          const slider = document.getElementById('guideTimelineSlider');
+          const timeEl = document.getElementById('guideTimeCurrent');
+          const labelEl = document.getElementById('guideCurrentSceneLabel');
+          if (slider) slider.value = this.state.currentTime.toFixed(2);
+          if (timeEl) timeEl.textContent = this.formatClock(this.state.currentTime);
+          if (labelEl) labelEl.textContent = `${scene.tag} • ${scene.shortName}`;
+
+          document.querySelectorAll('.guide-scene-chip').forEach(btn => {
+            const idx = Number(btn.getAttribute('data-guide-scene'));
+            btn.className = idx === scene.id
+              ? 'guide-scene-chip px-3 py-1 rounded-full bg-[#653040] text-[#FFFFFF] font-semibold transition'
+              : 'guide-scene-chip px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 text-[#E2D7BF] font-medium transition';
+          });
+
+          if (this.state.isRecording) {
+            const pct = Math.min(100, Math.round((this.state.currentTime / this.DURATION) * 100));
+            const recTxt = document.getElementById('guideRecordingProgressText');
+            if (recTxt) recTxt.textContent = `Đang xuất video HD 40s... ${pct}%`;
+          }
+        },
+
+        animateLoop(ts) {
+          if (!this.state.tabActive) {
+            this.rafId = null;
+            return;
+          }
+          if (this.state.lastTs === null) this.state.lastTs = ts;
+          const dt = Math.min(0.1, (ts - this.state.lastTs) / 1000);
+          this.state.lastTs = ts;
+
+          if (this.state.playing) {
+            this.state.currentTime += dt * (this.state.isRecording ? 1 : this.state.speed);
+            if (this.state.currentTime >= this.DURATION) {
+              if (this.state.isRecording) {
+                this.state.currentTime = this.DURATION;
+                this.renderFrame(this.state.currentTime);
+                this.syncUiControls();
+                this.stopVideoExport();
+              } else {
+                this.state.currentTime = 0;
+                this.state.lastSpokenSceneId = -1;
+              }
+            }
+          }
+
+          this.renderFrame(this.state.currentTime);
+          this.syncUiControls();
+          this.rafId = requestAnimationFrame(nextTs => this.animateLoop(nextTs));
+        },
+
+        togglePlayPause() {
+          if (this.state.isRecording) return;
+          this.state.playing = !this.state.playing;
+          const btn = document.getElementById('btnGuidePlayPause');
+          if (btn) btn.textContent = this.state.playing ? '⏸ Tạm dừng' : '▶ Phát tiếp';
+          if (!this.state.playing && 'speechSynthesis' in window) {
+            try { window.speechSynthesis.cancel(); } catch (e) {}
+          }
+        },
+
+        jumpToScene(idx) {
+          if (this.state.isRecording) return;
+          const target = this.SCENES[this.clamp(idx, 0, this.SCENES.length - 1)];
+          this.state.currentTime = target.start + 0.02;
+          this.state.lastSpokenSceneId = -1;
+          this.state.playing = true;
+          const btn = document.getElementById('btnGuidePlayPause');
+          if (btn) btn.textContent = '⏸ Tạm dừng';
+          this.renderFrame(this.state.currentTime);
+          this.syncUiControls();
+        },
+
+        startVideoExport() {
+          if (this.state.isRecording || !this.canvas) return;
+          if (!this.canvas.captureStream || typeof MediaRecorder === 'undefined') {
+            AppUtils.showToast('Trình duyệt hiện tại không hỗ trợ ghi video trực tiếp.', 'error');
+            return;
+          }
+          if ('speechSynthesis' in window) {
+            try { window.speechSynthesis.cancel(); } catch (e) {}
+          }
+
+          const stream = this.canvas.captureStream(30);
+          const mimeCandidates = ['video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm'];
+          const chosenMime = mimeCandidates.find(m => MediaRecorder.isTypeSupported(m)) || '';
+
+          this.state.recordedChunks = [];
+          try {
+            this.state.mediaRecorder = chosenMime
+              ? new MediaRecorder(stream, { mimeType: chosenMime, videoBitsPerSecond: 4500000 })
+              : new MediaRecorder(stream);
+          } catch (err) {
+            AppUtils.showToast(`Không thể khởi tạo trình ghi video: ${err.message}`, 'error');
+            return;
+          }
+
+          this.state.mediaRecorder.ondataavailable = e => {
+            if (e.data && e.data.size > 0) this.state.recordedChunks.push(e.data);
+          };
+          this.state.mediaRecorder.onstop = () => {
+            const blob = new Blob(this.state.recordedChunks, { type: chosenMime || 'video/webm' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'huong_dan_viettulam_40s_HD.webm';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 4000);
+            AppUtils.showToast('Đã xuất và tải xong video hướng dẫn 40s HD (.webm)!', 'success');
+          };
+
+          this.state.isRecording = true;
+          this.state.currentTime = 0;
+          this.state.playing = true;
+          this.state.lastTs = null;
+
+          const recBtn = document.getElementById('btnRecordGuideVideo');
+          const recBtnText = document.getElementById('guideRecordBtnText');
+          const recOv = document.getElementById('guideRecordingOverlay');
+          const playBtn = document.getElementById('btnGuidePlayPause');
+          if (recBtn) recBtn.disabled = true;
+          if (recBtnText) recBtnText.textContent = 'Đang ghi (00:40)...';
+          if (recOv) recOv.classList.remove('hidden');
+          if (playBtn) playBtn.textContent = '⏸ Đang ghi';
+
+          this.state.mediaRecorder.start(200);
+          AppUtils.showToast('Đang xuất video HD 40 giây, vui lòng giữ nguyên tab trình duyệt...', 'info');
+        },
+
+        stopVideoExport() {
+          if (!this.state.isRecording) return;
+          this.state.isRecording = false;
+          this.state.playing = false;
+          if (this.state.mediaRecorder && this.state.mediaRecorder.state !== 'inactive') {
+            this.state.mediaRecorder.stop();
+          }
+          const recBtn = document.getElementById('btnRecordGuideVideo');
+          const recBtnText = document.getElementById('guideRecordBtnText');
+          const recOv = document.getElementById('guideRecordingOverlay');
+          const playBtn = document.getElementById('btnGuidePlayPause');
+          if (recBtn) recBtn.disabled = false;
+          if (recBtnText) recBtnText.textContent = '⬇ Xuất & Tải Video 40s (.webm)';
+          if (recOv) recOv.classList.add('hidden');
+          if (playBtn) playBtn.textContent = '▶ Phát tiếp';
+        },
+
+        bindEvents() {
+          this.canvas?.addEventListener('click', () => this.togglePlayPause());
+          document.getElementById('btnGuidePlayPause')?.addEventListener('click', () => this.togglePlayPause());
+          document.getElementById('btnGuideReplay')?.addEventListener('click', () => {
+            if (this.state.isRecording) return;
+            this.state.currentTime = 0;
+            this.state.lastSpokenSceneId = -1;
+            this.state.playing = true;
+            const btn = document.getElementById('btnGuidePlayPause');
+            if (btn) btn.textContent = '⏸ Tạm dừng';
+            this.renderFrame(0);
+            this.syncUiControls();
+          });
+          document.getElementById('btnGuidePrevScene')?.addEventListener('click', () => {
+            const cur = this.getSceneAt(this.state.currentTime).id;
+            this.jumpToScene(Math.max(0, cur - 1));
+          });
+          document.getElementById('btnGuideNextScene')?.addEventListener('click', () => {
+            const cur = this.getSceneAt(this.state.currentTime).id;
+            this.jumpToScene(Math.min(this.SCENES.length - 1, cur + 1));
+          });
+          document.getElementById('guideTimelineSlider')?.addEventListener('input', e => {
+            if (this.state.isRecording) return;
+            this.state.currentTime = this.clamp(parseFloat(e.target.value) || 0, 0, this.DURATION);
+            this.state.lastSpokenSceneId = -1;
+            this.renderFrame(this.state.currentTime);
+            this.syncUiControls();
+          });
+          document.getElementById('guideSpeedSelect')?.addEventListener('change', e => {
+            this.state.speed = parseFloat(e.target.value) || 1;
+          });
+          document.querySelectorAll('.guide-scene-chip').forEach(btn => {
+            btn.addEventListener('click', () => {
+              this.jumpToScene(Number(btn.getAttribute('data-guide-scene')));
+            });
+          });
+          document.getElementById('btnGuideToggleVoice')?.addEventListener('click', () => {
+            this.state.voiceEnabled = !this.state.voiceEnabled;
+            this.state.lastSpokenSceneId = -1;
+            const icon = document.getElementById('guideVoiceIcon');
+            const lbl = document.getElementById('guideVoiceLabel');
+            if (icon) icon.textContent = this.state.voiceEnabled ? '🔊' : '🔇';
+            if (lbl) lbl.textContent = this.state.voiceEnabled ? 'Thuyết minh: BẬT' : 'Thuyết minh: TẮT';
+            if (!this.state.voiceEnabled && 'speechSynthesis' in window) {
+              try { window.speechSynthesis.cancel(); } catch (e) {}
+            } else if (this.state.voiceEnabled) {
+              this.speakSceneIfNeeded(this.getSceneAt(this.state.currentTime));
+            }
+          });
+          document.getElementById('btnRecordGuideVideo')?.addEventListener('click', () => this.startVideoExport());
+        }
+      };
+
+      // Khởi chạy ứng dụng sau khi DOM sẵn sàng
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => ViettulamApp.init());
+      } else {
         ViettulamApp.init();
-      });
+      }
     })();
   </script>
 </body>

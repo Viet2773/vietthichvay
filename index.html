@@ -901,11 +901,16 @@
                     </button>
                   </div>
 
-                  <!-- Thanh tiến trình tải file -->
+                  <!-- Thanh tiến trình tải file (có nút Hủy an toàn) -->
                   <div id="uploadProgressBox" class="hidden mt-3.5 rounded-xl border border-[#E2D7BF] bg-[#FFFFFF] p-3.5 space-y-2">
-                    <div class="flex items-center justify-between text-xs font-semibold text-[#3E1D27]">
-                      <span id="uploadProgressText">Đang xử lý tài liệu...</span>
-                      <span id="uploadProgressPercent" class="font-mono-code text-[#AA1342]">0%</span>
+                    <div class="flex items-center justify-between gap-2 text-xs font-semibold text-[#3E1D27]">
+                      <span id="uploadProgressText" class="truncate">Đang xử lý tài liệu...</span>
+                      <div class="flex items-center gap-2 shrink-0">
+                        <span id="uploadProgressPercent" class="font-mono-code text-[#AA1342]">0%</span>
+                        <button id="btnCancelUpload" type="button" class="px-2.5 py-0.5 rounded-full border border-[#AA1342]/40 bg-[#FDF0F4] hover:bg-[#AA1342] hover:text-[#FFFFFF] text-[11px] font-semibold text-[#AA1342] transition">
+                          ✕ Hủy
+                        </button>
+                      </div>
                     </div>
                     <div class="w-full h-1.5 rounded-full bg-[#EFE8DA] overflow-hidden">
                       <div id="uploadProgressBar" class="h-full bg-[#DDB247] transition-all duration-200" style="width: 0%"></div>
@@ -1352,27 +1357,61 @@
   </div>
 
   <!-- ======================================================================
-       MODAL 1: STUDIO CẮT LẠI KHUNG ẢNH TRÊN TRANG PDF GỐC
+       MODAL 1: STUDIO CẮT LẠI KHUNG ẢNH TRÊN TRANG PDF GỐC (V8 PRO)
        ====================================================================== -->
-  <div id="manualCropModal" class="fixed inset-0 z-[60] hidden bg-[#3E1D27]/75 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6">
-    <div class="bg-[#FFFFFF] rounded-2xl border border-[#E2D7BF] max-w-4xl w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden">
-      <div class="px-5 py-3.5 border-b border-[#EFE8DA] flex items-center justify-between gap-3 bg-[#FAF8F4]">
-        <div>
-          <h3 id="manualCropModalTitle" class="text-sm font-semibold text-[#3E1D27]">✂️ Cắt lại khung ảnh câu hỏi</h3>
-          <p class="text-[11px] text-[#7B5A64]">Giữ và kéo chuột trên trang giấy bên dưới để chọn khung cắt mới.</p>
+  <div id="manualCropModal" class="fixed inset-0 z-[60] hidden bg-[#3E1D27]/75 backdrop-blur-xs flex items-center justify-center p-2 sm:p-5">
+    <div class="bg-[#FFFFFF] rounded-2xl border border-[#E2D7BF] max-w-5xl w-full max-h-[94vh] flex flex-col shadow-2xl overflow-hidden">
+      <!-- Header -->
+      <div class="px-4 sm:px-5 py-3 border-b border-[#EFE8DA] flex items-center justify-between gap-3 bg-[#FAF8F4]">
+        <div class="min-w-0">
+          <h3 id="manualCropModalTitle" class="text-sm font-semibold text-[#3E1D27] truncate">✂️ Cắt lại khung ảnh câu hỏi</h3>
+          <p class="text-[11px] text-[#7B5A64]">Kéo 4 tay nắm góc để chỉnh sát chữ • Kéo trong khung để di chuyển • Phím mũi tên tinh chỉnh (Shift: nhanh, Alt: nới cạnh)</p>
         </div>
-        <button id="btnCloseManualCropModal" type="button" class="px-3 py-1.5 rounded-full border border-[#E2D7BF] bg-[#FFFFFF] hover:bg-[#EFE8DA] text-[#3E1D27] text-xs font-semibold">
+        <button id="btnCloseManualCropModal" type="button" class="px-3 py-1.5 rounded-full border border-[#E2D7BF] bg-[#FFFFFF] hover:bg-[#EFE8DA] text-[#3E1D27] text-xs font-semibold shrink-0">
           ✕ Đóng
         </button>
       </div>
-      <div class="flex-1 overflow-auto p-4 bg-[#3E1D27] flex justify-center items-start">
-        <canvas id="manualCropCanvas" class="cursor-crosshair rounded-lg shadow-lg max-w-full h-auto bg-white"></canvas>
+
+      <!-- Thanh công cụ Studio: Chọn trang (nếu câu 2 trang), Phóng to/Thu nhỏ, Hoàn tác, Đặt lại tự động -->
+      <div class="px-4 sm:px-5 py-2.5 border-b border-[#EFE8DA] bg-[#F4EFE6] flex flex-wrap items-center justify-between gap-2">
+        <div class="flex flex-wrap items-center gap-2">
+          <div id="manualCropPageTabs" class="hidden inline-flex items-center bg-[#FFFFFF] p-0.5 rounded-full border border-[#E2D7BF]"></div>
+
+          <div class="inline-flex items-center bg-[#FFFFFF] p-0.5 rounded-full border border-[#E2D7BF]">
+            <button id="btnCropZoomOut" type="button" title="Thu nhỏ" class="px-2.5 py-1 rounded-full hover:bg-[#F4EFE6] text-xs font-bold text-[#3E1D27] transition">−</button>
+            <span id="manualCropZoomLabel" class="px-2 font-mono-code text-[11px] font-bold text-[#653040] min-w-[46px] text-center">100%</span>
+            <button id="btnCropZoomIn" type="button" title="Phóng to để khoanh sát chữ" class="px-2.5 py-1 rounded-full hover:bg-[#F4EFE6] text-xs font-bold text-[#3E1D27] transition">＋</button>
+            <button id="btnCropZoomFit" type="button" title="Vừa khung nhìn" class="px-2.5 py-1 rounded-full hover:bg-[#F4EFE6] text-[11px] font-semibold text-[#7B5A64] hover:text-[#3E1D27] transition">Vừa</button>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-1.5">
+          <button id="btnCropUndo" type="button" disabled class="px-3 py-1 rounded-full border border-[#E2D7BF] bg-[#FFFFFF] hover:bg-[#EFE8DA] disabled:opacity-40 text-xs font-semibold text-[#3E1D27] transition" title="Hoàn tác (Ctrl+Z)">
+            ↩ Hoàn tác
+          </button>
+          <button id="btnCropClearPage" type="button" class="px-3 py-1 rounded-full border border-[#E2D7BF] bg-[#FFFFFF] hover:bg-[#EFE8DA] text-xs font-semibold text-[#7B5A64] hover:text-[#3E1D27] transition" title="Bỏ khung cắt trên trang hiện tại">
+            🧹 Bỏ khung trang này
+          </button>
+          <button id="btnCropResetAuto" type="button" class="px-3 py-1 rounded-full border border-[#DDB247] bg-[#FBF4DE] hover:bg-[#F4E6BB] text-xs font-semibold text-[#3E1D27] transition" title="Khôi phục kết quả cắt tự động ban đầu">
+            ♻️ Đặt lại cắt tự động
+          </button>
+        </div>
       </div>
-      <div class="px-5 py-3 border-t border-[#EFE8DA] bg-[#FAF8F4] flex items-center justify-between gap-3">
+
+      <!-- Vùng Canvas có hỗ trợ cuộn khi phóng to -->
+      <div id="manualCropCanvasWrap" class="flex-1 overflow-auto p-4 bg-[#2A171E] flex justify-center items-start">
+        <canvas id="manualCropCanvas" class="cursor-crosshair rounded-lg shadow-xl bg-white shrink-0"></canvas>
+      </div>
+
+      <!-- Footer -->
+      <div class="px-4 sm:px-5 py-3 border-t border-[#EFE8DA] bg-[#FAF8F4] flex flex-wrap items-center justify-between gap-3">
         <span id="manualCropCoordsText" class="text-xs font-mono-code text-[#3E1D27] font-semibold">Kéo chuột trên trang PDF để khoanh vùng...</span>
-        <button id="btnSaveManualCrop" type="button" class="px-4 py-2 rounded-full bg-[#653040] hover:bg-[#4E2330] text-[#FFFFFF] text-xs font-semibold transition">
-          Lưu vùng cắt
-        </button>
+        <div class="flex items-center gap-2">
+          <span id="manualCropMultiHint" class="hidden text-[11px] font-semibold text-[#AA1342]">Đã chọn 2 trang (sẽ tự nối dọc)</span>
+          <button id="btnSaveManualCrop" type="button" class="px-5 py-2 rounded-full bg-[#653040] hover:bg-[#4E2330] text-[#FFFFFF] text-xs font-semibold transition">
+            💾 Lưu vùng cắt
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -2114,7 +2153,8 @@
           if (corridorBottomY - corridorTopY >= 4) {
             return {
               corridorTopY: Math.max(floorY, corridorTopY + 1),
-              corridorBottomY: Math.min(h - 1, corridorBottomY - 1)
+              corridorBottomY: Math.min(h - 1, corridorBottomY - 1),
+              foundWhiteCorridor: true
             };
           }
 
@@ -2139,14 +2179,16 @@
           if (bestLen >= 2) {
             return {
               corridorTopY: bestStart + 1,
-              corridorBottomY: bestStart + bestLen - 1
+              corridorBottomY: bestStart + bestLen - 1,
+              foundWhiteCorridor: true
             };
           }
 
           const safeMidY = this.findSafeTopCutAboveFirstLine(hist, anchorBaselineY, fontH, floorY);
           return {
             corridorTopY: Math.max(floorY, safeMidY - 1),
-            corridorBottomY: safeMidY
+            corridorBottomY: safeMidY,
+            foundWhiteCorridor: false
           };
         },
 
@@ -2362,6 +2404,23 @@
             stripImg.src = topStripDataUrl;
             mainImg.src = targetQuestionDataUrl;
           });
+        },
+
+        // Quét ngược từ trần footer lên để lấy trọn hình vẽ mạch điện / đồ thị nằm dưới dòng chữ cuối của câu
+        findLastContentInkBottomY(hist, minY, maxCeilingY, padPx = 16) {
+          const h = hist.length;
+          const floorY = Math.max(0, Math.floor(minY));
+          const ceilingY = Math.min(h - 1, Math.floor(maxCeilingY));
+          if (ceilingY <= floorY) return Math.min(h - 1, floorY + padPx);
+
+          let lastInkY = floorY;
+          for (let y = ceilingY; y >= floorY; y--) {
+            if (hist[y] > 0) {
+              lastInkY = y;
+              break;
+            }
+          }
+          return Math.min(ceilingY, Math.max(floorY + padPx, lastInkY + padPx));
         },
 
         findStrictZeroBleedCutY(hist, minY, maxY, hardCeilingY = null) {
@@ -3657,10 +3716,10 @@
        * 8. BỘ XỬ LÝ FILE PDF / DOCX / TXT DO NGƯỜI DÙNG TẢI LÊN
        * ==================================================================== */
       const RealFileProcessor = {
-        async processUploadedFile(file, onProgress) {
+        async processUploadedFile(file, onProgress, abortSignal = null) {
           const ext = (file.name.split('.').pop() || '').toLowerCase();
           if (ext === 'pdf') {
-            return await this.processPdfFile(file, onProgress);
+            return await this.processPdfFile(file, onProgress, abortSignal);
           } else if (ext === 'docx') {
             return await this.processDocxFile(file, onProgress);
           } else {
@@ -3714,45 +3773,36 @@
           return cleanCanvas;
         },
 
-        async processPdfFile(file, onProgress) {
+        async processPdfFile(file, onProgress, abortSignal = null) {
+          const checkCancelled = () => {
+            if (abortSignal && abortSignal.aborted) {
+              const err = new Error('Đã hủy tiến trình xử lý PDF.');
+              err.isCancelled = true;
+              throw err;
+            }
+          };
+
           const arrayBuffer = await file.arrayBuffer();
+          checkCancelled();
           const pdf = await window.pdfjsLib.getDocument({ data: arrayBuffer }).promise;
           const totalPages = pdf.numPages;
 
           const detector = new QuestionDetector();
           const stateMachine = new QuestionStateMachine(file.name, totalPages);
-          const pageCanvases = {};
-          const cleanPageCanvases = {};
-          const pageHistograms = {};
-          const pageDataUrls = {};
           const pageAnnotationsMap = {};
+          const pageHeaderFooterMeta = {};
+          const scale = 2.0;
 
+          // ====================================================================
+          // PASS 1 (SIÊU NHẸ BỘ NHỚ): Chỉ đọc text & annotations, KHÔNG tạo canvas
+          // ====================================================================
           for (let p = 1; p <= totalPages; p++) {
+            checkCancelled();
             if (onProgress) {
-              onProgress(Math.round(((p - 0.5) / totalPages) * 85), `Đang xử lý trang ${p}/${totalPages}...`);
+              onProgress(Math.round((p / totalPages) * 28), `Đang phân tích cấu trúc trang ${p}/${totalPages}...`);
             }
             const page = await pdf.getPage(p);
-            const scale = 2.0;
             const viewport = page.getViewport({ scale });
-
-            // Canvas gốc giữ nguyên màu đỏ/highlight để bộ máy nhận diện đáp án đúng chính xác
-            const canvas = document.createElement('canvas');
-            canvas.width = viewport.width;
-            canvas.height = viewport.height;
-            const ctx = canvas.getContext('2d');
-            ctx.fillStyle = '#ffffff';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            await page.render({ canvasContext: ctx, viewport }).promise;
-
-            // Canvas sạch (Tầng 1 Vector) đã chặn trực tiếp hình chữ nhật tô màu highlight
-            const cleanCanvas = await this.renderPdfPageWithoutHighlightFills(page, viewport);
-
-            pageCanvases[p] = canvas;
-            cleanPageCanvases[p] = cleanCanvas;
-            pageHistograms[p] = ZeroBleedPdfSlicerV3.computeRowInkHistogram(cleanCanvas, 30, cleanCanvas.width - 30);
-            if (totalPages <= 100) {
-              pageDataUrls[p] = ZeroBleedPdfSlicerV3.canvasToWebpDataUrl(cleanCanvas, 0.78);
-            }
 
             try {
               const rawAnns = await page.getAnnotations();
@@ -3794,18 +3844,30 @@
             const visualLines = ZeroBleedPdfSlicerV3.coalesceSpansAnchorFirstV7(rawSpans, p);
 
             stateMachine.onPageStart(p);
+            const footerLines = [];
+            let detectedHeaderBot = Math.floor(viewport.height * 0.042);
+
             const validLines = visualLines.filter(ln => {
               const built = detector.reconstructLineFromSpans(ln.spans);
               ln.text = built.text;
               ln.bbox = built.bbox;
               ln.type = 'text';
-              return !detector.isHeaderOrFooterBlock(ln, canvas.height);
+              if (detector.isHeaderOrFooterBlock(ln, viewport.height)) {
+                if (ln.bbox && ln.bbox[1] > viewport.height * 0.5) {
+                  footerLines.push({ baselineY: ln.baselineY || (ln.bbox[1] + 14), fontH: ln.fontH || 16 });
+                } else if (ln.bbox && ln.bbox[3] < viewport.height * 0.25) {
+                  detectedHeaderBot = Math.max(detectedHeaderBot, Math.ceil(ln.bbox[3] + 8));
+                }
+                return false;
+              }
+              return true;
             });
 
+            pageHeaderFooterMeta[p] = { headerBot: detectedHeaderBot, footerLines };
             const leftMargin = validLines.length > 0 ? Math.min(...validLines.map(l => l.bbox[0])) : 56;
 
             for (const lineBlock of validLines) {
-              const det = detector.detect(lineBlock, canvas.width, canvas.height, leftMargin);
+              const det = detector.detect(lineBlock, viewport.width, viewport.height, leftMargin);
               if (det.isQuestionStart) {
                 stateMachine.startNewQuestion(det, lineBlock);
               } else {
@@ -3813,6 +3875,9 @@
               }
             }
             stateMachine.onPageEnd(p);
+            if (typeof page.cleanup === 'function') {
+              try { page.cleanup(); } catch (e) {}
+            }
           }
 
           const docModel = stateMachine.finalizeDocument();
@@ -3820,133 +3885,243 @@
           const finalQuestions = [];
           const prevCutBottomByPage = {};
 
-          for (let i = 0; i < rawQuestions.length; i++) {
-            const smQ = rawQuestions[i];
-            const nextSmQ = rawQuestions[i + 1] || null;
-            const pStart = smQ.start_page;
-            const canvasStart = cleanPageCanvases[pStart] || pageCanvases[pStart];
-            const histStart = pageHistograms[pStart];
+          // ====================================================================
+          // PASS 2 (CỬA SỔ TRƯỢT TỐI ĐA 2 TRANG): Render & giải phóng canvas ngay
+          // ====================================================================
+          const pageCache = new Map();
+          const releasePageEntry = entry => {
+            if (!entry) return;
+            if (entry.rawCanvas) { entry.rawCanvas.width = 0; entry.rawCanvas.height = 0; entry.rawCanvas = null; }
+            if (entry.cleanCanvas) { entry.cleanCanvas.width = 0; entry.cleanCanvas.height = 0; entry.cleanCanvas = null; }
+            entry.hist = null;
+          };
 
-            const firstBlock = smQ.blocks[0];
-            const firstBaselineY = firstBlock?.anchorBaselineY || firstBlock?.baselineY || (smQ.marker_bbox[1] + 18);
-            const firstFontH = firstBlock?.fontH || 17;
-            const hardFloorPrevY = prevCutBottomByPage[pStart] || Math.floor(canvasStart.height * 0.042);
-
-            const topCorridor = ZeroBleedPdfSlicerV3.findWhiteCorridorAboveAnchorV7(
-              histStart,
-              firstBaselineY,
-              firstFontH,
-              hardFloorPrevY
-            );
-            const safeTopY = topCorridor.corridorBottomY;
-
-            const blocksOnStartPage = smQ.blocks.filter(b => b.page === pStart);
-            const lastBlockOnStart = blocksOnStartPage[blocksOnStartPage.length - 1] || firstBlock;
-            let safeBottomY = Math.min(canvasStart.height * 0.94, lastBlockOnStart.bbox[3] + 22);
-
-            if (nextSmQ && nextSmQ.start_page === pStart) {
-              const nextFirstBlock = nextSmQ.blocks[0];
-              const nextBaseY = nextFirstBlock?.anchorBaselineY || nextFirstBlock?.baselineY || (nextSmQ.marker_bbox[1] + 18);
-              const nextFontH = nextFirstBlock?.fontH || 17;
-              const nextCorridor = ZeroBleedPdfSlicerV3.findWhiteCorridorAboveAnchorV7(
-                histStart,
-                nextBaseY,
-                nextFontH,
-                lastBlockOnStart.bbox[3]
-              );
-              safeBottomY = nextCorridor.corridorTopY;
+          const getRenderedPageBundle = async pageNum => {
+            if (pageCache.has(pageNum)) {
+              const existing = pageCache.get(pageNum);
+              pageCache.delete(pageNum);
+              pageCache.set(pageNum, existing);
+              return existing;
             }
 
-            prevCutBottomByPage[pStart] = safeBottomY;
+            // Chỉ giữ tối đa 2 trang trong RAM cùng lúc để xử lý mượt PDF hàng trăm trang
+            while (pageCache.size >= 2) {
+              const oldestKey = pageCache.keys().next().value;
+              releasePageEntry(pageCache.get(oldestKey));
+              pageCache.delete(oldestKey);
+            }
 
-            let croppedQuestionImage = ZeroBleedPdfSlicerV3.cropZeroBleedWithSyntheticPad(
-              canvasStart, 28, safeTopY, canvasStart.width - 28, safeBottomY, 18, 18
-            );
+            const page = await pdf.getPage(pageNum);
+            const viewport = page.getViewport({ scale });
 
-            let endPageBottomY = safeBottomY;
+            const rawCanvas = document.createElement('canvas');
+            rawCanvas.width = viewport.width;
+            rawCanvas.height = viewport.height;
+            const ctx = rawCanvas.getContext('2d');
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, rawCanvas.width, rawCanvas.height);
+            await page.render({ canvasContext: ctx, viewport }).promise;
 
-            if (smQ.is_multi_page && (cleanPageCanvases[smQ.end_page] || pageCanvases[smQ.end_page])) {
-              const pEnd = smQ.end_page;
-              const canvasEnd = cleanPageCanvases[pEnd] || pageCanvases[pEnd];
-              const histEnd = pageHistograms[pEnd];
-              const blocksOnEnd = smQ.blocks.filter(b => b.page === pEnd);
-              if (blocksOnEnd.length > 0) {
-                const firstEndBlk = blocksOnEnd[0];
-                const endTopY = ZeroBleedPdfSlicerV3.findSafeTopCutAboveFirstLine(
-                  histEnd,
-                  firstEndBlk.baselineY || (firstEndBlk.bbox[1] + 16),
-                  firstEndBlk.fontH || 16,
-                  Math.floor(canvasEnd.height * 0.045)
+            const cleanCanvas = await this.renderPdfPageWithoutHighlightFills(page, viewport);
+            const hist = ZeroBleedPdfSlicerV3.computeRowInkHistogram(cleanCanvas, 30, cleanCanvas.width - 30);
+            const dataUrl = totalPages <= 150 ? ZeroBleedPdfSlicerV3.canvasToWebpDataUrl(cleanCanvas, 0.76) : null;
+
+            const hfMeta = pageHeaderFooterMeta[pageNum] || { headerBot: Math.floor(viewport.height * 0.042), footerLines: [] };
+            let footerTopY = Math.floor(viewport.height * 0.948);
+            for (const fl of hfMeta.footerLines) {
+              const fc = ZeroBleedPdfSlicerV3.findWhiteCorridorAboveAnchorV7(
+                hist,
+                fl.baselineY,
+                fl.fontH,
+                Math.floor(viewport.height * 0.5)
+              );
+              footerTopY = Math.min(footerTopY, fc.corridorTopY);
+            }
+
+            if (typeof page.cleanup === 'function') {
+              try { page.cleanup(); } catch (e) {}
+            }
+
+            const bundle = {
+              rawCanvas,
+              cleanCanvas,
+              hist,
+              dataUrl,
+              headerBottomY: hfMeta.headerBot,
+              footerTopY
+            };
+            pageCache.set(pageNum, bundle);
+            return bundle;
+          };
+
+          try {
+            for (let i = 0; i < rawQuestions.length; i++) {
+              checkCancelled();
+              if (onProgress && (i % 3 === 0 || i === rawQuestions.length - 1)) {
+                const pct = 28 + Math.round(((i + 1) / Math.max(1, rawQuestions.length)) * 70);
+                onProgress(Math.min(98, pct), `Đang cắt câu ${i + 1}/${rawQuestions.length}...`);
+              }
+
+              const smQ = rawQuestions[i];
+              const nextSmQ = rawQuestions[i + 1] || null;
+              const pStart = smQ.start_page;
+              const startBundle = await getRenderedPageBundle(pStart);
+              const canvasStart = startBundle.cleanCanvas || startBundle.rawCanvas;
+              const histStart = startBundle.hist;
+
+              const firstBlock = smQ.blocks[0];
+              const firstBaselineY = firstBlock?.anchorBaselineY || firstBlock?.baselineY || (smQ.marker_bbox[1] + 18);
+              const firstFontH = firstBlock?.fontH || 17;
+              const hardFloorPrevY = prevCutBottomByPage[pStart] || startBundle.headerBottomY || Math.floor(canvasStart.height * 0.042);
+
+              const topCorridor = ZeroBleedPdfSlicerV3.findWhiteCorridorAboveAnchorV7(
+                histStart,
+                firstBaselineY,
+                firstFontH,
+                hardFloorPrevY
+              );
+              const safeTopY = topCorridor.corridorBottomY;
+              let hasCorridorWarning = topCorridor.foundWhiteCorridor === false;
+
+              const blocksOnStartPage = smQ.blocks.filter(b => b.page === pStart);
+              const lastBlockOnStart = blocksOnStartPage[blocksOnStartPage.length - 1] || firstBlock;
+              const startPageFooterCeiling = startBundle.footerTopY || Math.floor(canvasStart.height * 0.945);
+              let safeBottomY = ZeroBleedPdfSlicerV3.findLastContentInkBottomY(
+                histStart,
+                lastBlockOnStart.bbox[3],
+                startPageFooterCeiling,
+                16
+              );
+
+              if (nextSmQ && nextSmQ.start_page === pStart) {
+                const nextFirstBlock = nextSmQ.blocks[0];
+                const nextBaseY = nextFirstBlock?.anchorBaselineY || nextFirstBlock?.baselineY || (nextSmQ.marker_bbox[1] + 18);
+                const nextFontH = nextFirstBlock?.fontH || 17;
+                const nextCorridor = ZeroBleedPdfSlicerV3.findWhiteCorridorAboveAnchorV7(
+                  histStart,
+                  nextBaseY,
+                  nextFontH,
+                  lastBlockOnStart.bbox[3]
                 );
-                const lastEndB = blocksOnEnd[blocksOnEnd.length - 1];
-                let endBottomY = Math.min(canvasEnd.height * 0.94, lastEndB.bbox[3] + 22);
+                safeBottomY = nextCorridor.corridorTopY;
+                if (nextCorridor.foundWhiteCorridor === false) hasCorridorWarning = true;
+              }
 
-                if (nextSmQ && nextSmQ.start_page === pEnd) {
-                  const nextFirstB = nextSmQ.blocks[0];
-                  const nextTopGuard = ZeroBleedPdfSlicerV3.findSafeTopCutAboveFirstLine(
-                    histEnd,
-                    nextFirstB?.baselineY || (nextSmQ.marker_bbox[1] + 18),
-                    nextFirstB?.fontH || 16,
-                    lastEndB.bbox[3]
-                  );
-                  endBottomY = ZeroBleedPdfSlicerV3.findStrictZeroBleedCutY(
+              prevCutBottomByPage[pStart] = safeBottomY;
+
+              let croppedQuestionImage = ZeroBleedPdfSlicerV3.cropZeroBleedWithSyntheticPad(
+                canvasStart, 28, safeTopY, canvasStart.width - 28, safeBottomY, 18, 18
+              );
+
+              let endPageBottomY = safeBottomY;
+              let endBundle = null;
+              let endCropCoords = null;
+              const localRawCanvases = { [pStart]: startBundle.rawCanvas };
+
+              if (smQ.is_multi_page && smQ.end_page !== pStart) {
+                const pEnd = smQ.end_page;
+                endBundle = await getRenderedPageBundle(pEnd);
+                localRawCanvases[pEnd] = endBundle.rawCanvas;
+                const canvasEnd = endBundle.cleanCanvas || endBundle.rawCanvas;
+                const histEnd = endBundle.hist;
+                const blocksOnEnd = smQ.blocks.filter(b => b.page === pEnd);
+                if (blocksOnEnd.length > 0) {
+                  const endTopY = endBundle.headerBottomY || Math.floor(canvasEnd.height * 0.042);
+                  const lastEndB = blocksOnEnd[blocksOnEnd.length - 1];
+                  const endPageFooterCeiling = endBundle.footerTopY || Math.floor(canvasEnd.height * 0.945);
+                  let endBottomY = ZeroBleedPdfSlicerV3.findLastContentInkBottomY(
                     histEnd,
                     lastEndB.bbox[3],
-                    nextTopGuard,
-                    nextTopGuard
+                    endPageFooterCeiling,
+                    16
+                  );
+
+                  if (nextSmQ && nextSmQ.start_page === pEnd) {
+                    const nextFirstB = nextSmQ.blocks[0];
+                    const nextTopGuard = ZeroBleedPdfSlicerV3.findSafeTopCutAboveFirstLine(
+                      histEnd,
+                      nextFirstB?.baselineY || (nextSmQ.marker_bbox[1] + 18),
+                      nextFirstB?.fontH || 16,
+                      lastEndB.bbox[3]
+                    );
+                    endBottomY = ZeroBleedPdfSlicerV3.findStrictZeroBleedCutY(
+                      histEnd,
+                      lastEndB.bbox[3],
+                      nextTopGuard,
+                      nextTopGuard
+                    );
+                  }
+                  prevCutBottomByPage[pEnd] = endBottomY;
+                  endPageBottomY = endBottomY;
+                  endCropCoords = { page: pEnd, topY: endTopY, bottomY: endBottomY };
+
+                  const bottomSliceUrl = ZeroBleedPdfSlicerV3.cropZeroBleedWithSyntheticPad(
+                    canvasEnd, 28, endTopY, canvasEnd.width - 28, endBottomY, 18, 16
+                  );
+                  croppedQuestionImage = await ZeroBleedPdfSlicerV3.stitchTwoCanvasesVertically(
+                    croppedQuestionImage,
+                    bottomSliceUrl
                   );
                 }
-                prevCutBottomByPage[pEnd] = endBottomY;
-                endPageBottomY = endBottomY;
-
-                const bottomSliceUrl = ZeroBleedPdfSlicerV3.cropZeroBleedWithSyntheticPad(
-                  canvasEnd, 28, endTopY, canvasEnd.width - 28, endBottomY, 18, 16
-                );
-                croppedQuestionImage = await ZeroBleedPdfSlicerV3.stitchTwoCanvasesVertically(
-                  croppedQuestionImage,
-                  bottomSliceUrl
-                );
               }
+
+              const detectedCorrectLetter = ZeroBleedPdfSlicerV3.detectCorrectAnswerFrom2DOptionSpans(
+                smQ,
+                localRawCanvases,
+                endPageBottomY,
+                pageAnnotationsMap
+              );
+
+              const builtOptions = ['A', 'B', 'C', 'D'].map(letter => ({
+                optionId: `${smQ.question_id}_OPT_${letter}`,
+                label: letter,
+                displayLabel: letter,
+                rawText: `Đáp án ${letter}`,
+                text: `Đáp án ${letter}`,
+                isCorrect: letter === detectedCorrectLetter
+              }));
+
+              const firstHeaderText = firstBlock?.metadata?.remaining_text || firstBlock?.text || smQ.raw_marker;
+              const repairedHeader = VietnameseFontRepairEngine.repairVietnameseBrokenWords(firstHeaderText);
+
+              const cropWarning = hasCorridorWarning
+                ? 'Không thấy khe trắng rõ — nên kiểm tra khung cắt'
+                : (smQ.confidence < 0.72 ? 'Độ tin cậy nhận diện thấp — nên kiểm tra' : null);
+
+              finalQuestions.push({
+                id: `pdf_${file.name}_${smQ.question_id}_${Date.now()}_${i}`,
+                docName: file.name,
+                chapter: '',
+                code: smQ.raw_marker.replace(/:$/, ''),
+                questionCode: smQ.question_code,
+                confidence: smQ.confidence,
+                startPage: smQ.start_page,
+                endPage: smQ.end_page,
+                isMultiPage: smQ.is_multi_page,
+                isPdfFullImage: true,
+                structureType: smQ.structure_type,
+                cropCoords: { page: pStart, topY: safeTopY, bottomY: safeBottomY },
+                endCropCoords,
+                cropWarning,
+                hasManualCrop: false,
+                manualCropRects: null,
+                _autoCroppedQuestionImage: croppedQuestionImage,
+                stateMachineBlocks: smQ.blocks,
+                stemText: `${smQ.raw_marker} ${repairedHeader}`.trim(),
+                croppedQuestionImage,
+                sourcePageImages: [startBundle.dataUrl, endBundle ? endBundle.dataUrl : null].filter(Boolean),
+                options: builtOptions
+              });
             }
-
-            const detectedCorrectLetter = ZeroBleedPdfSlicerV3.detectCorrectAnswerFrom2DOptionSpans(
-              smQ,
-              pageCanvases,
-              endPageBottomY,
-              pageAnnotationsMap
-            );
-
-            const builtOptions = ['A', 'B', 'C', 'D'].map(letter => ({
-              optionId: `${smQ.question_id}_OPT_${letter}`,
-              label: letter,
-              displayLabel: letter,
-              rawText: `Đáp án ${letter}`,
-              text: `Đáp án ${letter}`,
-              isCorrect: letter === detectedCorrectLetter
-            }));
-
-            const firstHeaderText = firstBlock?.metadata?.remaining_text || firstBlock?.text || smQ.raw_marker;
-            const repairedHeader = VietnameseFontRepairEngine.repairVietnameseBrokenWords(firstHeaderText);
-
-            finalQuestions.push({
-              id: `pdf_${file.name}_${smQ.question_id}_${Date.now()}_${i}`,
-              docName: file.name,
-              chapter: '',
-              code: smQ.raw_marker.replace(/:$/, ''),
-              questionCode: smQ.question_code,
-              confidence: smQ.confidence,
-              startPage: smQ.start_page,
-              endPage: smQ.end_page,
-              isMultiPage: smQ.is_multi_page,
-              isPdfFullImage: true,
-              structureType: smQ.structure_type,
-              cropCoords: { page: pStart, topY: safeTopY, bottomY: safeBottomY },
-              stateMachineBlocks: smQ.blocks,
-              stemText: `${smQ.raw_marker} ${repairedHeader}`.trim(),
-              croppedQuestionImage,
-              sourcePageImages: [pageDataUrls[pStart], smQ.is_multi_page ? pageDataUrls[smQ.end_page] : null].filter(Boolean),
-              options: builtOptions
-            });
+          } finally {
+            // Giải phóng toàn bộ canvas trung gian ngay sau khi hoàn tất hoặc khi bị hủy
+            for (const entry of pageCache.values()) {
+              releasePageEntry(entry);
+            }
+            pageCache.clear();
+            if (typeof pdf.destroy === 'function') {
+              try { await pdf.destroy(); } catch (e) {}
+            }
           }
 
           window.applyAuto50ChapterSplit(finalQuestions);
@@ -4769,6 +4944,12 @@
           examTimerId: null,
           manualCropTargetQuestionId: null,
           manualCropRect: null,
+          manualCropActivePageIdx: 0,
+          manualCropPageRects: {},
+          manualCropUndoStack: [],
+          manualCropZoom: 1,
+          manualCropPageImages: [],
+          uploadAbortController: null,
           bulkEditorEditedSlots: {},
           bulkEditorFilter: 'SEARCH',
           bulkSearchQuery: '',
@@ -5497,22 +5678,48 @@
           const bar = document.getElementById('uploadProgressBar');
           if (box) box.classList.remove('hidden');
 
+          if (this.state.uploadAbortController) {
+            try { this.state.uploadAbortController.abort(); } catch (e) {}
+          }
+          const abortController = new AbortController();
+          this.state.uploadAbortController = abortController;
+
+          let savedCount = 0;
+          let warningCount = 0;
+
           try {
             for (const file of files) {
-              const docObj = await RealFileProcessor.processUploadedFile(file, (percent, msg) => {
-                if (txt) txt.textContent = `${file.name}: ${msg}`;
-                if (pct) pct.textContent = `${percent}%`;
-                if (bar) bar.style.width = `${percent}%`;
-              });
+              if (abortController.signal.aborted) break;
+              const docObj = await RealFileProcessor.processUploadedFile(
+                file,
+                (percent, msg) => {
+                  if (txt) txt.textContent = `${file.name}: ${msg}`;
+                  if (pct) pct.textContent = `${percent}%`;
+                  if (bar) bar.style.width = `${percent}%`;
+                },
+                abortController.signal
+              );
               await ViettulamDb.saveDocument(docObj);
+              savedCount++;
+              warningCount += (docObj.questions || []).filter(q => Boolean(q.cropWarning)).length;
             }
             const refreshedDocs = await ViettulamDb.getAllDocuments();
             this.setDocuments(refreshedDocs);
-            AppUtils.showToast(`Đã nạp thành công ${files.length} tài liệu!`, 'success');
+            if (savedCount > 0) {
+              const warnSuffix = warningCount > 0 ? ` (${warningCount} câu có cảnh báo khung cắt — bấm ⚠️ để rà nhanh)` : '';
+              AppUtils.showToast(`Đã nạp thành công ${savedCount} tài liệu!${warnSuffix}`, warningCount > 0 ? 'warning' : 'success');
+            }
           } catch (err) {
-            console.error(err);
-            AppUtils.showToast(`Lỗi xử lý file: ${err.message || err}`, 'error');
+            if (err && err.isCancelled) {
+              const refreshedDocs = await ViettulamDb.getAllDocuments();
+              this.setDocuments(refreshedDocs);
+              AppUtils.showToast('Đã hủy nạp file. Dữ liệu đã lưu trước đó vẫn nguyên vẹn.', 'info');
+            } else {
+              console.error(err);
+              AppUtils.showToast(`Lỗi xử lý file: ${err.message || err}`, 'error');
+            }
           } finally {
+            this.state.uploadAbortController = null;
             setTimeout(() => {
               if (box) box.classList.add('hidden');
             }, 900);
@@ -5795,6 +6002,8 @@
                   </span>
                   ${q.chapter ? `<span class="hidden sm:inline-block px-2.5 py-0.5 rounded-full bg-[#F4EFE6] font-mono-code text-[10px] text-[#7B5A64] font-medium">${AppUtils.escapeHtml(q.chapter)}</span>` : ''}
                   ${wrongTimes > 0 ? `<span class="px-2 py-0.5 rounded-full bg-[#FDF0F4] text-[#AA1342] font-mono-code text-[10px] font-bold">⚠️ Sai ${wrongTimes} lần</span>` : ''}
+                  ${q.hasManualCrop ? `<span class="px-2 py-0.5 rounded-full bg-[#FBF4DE] text-[#653040] font-mono-code text-[10px] font-bold" title="Đã tùy chỉnh khung cắt thủ công">✂️ Đã cắt tay</span>` : ''}
+                  ${!q.hasManualCrop && q.cropWarning ? `<button type="button" data-action="open-manual-crop" data-qid="${AppUtils.escapeHtml(q.id)}" class="px-2 py-0.5 rounded-full bg-[#FBF4DE] hover:bg-[#DDB247] text-[#3E1D27] border border-[#DDB247] font-mono-code text-[10px] font-bold transition" title="${AppUtils.escapeHtml(q.cropWarning)}">⚠️ Kiểm tra cắt</button>` : ''}
                 </div>
 
                 <!-- Nút Gắn cờ & Menu công cụ gọn -->
@@ -5804,38 +6013,12 @@
                     title="Gắn cờ ôn lại">
                     🚩${isFlagged ? ' Đã gắn cờ' : ''}
                   </button>
-                  <div class="relative">
-                    <button type="button" data-action="toggle-q-tools-menu" data-qid="${AppUtils.escapeHtml(q.id)}"
-                    class="px-3 py-1 rounded-full border border-[#E2D7BF] bg-[#FAF8F4] hover:bg-[#EFE8DA] text-xs font-semibold text-[#3E1D27] transition">
-                    ⋯ Tùy chỉnh
-                  </button>
-                  ${isMenuOpen ? `
-                    <div class="absolute right-0 mt-1.5 w-52 rounded-xl border border-[#E2D7BF] bg-[#FFFFFF] shadow-xl p-1.5 z-30 space-y-1 text-xs">
-                      <button type="button" data-action="shuffle-single-q-options" data-qid="${AppUtils.escapeHtml(q.id)}"
-                        class="w-full text-left px-3 py-2 rounded-lg hover:bg-[#F4EFE6] font-medium text-[#3E1D27] flex items-center gap-2">
-                        <span>🔀 Đảo đáp án câu này</span>
-                      </button>
-                      ${isPdfImg ? `
-                        <button type="button" data-action="trim-bottom-bleed" data-qid="${AppUtils.escapeHtml(q.id)}"
-                          class="w-full text-left px-3 py-2 rounded-lg hover:bg-[#F4EFE6] font-medium text-[#3E1D27] flex items-center gap-2">
-                          <span>🧹 Gọt dòng lẹm đáy</span>
-                        </button>
-                        <button type="button" data-action="adjust-crop-top" data-qid="${AppUtils.escapeHtml(q.id)}"
-                          class="w-full text-left px-3 py-2 rounded-lg hover:bg-[#F4EFE6] font-medium text-[#3E1D27] flex items-center gap-2">
-                          <span>⬆️ Mở rộng đỉnh (+16px)</span>
-                        </button>
-                        <button type="button" data-action="adjust-crop-bottom" data-qid="${AppUtils.escapeHtml(q.id)}"
-                          class="w-full text-left px-3 py-2 rounded-lg hover:bg-[#F4EFE6] font-medium text-[#3E1D27] flex items-center gap-2">
-                          <span>⬇️ Thu gọn đáy (-14px)</span>
-                        </button>
-                        <button type="button" data-action="open-manual-crop" data-qid="${AppUtils.escapeHtml(q.id)}"
-                          class="w-full text-left px-3 py-2 rounded-lg hover:bg-[#F4EFE6] font-medium text-[#3E1D27] flex items-center gap-2">
-                          <span>✂️ Cắt lại khung PDF</span>
-                        </button>
-                      ` : ''}
-                    </div>
+                  ${isPdfImg ? `
+                    <button type="button" data-action="open-manual-crop" data-qid="${AppUtils.escapeHtml(q.id)}"
+                      class="px-3 py-1 rounded-full border border-[#E2D7BF] bg-[#FAF8F4] hover:bg-[#EFE8DA] text-xs font-semibold text-[#3E1D27] transition">
+                      ✂️ Cắt khung
+                    </button>
                   ` : ''}
-                  </div>
                 </div>
               </div>
 
@@ -7318,8 +7501,10 @@
           const q = this.state.allQuestions.find(item => item.id === qId);
           if (!q) return;
 
-          const srcImgUrl = (q.sourcePageImages && q.sourcePageImages[0]) || q.croppedQuestionImage;
-          if (!srcImgUrl) {
+          const srcPages = Array.isArray(q.sourcePageImages) && q.sourcePageImages.length > 0
+            ? q.sourcePageImages.filter(Boolean)
+            : (q.croppedQuestionImage ? [q.croppedQuestionImage] : []);
+          if (srcPages.length === 0) {
             AppUtils.showToast('Không tìm thấy ảnh trang gốc để cắt lại.', 'warning');
             return;
           }
@@ -7329,54 +7514,291 @@
           const titleEl = document.getElementById('manualCropModalTitle');
           if (!modal || !canvas) return;
 
-          this.state.manualCropTargetQuestionId = qId;
-          this.state.manualCropRect = null;
-          if (titleEl) titleEl.textContent = `✂️ Cắt lại khung ảnh: ${q.code || 'Câu hỏi'}`;
+          // Bảo toàn bản cắt tự động trước lần chỉnh tay đầu tiên
+          if (!q._autoCroppedQuestionImage && q.croppedQuestionImage) {
+            q._autoCroppedQuestionImage = q.croppedQuestionImage;
+          }
 
-          const img = await PdfImageOptionShufflerV8.loadImage(srcImgUrl);
+          this.state.manualCropTargetQuestionId = qId;
+          this.state.manualCropActivePageIdx = 0;
+          this.state.manualCropUndoStack = [];
+          this.state.manualCropZoom = 1;
+          this.state.manualCropPageImages = [];
+
+          for (const url of srcPages) {
+            const loadedImg = await PdfImageOptionShufflerV8.loadImage(url);
+            this.state.manualCropPageImages.push(loadedImg);
+          }
+
+          // Khởi tạo khung cắt từ dữ liệu đã lưu tay trước đó, hoặc từ tọa độ cắt tự động
+          const initRects = {};
+          if (q.manualCropRects && typeof q.manualCropRects === 'object') {
+            for (const [k, v] of Object.entries(q.manualCropRects)) {
+              if (v) initRects[Number(k)] = { ...v };
+            }
+          } else {
+            const img0 = this.state.manualCropPageImages[0];
+            if (img0 && q.cropCoords && typeof q.cropCoords.topY === 'number') {
+              initRects[0] = {
+                x0: 28,
+                y0: Math.max(0, q.cropCoords.topY),
+                x1: Math.max(60, img0.width - 28),
+                y1: Math.min(img0.height, q.cropCoords.bottomY)
+              };
+            }
+            const img1 = this.state.manualCropPageImages[1];
+            if (img1 && q.endCropCoords && typeof q.endCropCoords.topY === 'number') {
+              initRects[1] = {
+                x0: 28,
+                y0: Math.max(0, q.endCropCoords.topY),
+                x1: Math.max(60, img1.width - 28),
+                y1: Math.min(img1.height, q.endCropCoords.bottomY)
+              };
+            }
+          }
+
+          this.state.manualCropPageRects = initRects;
+          this.state.manualCropRect = initRects[0] ? { ...initRects[0] } : null;
+
+          if (titleEl) {
+            const multiTag = srcPages.length > 1 ? ` (Câu trải ${srcPages.length} trang)` : '';
+            titleEl.textContent = `✂️ Studio Cắt Tay: ${q.code || 'Câu hỏi'}${multiTag}`;
+          }
+
+          modal.classList.remove('hidden');
+          this.renderManualCropActivePage();
+        },
+
+        pushManualCropUndoSnapshot() {
+          const pIdx = this.state.manualCropActivePageIdx || 0;
+          const cur = this.state.manualCropPageRects[pIdx];
+          this.state.manualCropUndoStack.push({
+            pageIdx: pIdx,
+            rect: cur ? { ...cur } : null
+          });
+          if (this.state.manualCropUndoStack.length > 30) {
+            this.state.manualCropUndoStack.shift();
+          }
+          const undoBtn = document.getElementById('btnCropUndo');
+          if (undoBtn) undoBtn.disabled = this.state.manualCropUndoStack.length === 0;
+        },
+
+        undoManualCropChange() {
+          if (this.state.manualCropUndoStack.length === 0) return;
+          const prev = this.state.manualCropUndoStack.pop();
+          this.state.manualCropActivePageIdx = prev.pageIdx;
+          if (prev.rect) {
+            this.state.manualCropPageRects[prev.pageIdx] = { ...prev.rect };
+          } else {
+            delete this.state.manualCropPageRects[prev.pageIdx];
+          }
+          this.state.manualCropRect = prev.rect ? { ...prev.rect } : null;
+          this.renderManualCropActivePage();
+        },
+
+        setManualCropZoom(newZoom) {
+          const clamped = Math.max(0.5, Math.min(2.5, Math.round(newZoom * 100) / 100));
+          this.state.manualCropZoom = clamped;
+          const canvas = document.getElementById('manualCropCanvas');
+          const lbl = document.getElementById('manualCropZoomLabel');
+          if (lbl) lbl.textContent = `${Math.round(clamped * 100)}%`;
+          if (canvas && canvas._baseImage) {
+            const wrap = document.getElementById('manualCropCanvasWrap');
+            const baseFitW = wrap ? Math.min(canvas._baseImage.width, Math.max(320, wrap.clientWidth - 40)) : 780;
+            canvas.style.width = `${Math.round(baseFitW * clamped)}px`;
+            canvas.style.height = 'auto';
+          }
+        },
+
+        renderManualCropActivePage() {
+          const canvas = document.getElementById('manualCropCanvas');
+          const tabsEl = document.getElementById('manualCropPageTabs');
+          const undoBtn = document.getElementById('btnCropUndo');
+          const multiHint = document.getElementById('manualCropMultiHint');
+          const imgs = this.state.manualCropPageImages || [];
+          const pIdx = Math.max(0, Math.min(imgs.length - 1, this.state.manualCropActivePageIdx || 0));
+          this.state.manualCropActivePageIdx = pIdx;
+          const img = imgs[pIdx];
+          if (!canvas || !img) return;
+
           canvas.width = img.width;
           canvas.height = img.height;
           canvas._baseImage = img;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0);
+          this.state.manualCropRect = this.state.manualCropPageRects[pIdx]
+            ? { ...this.state.manualCropPageRects[pIdx] }
+            : null;
 
-          modal.classList.remove('hidden');
+          if (tabsEl) {
+            if (imgs.length > 1) {
+              tabsEl.classList.remove('hidden');
+              tabsEl.innerHTML = imgs.map((_, idx) => {
+                const isAct = idx === pIdx;
+                const hasR = Boolean(this.state.manualCropPageRects[idx]);
+                return `
+                  <button type="button" data-action="switch-crop-page" data-page-idx="${idx}"
+                    class="px-3 py-1 rounded-full text-xs font-semibold transition ${isAct ? 'bg-[#653040] text-[#FFFFFF]' : 'text-[#7B5A64] hover:text-[#3E1D27]'}">
+                    Trang ${idx + 1}${hasR ? ' ✓' : ''}
+                  </button>
+                `;
+              }).join('');
+            } else {
+              tabsEl.classList.add('hidden');
+            }
+          }
+
+          if (undoBtn) undoBtn.disabled = this.state.manualCropUndoStack.length === 0;
+          if (multiHint) {
+            const selectedPagesCount = Object.values(this.state.manualCropPageRects).filter(
+              r => r && (r.x1 - r.x0) > 10 && (r.y1 - r.y0) > 10
+            ).length;
+            multiHint.classList.toggle('hidden', selectedPagesCount < 2);
+          }
+
+          this.setManualCropZoom(this.state.manualCropZoom || 1);
+          this.redrawManualCropCanvas();
+        },
+
+        redrawManualCropCanvas() {
+          const canvas = document.getElementById('manualCropCanvas');
+          const coordTxt = document.getElementById('manualCropCoordsText');
+          if (!canvas || !canvas._baseImage) return;
+          const ctx = canvas.getContext('2d');
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(canvas._baseImage, 0, 0);
+
+          const r = this.state.manualCropRect;
+          if (r && (r.x1 - r.x0) > 4 && (r.y1 - r.y0) > 4) {
+            const rw = r.x1 - r.x0;
+            const rh = r.y1 - r.y0;
+            ctx.save();
+            // Phủ mờ vùng bên ngoài khung cắt
+            ctx.fillStyle = 'rgba(30, 15, 22, 0.38)';
+            ctx.fillRect(0, 0, canvas.width, r.y0);
+            ctx.fillRect(0, r.y1, canvas.width, canvas.height - r.y1);
+            ctx.fillRect(0, r.y0, r.x0, rh);
+            ctx.fillRect(r.x1, r.y0, canvas.width - r.x1, rh);
+
+            // Viền khung cắt
+            ctx.strokeStyle = '#AA1342';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(r.x0, r.y0, rw, rh);
+
+            // 4 tay nắm ở 4 góc
+            const hs = 14;
+            const corners = [
+              [r.x0, r.y0],
+              [r.x1, r.y0],
+              [r.x0, r.y1],
+              [r.x1, r.y1]
+            ];
+            ctx.fillStyle = '#DDB247';
+            ctx.strokeStyle = '#3E1D27';
+            ctx.lineWidth = 2.5;
+            for (const [cx, cy] of corners) {
+              ctx.fillRect(cx - hs / 2, cy - hs / 2, hs, hs);
+              ctx.strokeRect(cx - hs / 2, cy - hs / 2, hs, hs);
+            }
+            ctx.restore();
+
+            if (coordTxt) {
+              coordTxt.textContent = `Trang ${(this.state.manualCropActivePageIdx || 0) + 1}: ${Math.round(rw)} × ${Math.round(rh)} px (x:${Math.round(r.x0)}, y:${Math.round(r.y0)})`;
+            }
+          } else if (coordTxt) {
+            coordTxt.textContent = `Trang ${(this.state.manualCropActivePageIdx || 0) + 1}: Kéo chuột trên trang giấy để khoanh vùng cắt...`;
+          }
+        },
+
+        async resetQuestionToAutoCrop() {
+          const qId = this.state.manualCropTargetQuestionId;
+          const q = this.state.allQuestions.find(item => item.id === qId);
+          if (!q) return;
+          if (!q._autoCroppedQuestionImage) {
+            AppUtils.showToast('Không có bản cắt tự động trước đó để khôi phục.', 'warning');
+            return;
+          }
+
+          q.croppedQuestionImage = q._autoCroppedQuestionImage;
+          q._originalCroppedImage = q._autoCroppedQuestionImage;
+          q.hasManualCrop = false;
+          q.manualCropRects = null;
+
+          const docObj = this.state.documents.find(d => d.docName === q.docName);
+          if (docObj) await ViettulamDb.saveDocument(docObj);
+
+          document.getElementById('manualCropModal')?.classList.add('hidden');
+          if (this.state.activeTab === 'practice') this.renderPracticeView();
+          else if (this.state.activeTab === 'exam') this.renderExamView();
+          else if (this.state.activeTab === 'bank') this.renderBankView();
+          AppUtils.showToast('Đã khôi phục khung cắt tự động ban đầu!', 'success');
         },
 
         async saveManualCropSelection() {
           const qId = this.state.manualCropTargetQuestionId;
-          const rect = this.state.manualCropRect;
-          const canvas = document.getElementById('manualCropCanvas');
           const modal = document.getElementById('manualCropModal');
-          if (!qId || !rect || !canvas || !canvas._baseImage) {
-            AppUtils.showToast('Hãy kéo chuột khoanh vùng trên trang giấy trước khi lưu.', 'warning');
+          const imgs = this.state.manualCropPageImages || [];
+          const rectsMap = this.state.manualCropPageRects || {};
+          const q = this.state.allQuestions.find(item => item.id === qId);
+          if (!q || imgs.length === 0) return;
+
+          const validSlices = [];
+          const savedRects = {};
+
+          for (let idx = 0; idx < imgs.length; idx++) {
+            const r = rectsMap[idx];
+            if (r && (r.x1 - r.x0) > 10 && (r.y1 - r.y0) > 10) {
+              const img = imgs[idx];
+              const temp = document.createElement('canvas');
+              temp.width = img.width;
+              temp.height = img.height;
+              temp.getContext('2d').drawImage(img, 0, 0);
+              const sliceUrl = ZeroBleedPdfSlicerV3.cropZeroBleedWithSyntheticPad(
+                temp,
+                r.x0,
+                r.y0,
+                r.x1,
+                r.y1,
+                18,
+                18
+              );
+              temp.width = 0;
+              temp.height = 0;
+              validSlices.push(sliceUrl);
+              savedRects[idx] = { x0: r.x0, y0: r.y0, x1: r.x1, y1: r.y1 };
+            }
+          }
+
+          if (validSlices.length === 0) {
+            AppUtils.showToast('Hãy kéo chuột khoanh vùng trên ít nhất 1 trang trước khi lưu.', 'warning');
             return;
           }
 
-          const q = this.state.allQuestions.find(item => item.id === qId);
-          if (!q) return;
+          let finalUrl = validSlices[0];
+          for (let k = 1; k < validSlices.length; k++) {
+            finalUrl = await ZeroBleedPdfSlicerV3.stitchTwoCanvasesVertically(finalUrl, validSlices[k]);
+          }
 
-          const temp = document.createElement('canvas');
-          temp.width = canvas.width;
-          temp.height = canvas.height;
-          temp.getContext('2d').drawImage(canvas._baseImage, 0, 0);
-
-          q.croppedQuestionImage = ZeroBleedPdfSlicerV3.cropZeroBleedWithSyntheticPad(
-            temp,
-            rect.x0,
-            rect.y0,
-            rect.x1,
-            rect.y1,
-            18,
-            18
-          );
+          if (!q._autoCroppedQuestionImage && q.croppedQuestionImage) {
+            q._autoCroppedQuestionImage = q.croppedQuestionImage;
+          }
+          q.croppedQuestionImage = finalUrl;
+          q._originalCroppedImage = finalUrl;
+          q.hasManualCrop = true;
+          q.manualCropRects = savedRects;
+          q.cropWarning = null;
 
           const docObj = this.state.documents.find(d => d.docName === q.docName);
           if (docObj) await ViettulamDb.saveDocument(docObj);
 
           if (modal) modal.classList.add('hidden');
-          this.renderPracticeView();
-          AppUtils.showToast('Đã lưu khung cắt ảnh mới!', 'success');
+          if (this.state.activeTab === 'practice') this.renderPracticeView();
+          else if (this.state.activeTab === 'exam') this.renderExamView();
+          else if (this.state.activeTab === 'bank') this.renderBankView();
+          AppUtils.showToast(
+            validSlices.length > 1
+              ? `Đã lưu & nối khung cắt thủ công từ ${validSlices.length} trang!`
+              : 'Đã lưu khung cắt thủ công mới!',
+            'success'
+          );
         },
 
         /* ==================================================================
@@ -7768,18 +8190,48 @@
             this.updateBulkAnswerLivePreview();
           });
 
-          // Modal cắt lại khung PDF thủ công
+          // Nút Hủy nạp file PDF dài
+          document.getElementById('btnCancelUpload')?.addEventListener('click', () => {
+            if (this.state.uploadAbortController) {
+              this.state.uploadAbortController.abort();
+            }
+          });
+
+          // Modal cắt lại khung PDF thủ công (4 tay nắm góc, di chuyển, phóng to, hoàn tác, đặt lại tự động)
           document.getElementById('btnCloseManualCropModal')?.addEventListener('click', () => {
             document.getElementById('manualCropModal')?.classList.add('hidden');
           });
           document.getElementById('btnSaveManualCrop')?.addEventListener('click', async () => {
             await this.saveManualCropSelection();
           });
+          document.getElementById('btnCropZoomIn')?.addEventListener('click', () => {
+            this.setManualCropZoom((this.state.manualCropZoom || 1) + 0.25);
+          });
+          document.getElementById('btnCropZoomOut')?.addEventListener('click', () => {
+            this.setManualCropZoom((this.state.manualCropZoom || 1) - 0.25);
+          });
+          document.getElementById('btnCropZoomFit')?.addEventListener('click', () => {
+            this.setManualCropZoom(1);
+          });
+          document.getElementById('btnCropUndo')?.addEventListener('click', () => {
+            this.undoManualCropChange();
+          });
+          document.getElementById('btnCropClearPage')?.addEventListener('click', () => {
+            this.pushManualCropUndoSnapshot();
+            const pIdx = this.state.manualCropActivePageIdx || 0;
+            delete this.state.manualCropPageRects[pIdx];
+            this.state.manualCropRect = null;
+            this.renderManualCropActivePage();
+          });
+          document.getElementById('btnCropResetAuto')?.addEventListener('click', async () => {
+            await this.resetQuestionToAutoCrop();
+          });
 
           const cropCanvas = document.getElementById('manualCropCanvas');
           if (cropCanvas) {
-            let isDraggingCrop = false;
+            let dragMode = null; // 'NEW' | 'MOVE' | 'NW' | 'NE' | 'SW' | 'SE'
             let startPt = null;
+            let origRect = null;
 
             const getCanvasPt = evt => {
               const rect = cropCanvas.getBoundingClientRect();
@@ -7793,48 +8245,81 @@
               };
             };
 
-            const redrawCropOverlay = () => {
-              if (!cropCanvas._baseImage) return;
-              const ctx = cropCanvas.getContext('2d');
-              ctx.clearRect(0, 0, cropCanvas.width, cropCanvas.height);
-              ctx.drawImage(cropCanvas._baseImage, 0, 0);
-              const r = this.state.manualCropRect;
-              if (r) {
-                ctx.save();
-                ctx.fillStyle = 'rgba(101, 48, 64, 0.18)';
-                ctx.strokeStyle = '#AA1342';
-                ctx.lineWidth = 3;
-                ctx.fillRect(r.x0, r.y0, r.x1 - r.x0, r.y1 - r.y0);
-                ctx.strokeRect(r.x0, r.y0, r.x1 - r.x0, r.y1 - r.y0);
-                ctx.restore();
-              }
+            const hitTestCropHandle = (pt, r) => {
+              if (!r || (r.x1 - r.x0) < 8 || (r.y1 - r.y0) < 8) return 'NEW';
+              const hitTol = Math.max(18, 22 / (this.state.manualCropZoom || 1));
+              if (Math.abs(pt.x - r.x0) <= hitTol && Math.abs(pt.y - r.y0) <= hitTol) return 'NW';
+              if (Math.abs(pt.x - r.x1) <= hitTol && Math.abs(pt.y - r.y0) <= hitTol) return 'NE';
+              if (Math.abs(pt.x - r.x0) <= hitTol && Math.abs(pt.y - r.y1) <= hitTol) return 'SW';
+              if (Math.abs(pt.x - r.x1) <= hitTol && Math.abs(pt.y - r.y1) <= hitTol) return 'SE';
+              if (pt.x >= r.x0 && pt.x <= r.x1 && pt.y >= r.y0 && pt.y <= r.y1) return 'MOVE';
+              return 'NEW';
             };
 
             const onStartDrag = evt => {
               if (!cropCanvas._baseImage) return;
-              isDraggingCrop = true;
               startPt = getCanvasPt(evt);
-              this.state.manualCropRect = { x0: startPt.x, y0: startPt.y, x1: startPt.x, y1: startPt.y };
-            };
-            const onMoveDrag = evt => {
-              if (!isDraggingCrop || !startPt) return;
-              if (evt.cancelable) evt.preventDefault();
-              const cur = getCanvasPt(evt);
-              this.state.manualCropRect = {
-                x0: Math.min(startPt.x, cur.x),
-                y0: Math.min(startPt.y, cur.y),
-                x1: Math.max(startPt.x, cur.x),
-                y1: Math.max(startPt.y, cur.y)
-              };
-              redrawCropOverlay();
-              const coordTxt = document.getElementById('manualCropCoordsText');
-              if (coordTxt) {
-                const r = this.state.manualCropRect;
-                coordTxt.textContent = `Vùng chọn: ${Math.round(r.x1 - r.x0)} × ${Math.round(r.y1 - r.y0)} px`;
+              const curR = this.state.manualCropRect;
+              dragMode = hitTestCropHandle(startPt, curR);
+              this.pushManualCropUndoSnapshot();
+              origRect = curR ? { ...curR } : null;
+              if (dragMode === 'NEW') {
+                this.state.manualCropRect = { x0: startPt.x, y0: startPt.y, x1: startPt.x, y1: startPt.y };
               }
             };
+
+            const onMoveDrag = evt => {
+              if (!cropCanvas._baseImage) return;
+              const cur = getCanvasPt(evt);
+              if (!dragMode || !startPt) {
+                const hover = hitTestCropHandle(cur, this.state.manualCropRect);
+                const cursorMap = { NW: 'nwse-resize', SE: 'nwse-resize', NE: 'nesw-resize', SW: 'nesw-resize', MOVE: 'move', NEW: 'crosshair' };
+                cropCanvas.style.cursor = cursorMap[hover] || 'crosshair';
+                return;
+              }
+              if (evt.cancelable) evt.preventDefault();
+
+              let nextR = origRect ? { ...origRect } : { x0: startPt.x, y0: startPt.y, x1: cur.x, y1: cur.y };
+              if (dragMode === 'NEW') {
+                nextR = {
+                  x0: Math.min(startPt.x, cur.x),
+                  y0: Math.min(startPt.y, cur.y),
+                  x1: Math.max(startPt.x, cur.x),
+                  y1: Math.max(startPt.y, cur.y)
+                };
+              } else if (dragMode === 'MOVE' && origRect) {
+                const dx = cur.x - startPt.x;
+                const dy = cur.y - startPt.y;
+                const rw = origRect.x1 - origRect.x0;
+                const rh = origRect.y1 - origRect.y0;
+                const nx0 = Math.max(0, Math.min(cropCanvas.width - rw, origRect.x0 + dx));
+                const ny0 = Math.max(0, Math.min(cropCanvas.height - rh, origRect.y0 + dy));
+                nextR = { x0: nx0, y0: ny0, x1: nx0 + rw, y1: ny0 + rh };
+              } else if (origRect) {
+                let { x0, y0, x1, y1 } = origRect;
+                if (dragMode === 'NW') { x0 = cur.x; y0 = cur.y; }
+                else if (dragMode === 'NE') { x1 = cur.x; y0 = cur.y; }
+                else if (dragMode === 'SW') { x0 = cur.x; y1 = cur.y; }
+                else if (dragMode === 'SE') { x1 = cur.x; y1 = cur.y; }
+                nextR = {
+                  x0: Math.min(x0, x1),
+                  y0: Math.min(y0, y1),
+                  x1: Math.max(x0, x1),
+                  y1: Math.max(y0, y1)
+                };
+              }
+
+              this.state.manualCropRect = nextR;
+              this.state.manualCropPageRects[this.state.manualCropActivePageIdx || 0] = { ...nextR };
+              this.redrawManualCropCanvas();
+            };
+
             const onEndDrag = () => {
-              isDraggingCrop = false;
+              if (!dragMode) return;
+              dragMode = null;
+              startPt = null;
+              origRect = null;
+              this.renderManualCropActivePage();
             };
 
             cropCanvas.addEventListener('mousedown', onStartDrag);
@@ -8060,6 +8545,15 @@
               return;
             }
 
+            if (action === 'switch-crop-page') {
+              const pIdx = parseInt(actionBtn.getAttribute('data-page-idx') || '0', 10);
+              if (!Number.isNaN(pIdx)) {
+                this.state.manualCropActivePageIdx = pIdx;
+                this.renderManualCropActivePage();
+              }
+              return;
+            }
+
             if (action === 'set-bulk-filter') {
               this.state.bulkEditorFilter = actionBtn.getAttribute('data-filter') || 'SEARCH';
               this.updateBulkAnswerLivePreview();
@@ -8128,6 +8622,42 @@
               document.getElementById('examReviewModal')?.classList.add('hidden');
               this.setLeftSidebarMobileOpen(false);
               return;
+            }
+
+            // Phím mũi tên & Ctrl+Z tinh chỉnh khung cắt khi mở Studio Cắt Tay
+            const cropModalEl = document.getElementById('manualCropModal');
+            if (cropModalEl && !cropModalEl.classList.contains('hidden')) {
+              if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') {
+                e.preventDefault();
+                this.undoManualCropChange();
+                return;
+              }
+              const r = this.state.manualCropRect;
+              const c = document.getElementById('manualCropCanvas');
+              if (r && c && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+                e.preventDefault();
+                const step = e.shiftKey ? 10 : 2;
+                const next = { ...r };
+                if (e.altKey) {
+                  // Alt + Mũi tên: nới / thu cạnh phải hoặc đáy
+                  if (e.key === 'ArrowDown') next.y1 = Math.min(c.height, next.y1 + step);
+                  if (e.key === 'ArrowUp') next.y1 = Math.max(next.y0 + 20, next.y1 - step);
+                  if (e.key === 'ArrowRight') next.x1 = Math.min(c.width, next.x1 + step);
+                  if (e.key === 'ArrowLeft') next.x1 = Math.max(next.x0 + 20, next.x1 - step);
+                } else {
+                  // Mũi tên thường: dịch chuyển cả khung cắt
+                  const rw = next.x1 - next.x0;
+                  const rh = next.y1 - next.y0;
+                  if (e.key === 'ArrowUp') { next.y0 = Math.max(0, next.y0 - step); next.y1 = next.y0 + rh; }
+                  if (e.key === 'ArrowDown') { next.y1 = Math.min(c.height, next.y1 + step); next.y0 = next.y1 - rh; }
+                  if (e.key === 'ArrowLeft') { next.x0 = Math.max(0, next.x0 - step); next.x1 = next.x0 + rw; }
+                  if (e.key === 'ArrowRight') { next.x1 = Math.min(c.width, next.x1 + step); next.x0 = next.x1 - rw; }
+                }
+                this.state.manualCropRect = next;
+                this.state.manualCropPageRects[this.state.manualCropActivePageIdx || 0] = { ...next };
+                this.redrawManualCropCanvas();
+                return;
+              }
             }
 
             const keyUpper = e.key.toUpperCase();

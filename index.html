@@ -737,6 +737,13 @@
               <span class="sidebar-hide-collapsed whitespace-nowrap">Ngân Hàng</span>
             </button>
 
+            <button type="button" data-nav-tab="theory" title="Tài Liệu Lý Thuyết" class="nav-tab-btn sidebar-center-collapsed w-full text-left px-3 py-2 rounded-full text-[13px] font-medium transition-all duration-200 flex items-center gap-3 text-[#7B5A64] hover:text-[#3E1D27] hover:bg-[#EBE3D3]">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-[18px] h-[18px] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+              </svg>
+              <span class="sidebar-hide-collapsed whitespace-nowrap">Tài Liệu</span>
+            </button>
+
             <button type="button" data-nav-tab="guide" title="Hướng Dẫn" class="nav-tab-btn sidebar-center-collapsed w-full text-left px-3 py-2 rounded-full text-[13px] font-medium transition-all duration-200 flex items-center gap-3 text-[#7B5A64] hover:text-[#3E1D27] hover:bg-[#EBE3D3]">
               <svg xmlns="http://www.w3.org/2000/svg" class="w-[18px] h-[18px] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
@@ -893,12 +900,19 @@
                       </div>
                       <div>
                         <div class="text-xs sm:text-sm font-semibold text-[#3E1D27]">Kéo thả hoặc chọn file tài liệu (.PDF, .DOCX, .TXT)</div>
-                        <div class="text-[11px] text-[#7B5A64]">Hỗ trợ chọn nhiều file cùng lúc • Tự động nhận diện câu hỏi &amp; đáp án</div>
+                        <div class="text-[11px] text-[#7B5A64]">Tự động phân loại Đề trắc nghiệm &amp; Tài liệu lý thuyết / bài giảng</div>
                       </div>
                     </div>
-                    <button type="button" id="btnTriggerOverviewUpload" class="px-4 py-2 rounded-full border border-[#E2D7BF] bg-[#FFFFFF] hover:bg-[#653040] hover:text-[#FFFFFF] hover:border-[#653040] text-xs font-semibold text-[#3E1D27] transition shrink-0">
-                      Chọn file từ máy
-                    </button>
+                    <div class="flex flex-wrap items-center gap-2 shrink-0">
+                      <select id="uploadClassifyModeSelect" title="Chế độ phân loại file khi nạp" class="px-3 py-2 rounded-full border border-[#E2D7BF] bg-[#FFFFFF] text-[11px] font-semibold text-[#3E1D27] focus:outline-none focus:border-[#653040]">
+                        <option value="AUTO" selected>✨ Tự động phân loại</option>
+                        <option value="QUIZ">📝 Nạp vào Đề thi</option>
+                        <option value="THEORY">📖 Nạp vào Tài liệu</option>
+                      </select>
+                      <button type="button" id="btnTriggerOverviewUpload" class="px-4 py-2 rounded-full border border-[#E2D7BF] bg-[#FFFFFF] hover:bg-[#653040] hover:text-[#FFFFFF] hover:border-[#653040] text-xs font-semibold text-[#3E1D27] transition shrink-0">
+                        Chọn file từ máy
+                      </button>
+                    </div>
                   </div>
 
                   <!-- Thanh tiến trình tải file (có nút Hủy an toàn) -->
@@ -1238,6 +1252,134 @@
       </div>
 
       <div id="bankQuestionsContainer" class="space-y-4"></div>
+    </section>
+
+    <!-- ====================================================================
+         05 || KHO TÀI LIỆU LÝ THUYẾT & GIÁO TRÌNH (PDF / DOCX / TXT)
+         ==================================================================== -->
+    <section id="tab-theory" class="hidden space-y-5 animate-stage">
+      <!-- Thanh công cụ chọn tài liệu & nạp mới -->
+      <div class="editorial-card rounded-2xl p-4 sm:px-5 space-y-3">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+          <div class="flex flex-wrap items-center gap-2.5 flex-1 min-w-0">
+            <select id="theoryDocSelect" class="flex-1 min-w-[220px] px-3.5 py-2.5 rounded-xl border border-[#E2D7BF] bg-[#FAF8F4] text-xs font-semibold text-[#3E1D27] focus:outline-none focus:border-[#653040] transition"></select>
+            <span id="theoryDocMetaBadge" class="hidden px-2.5 py-1 rounded-full bg-[#F4EFE6] font-mono-code text-[11px] font-semibold text-[#7B5A64]"></span>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2 shrink-0">
+            <label class="cursor-pointer px-4 py-2 rounded-full bg-[#653040] hover:bg-[#4E2330] text-[#FFFFFF] text-xs font-semibold transition flex items-center gap-1.5">
+              <span>＋ Nạp tài liệu lý thuyết</span>
+              <input id="theoryFileInputUpload" type="file" accept=".pdf,.docx,.txt" multiple class="hidden" />
+            </label>
+            <button id="btnConvertTheoryToQuiz" type="button" class="hidden px-3.5 py-2 rounded-full border border-[#E2D7BF] bg-[#FAF8F4] hover:bg-[#FBF4DE] hover:border-[#DDB247] text-xs font-semibold text-[#3E1D27] transition" title="Nhận nhầm loại? Chuyển file này sang luồng Đề trắc nghiệm">
+              🔀 Chuyển sang Đề thi
+            </button>
+            <button id="btnDeleteCurrentTheoryDoc" type="button" class="hidden px-3 py-2 rounded-full border border-[#E2D7BF] bg-[#FFFFFF] hover:bg-[#AA1342] hover:text-[#FFFFFF] hover:border-[#AA1342] text-xs font-semibold text-[#7B5A64] transition" title="Xóa tài liệu lý thuyết đang xem">
+              ✕ Xóa
+            </button>
+          </div>
+        </div>
+
+        <!-- Tiến trình nạp tài liệu lý thuyết -->
+        <div id="theoryUploadProgressBox" class="hidden rounded-xl border border-[#E2D7BF] bg-[#FAF8F4] p-3 space-y-1.5">
+          <div class="flex items-center justify-between text-xs font-semibold text-[#3E1D27]">
+            <span id="theoryUploadProgressText">Đang lập chỉ mục tài liệu lý thuyết...</span>
+            <span id="theoryUploadProgressPercent" class="font-mono-code text-[#AA1342]">0%</span>
+          </div>
+          <div class="w-full h-1.5 rounded-full bg-[#EFE8DA] overflow-hidden">
+            <div id="theoryUploadProgressBar" class="h-full bg-[#DDB247] transition-all duration-200" style="width: 0%"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trạng thái trống khi chưa có tài liệu lý thuyết -->
+      <div id="theoryEmptyState" class="editorial-card rounded-2xl p-10 text-center space-y-3">
+        <div class="w-12 h-12 rounded-2xl bg-[#F4EFE6] border border-[#E2D7BF] flex items-center justify-center text-2xl mx-auto">📖</div>
+        <div class="font-display text-base font-semibold text-[#3E1D27]">Chưa có tài liệu lý thuyết / giáo trình nào</div>
+        <p class="text-xs text-[#7B5A64] max-w-md mx-auto">
+          Kéo thả hoặc nạp file <strong>.PDF</strong>, <strong>.DOCX</strong>, <strong>.TXT</strong> bài giảng để đọc nhẹ RAM, tự tách mục lục, tìm kiếm toàn văn và đánh dấu trang công thức trọng tâm.
+        </p>
+        <div class="pt-1">
+          <button type="button" id="btnTriggerTheoryUploadEmpty" class="kontu-pill-btn">
+            <span>＋ Nạp tài liệu đầu tiên</span>
+            <span class="cta-arrow">→</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Không gian đọc 2 cột: Bảng tra cứu (Mục lục / Tìm kiếm / Đánh dấu) + Trình đọc chính -->
+      <div id="theoryReaderWorkspace" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+        <!-- Cột trái: Mục lục / Tìm kiếm / Đánh dấu -->
+        <aside class="lg:col-span-4 xl:col-span-3 lg:sticky lg:top-6 editorial-card rounded-2xl p-3.5 space-y-3">
+          <div class="grid grid-cols-3 bg-[#F4EFE6] p-0.5 rounded-full border border-[#E2D7BF] text-[11px]">
+            <button type="button" data-action="set-theory-panel" data-panel="TOC" class="theory-panel-btn px-2 py-1.5 rounded-full font-semibold bg-[#653040] text-[#FFFFFF] transition">
+              📑 Mục lục
+            </button>
+            <button type="button" data-action="set-theory-panel" data-panel="SEARCH" class="theory-panel-btn px-2 py-1.5 rounded-full font-medium text-[#7B5A64] hover:text-[#3E1D27] transition">
+              🔍 Tìm kiếm
+            </button>
+            <button type="button" data-action="set-theory-panel" data-panel="BOOKMARKS" class="theory-panel-btn px-2 py-1.5 rounded-full font-medium text-[#7B5A64] hover:text-[#3E1D27] transition">
+              🔖 Ghim (<span id="theoryBookmarkCountBadge">0</span>)
+            </button>
+          </div>
+
+          <!-- Panel 1: Mục lục tự động -->
+          <div id="theoryPanelToc" class="space-y-1 max-h-[540px] overflow-y-auto pr-1 text-xs"></div>
+
+          <!-- Panel 2: Tìm kiếm toàn văn -->
+          <div id="theoryPanelSearch" class="hidden space-y-2.5">
+            <input id="theorySearchInput" type="text" placeholder="Gõ công thức, định nghĩa, từ khóa..." class="w-full px-3 py-2 rounded-xl border border-[#E2D7BF] bg-[#FAF8F4] text-xs font-medium text-[#3E1D27] placeholder-[#9A7E87] focus:outline-none focus:border-[#653040] focus:bg-[#FFFFFF]" />
+            <div id="theorySearchResults" class="space-y-2 max-h-[480px] overflow-y-auto pr-1 text-xs"></div>
+          </div>
+
+          <!-- Panel 3: Trang đánh dấu (Bookmarks) -->
+          <div id="theoryPanelBookmarks" class="hidden space-y-2 max-h-[540px] overflow-y-auto pr-1 text-xs"></div>
+        </aside>
+
+        <!-- Cột phải: Trình đọc chính (PDF Canvas on-demand hoặc DOCX/TXT Rich Reader) -->
+        <div class="lg:col-span-8 xl:col-span-9 space-y-3.5">
+          <!-- Thanh điều khiển trang, đánh dấu & phóng to -->
+          <div class="editorial-card rounded-2xl px-4 py-3 flex flex-wrap items-center justify-between gap-2.5">
+            <div class="flex items-center gap-1.5">
+              <button id="btnTheoryPrevPage" type="button" class="px-3 py-1.5 rounded-full border border-[#E2D7BF] bg-[#FFFFFF] hover:bg-[#F4EFE6] disabled:opacity-40 text-xs font-semibold text-[#3E1D27] transition">
+                ← Trước
+              </button>
+              <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#F4EFE6] border border-[#E2D7BF] text-xs font-mono-code font-semibold text-[#3E1D27]">
+                <span>Trang</span>
+                <input id="theoryPageInput" type="number" min="1" value="1" class="w-12 px-1 py-0.5 rounded-md border border-[#E2D7BF] bg-[#FFFFFF] text-center text-xs font-bold text-[#3E1D27]" />
+                <span>/ <span id="theoryTotalPagesText">1</span></span>
+              </div>
+              <button id="btnTheoryNextPage" type="button" class="px-3 py-1.5 rounded-full bg-[#653040] hover:bg-[#4E2330] disabled:opacity-40 text-xs font-semibold text-[#FFFFFF] transition">
+                Sau →
+              </button>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2">
+              <button id="btnTheoryToggleBookmark" type="button" class="px-3 py-1.5 rounded-full border border-[#E2D7BF] bg-[#FAF8F4] hover:bg-[#FBF4DE] text-xs font-semibold text-[#3E1D27] transition">
+                🔖 Đánh dấu trang
+              </button>
+
+              <div class="inline-flex items-center bg-[#F4EFE6] p-0.5 rounded-full border border-[#E2D7BF]">
+                <button id="btnTheoryZoomOut" type="button" title="Thu nhỏ" class="px-2.5 py-1 rounded-full hover:bg-[#FFFFFF] text-xs font-bold text-[#3E1D27] transition">−</button>
+                <span id="theoryZoomLabel" class="px-2 font-mono-code text-[11px] font-bold text-[#653040] min-w-[44px] text-center">100%</span>
+                <button id="btnTheoryZoomIn" type="button" title="Phóng to" class="px-2.5 py-1 rounded-full hover:bg-[#FFFFFF] text-xs font-bold text-[#3E1D27] transition">＋</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Khung hiển thị trang PDF (On-demand Canvas) -->
+          <div id="theoryPdfViewerWrap" class="hidden editorial-card rounded-2xl p-3 sm:p-4 overflow-auto">
+            <div class="pdf-img-frame rounded-xl border border-[#EFE8DA] bg-white p-2 flex justify-center min-h-[420px]">
+              <canvas id="theoryPdfCanvas" class="rounded-lg shadow-sm bg-white max-w-none"></canvas>
+            </div>
+          </div>
+
+          <!-- Khung hiển thị tài liệu DOCX / TXT -->
+          <div id="theoryRichViewerWrap" class="hidden editorial-card rounded-2xl p-5 sm:p-7 space-y-4">
+            <div id="theoryRichContentBody" class="space-y-3 text-sm leading-relaxed text-[#3E1D27]"></div>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- ====================================================================
@@ -3551,7 +3693,8 @@
         dbName: 'ViettulamQuestionBankDB',
         storeName: 'documents',
         metaStoreName: 'session_meta',
-        version: 2,
+        theoryStoreName: 'theory_docs',
+        version: 3,
 
         open() {
           return new Promise((resolve, reject) => {
@@ -3564,9 +3707,46 @@
               if (!db.objectStoreNames.contains(this.metaStoreName)) {
                 db.createObjectStore(this.metaStoreName, { keyPath: 'key' });
               }
+              if (!db.objectStoreNames.contains(this.theoryStoreName)) {
+                db.createObjectStore(this.theoryStoreName, { keyPath: 'docName' });
+              }
             };
             req.onsuccess = e => resolve(e.target.result);
             req.onerror = e => reject(e.target.error);
+          });
+        },
+
+        async getAllTheoryDocs() {
+          try {
+            const db = await this.open();
+            return new Promise((resolve, reject) => {
+              const tx = db.transaction(this.theoryStoreName, 'readonly');
+              const req = tx.objectStore(this.theoryStoreName).getAll();
+              req.onsuccess = () => resolve(req.result || []);
+              req.onerror = () => reject(req.error);
+            });
+          } catch (e) {
+            return [];
+          }
+        },
+
+        async saveTheoryDoc(docObj) {
+          const db = await this.open();
+          return new Promise((resolve, reject) => {
+            const tx = db.transaction(this.theoryStoreName, 'readwrite');
+            tx.objectStore(this.theoryStoreName).put(docObj);
+            tx.oncomplete = () => resolve(true);
+            tx.onerror = () => reject(tx.error);
+          });
+        },
+
+        async deleteTheoryDoc(docName) {
+          const db = await this.open();
+          return new Promise((resolve, reject) => {
+            const tx = db.transaction(this.theoryStoreName, 'readwrite');
+            tx.objectStore(this.theoryStoreName).delete(docName);
+            tx.oncomplete = () => resolve(true);
+            tx.onerror = () => reject(tx.error);
           });
         },
 
@@ -3597,13 +3777,18 @@
         async restoreBackup(backup) {
           const db = await this.open();
           return new Promise((resolve, reject) => {
-            const tx = db.transaction([this.storeName, this.metaStoreName], 'readwrite');
+            const tx = db.transaction([this.storeName, this.metaStoreName, this.theoryStoreName], 'readwrite');
             const docs = tx.objectStore(this.storeName);
             const meta = tx.objectStore(this.metaStoreName);
+            const theory = tx.objectStore(this.theoryStoreName);
             docs.clear();
             meta.clear();
+            theory.clear();
             backup.documents.forEach(doc => docs.put(doc));
             backup.meta.forEach(item => meta.put(item));
+            if (Array.isArray(backup.theoryDocs)) {
+              backup.theoryDocs.forEach(td => theory.put(td));
+            }
             tx.oncomplete = () => resolve(true);
             tx.onerror = () => reject(tx.error);
             tx.onabort = () => reject(tx.error || new Error('Không thể khôi phục bản sao lưu.'));
@@ -3633,8 +3818,9 @@
         async clearAll() {
           const db = await this.open();
           return new Promise((resolve, reject) => {
-            const tx = db.transaction([this.storeName, this.metaStoreName], 'readwrite');
+            const tx = db.transaction([this.storeName, this.metaStoreName, this.theoryStoreName], 'readwrite');
             tx.objectStore(this.storeName).clear();
+            tx.objectStore(this.theoryStoreName).clear();
             tx.objectStore(this.metaStoreName).delete('practice_resume_v1');
             tx.oncomplete = () => resolve(true);
             tx.onerror = () => reject(tx.error);
@@ -3709,6 +3895,302 @@
           } catch (e) {
             return null;
           }
+        }
+      };
+
+      /* ====================================================================
+       * 7B. HỆ THỐNG PHÂN LOẠI & XỬ LÝ TÀI LIỆU LÝ THUYẾT / GIÁO TRÌNH
+       * ==================================================================== */
+      const TheoryDocumentEngine = {
+        arrayBufferToBase64(buffer) {
+          if (!buffer) return null;
+          const bytes = new Uint8Array(buffer);
+          const chunkSize = 0x8000;
+          let binary = '';
+          for (let i = 0; i < bytes.length; i += chunkSize) {
+            binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunkSize));
+          }
+          return btoa(binary);
+        },
+
+        base64ToArrayBuffer(b64) {
+          if (!b64) return null;
+          const binary = atob(b64);
+          const len = binary.length;
+          const bytes = new Uint8Array(len);
+          for (let i = 0; i < len; i++) {
+            bytes[i] = binary.charCodeAt(i);
+          }
+          return bytes.buffer;
+        },
+
+        scoreQuizLikelihood(sampleText) {
+          const text = String(sampleText || '');
+          const qExplicit = (text.match(/(?:^|\n)\s*(?:C\s*â\s*u(?:\s+hỏi)?|Cau|Question)\s*\d+(?:[\.,\/-]\d+)*\s*[:\.\-\)]/gi) || []).length;
+          const qHier = (text.match(/(?:^|\n)\s*\d+(?:[\.,]\d+){2,}\s*[:\.\)]\s+\S/g) || []).length;
+          const optHits = (text.match(/(?:^|\s)(?:[\(\[])?[a-dA-D](?:[\)\]\.\:])(?=\s)/g) || []).length;
+          const totalQ = qExplicit + qHier;
+          const isQuiz = (totalQ >= 2 && optHits >= 6) || (totalQ >= 4 && optHits >= 4);
+          return { isQuiz, totalQ, optHits };
+        },
+
+        async classifyFile(file) {
+          const ext = (file.name.split('.').pop() || '').toLowerCase();
+          try {
+            if (ext === 'pdf') {
+              const ab = await file.arrayBuffer();
+              const pdf = await window.pdfjsLib.getDocument({ data: ab.slice(0) }).promise;
+              const checkPages = Math.min(3, pdf.numPages);
+              let sample = '';
+              for (let p = 1; p <= checkPages; p++) {
+                const page = await pdf.getPage(p);
+                const tc = await page.getTextContent();
+                sample += '\n' + tc.items.map(it => it.str || '').join(' ');
+                if (typeof page.cleanup === 'function') { try { page.cleanup(); } catch (e) {} }
+              }
+              if (typeof pdf.destroy === 'function') { try { await pdf.destroy(); } catch (e) {} }
+              return this.scoreQuizLikelihood(sample).isQuiz ? 'QUIZ' : 'THEORY';
+            } else if (ext === 'docx') {
+              const ab = await file.arrayBuffer();
+              const zip = await window.JSZip.loadAsync(ab);
+              const docXml = zip.file('word/document.xml');
+              if (!docXml) return 'THEORY';
+              const xmlText = await docXml.async('text');
+              const parser = new DOMParser();
+              const xmlDoc = parser.parseFromString(xmlText, 'application/xml');
+              const ps = Array.from(xmlDoc.getElementsByTagName('w:p')).slice(0, 120);
+              const sample = ps.map(p => p.textContent || '').join('\n');
+              return this.scoreQuizLikelihood(sample).isQuiz ? 'QUIZ' : 'THEORY';
+            } else {
+              const txt = await file.text();
+              const sample = txt.split(/\r?\n/).slice(0, 120).join('\n');
+              return this.scoreQuizLikelihood(sample).isQuiz ? 'QUIZ' : 'THEORY';
+            }
+          } catch (e) {
+            return 'QUIZ';
+          }
+        },
+
+        extractTocFromPagesText(pagesText) {
+          const toc = [];
+          const seen = new Set();
+          const lvl1Re = /^(?:CHƯƠNG|Chương|PHẦN|Phần|BÀI|Bài|CHAPTER|PART)\s+[0-9IVXLCDM]+(?:[\.\:\-\s]+.*)?$/;
+          const lvl2Re = /^(?:[IVX]+\.\s+\S|\d+\.\d+(?:\.\d+)?\.?\s+\S)/;
+
+          pagesText.forEach((pText, idx) => {
+            const pageNum = idx + 1;
+            const lines = String(pText || '').split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+            for (const line of lines) {
+              if (line.length < 5 || line.length > 120) continue;
+              if (/[,;]$/.test(line)) continue;
+              let level = 0;
+              if (lvl1Re.test(line)) level = 1;
+              else if (lvl2Re.test(line)) level = 2;
+              if (level > 0) {
+                const key = `${pageNum}::${line.toLowerCase().slice(0, 48)}`;
+                if (!seen.has(key)) {
+                  seen.add(key);
+                  toc.push({ title: line, page: pageNum, level });
+                  if (toc.length >= 250) return;
+                }
+              }
+            }
+          });
+          return toc;
+        },
+
+        async processTheoryFile(file, onProgress, abortSignal = null) {
+          const ext = (file.name.split('.').pop() || '').toLowerCase();
+          if (ext === 'pdf') {
+            return await this.processTheoryPdf(file, onProgress, abortSignal);
+          } else if (ext === 'docx') {
+            return await this.processTheoryDocx(file, onProgress);
+          } else {
+            return await this.processTheoryTxt(file, onProgress);
+          }
+        },
+
+        async processTheoryPdf(file, onProgress, abortSignal = null) {
+          const rawBuffer = await file.arrayBuffer();
+          const storedBuffer = rawBuffer.slice(0);
+          const pdf = await window.pdfjsLib.getDocument({ data: rawBuffer }).promise;
+          const totalPages = pdf.numPages;
+          const pagesText = [];
+
+          try {
+            for (let p = 1; p <= totalPages; p++) {
+              if (abortSignal && abortSignal.aborted) {
+                const err = new Error('Đã hủy nạp tài liệu lý thuyết.');
+                err.isCancelled = true;
+                throw err;
+              }
+              if (onProgress && (p === 1 || p % 4 === 0 || p === totalPages)) {
+                onProgress(Math.round((p / totalPages) * 92), `Đang lập chỉ mục trang ${p}/${totalPages}...`);
+              }
+              const page = await pdf.getPage(p);
+              const tc = await page.getTextContent();
+              let lines = [];
+              let curLine = '';
+              let lastY = null;
+              for (const item of tc.items) {
+                const s = AppUtils.decodeSymbolPuaText(item.str || '');
+                const y = item.transform ? Math.round(item.transform[5]) : null;
+                if (lastY !== null && y !== null && Math.abs(y - lastY) > 4) {
+                  if (curLine.trim()) lines.push(curLine.trim());
+                  curLine = s;
+                } else {
+                  curLine += (curLine && s && !curLine.endsWith(' ') && !s.startsWith(' ') ? ' ' : '') + s;
+                }
+                if (y !== null) lastY = y;
+              }
+              if (curLine.trim()) lines.push(curLine.trim());
+              pagesText.push(lines.join('\n'));
+              if (typeof page.cleanup === 'function') { try { page.cleanup(); } catch (e) {} }
+            }
+
+            // Ưu tiên mục lục gốc (PDF Outline) nếu có
+            let toc = [];
+            try {
+              const outline = await pdf.getOutline();
+              if (Array.isArray(outline) && outline.length > 0) {
+                const flattenOutline = async (items, level) => {
+                  for (const it of items) {
+                    let destPage = 1;
+                    try {
+                      let dest = it.dest;
+                      if (typeof dest === 'string') dest = await pdf.getDestination(dest);
+                      if (Array.isArray(dest) && dest[0]) {
+                        const pageIndex = await pdf.getPageIndex(dest[0]);
+                        destPage = pageIndex + 1;
+                      }
+                    } catch (e) {}
+                    if (it.title && it.title.trim()) {
+                      toc.push({ title: it.title.trim(), page: destPage, level: Math.min(3, level) });
+                    }
+                    if (Array.isArray(it.items) && it.items.length > 0 && toc.length < 250) {
+                      await flattenOutline(it.items, level + 1);
+                    }
+                  }
+                };
+                await flattenOutline(outline, 1);
+              }
+            } catch (e) {}
+
+            if (toc.length < 2) {
+              toc = this.extractTocFromPagesText(pagesText);
+            }
+
+            if (onProgress) onProgress(100, 'Hoàn tất lập chỉ mục!');
+            return {
+              docName: file.name,
+              fileType: 'PDF',
+              fileSize: file.size || storedBuffer.byteLength,
+              uploadedAt: new Date().toISOString(),
+              totalPages,
+              pdfArrayBuffer: storedBuffer,
+              pagesText,
+              toc,
+              bookmarks: [],
+              lastPage: 1
+            };
+          } finally {
+            if (typeof pdf.destroy === 'function') { try { await pdf.destroy(); } catch (e) {} }
+          }
+        },
+
+        async processTheoryDocx(file, onProgress) {
+          if (onProgress) onProgress(35, 'Đang trích xuất nội dung & hình ảnh DOCX...');
+          const ab = await file.arrayBuffer();
+          const { structuredLines, mediaList } = await RealFileProcessor.extractStructuredLinesFromDocx(ab);
+          const lvl1Re = /^(?:CHƯƠNG|Chương|PHẦN|Phần|BÀI|Bài|CHAPTER|PART)\s+[0-9IVXLCDM]+/i;
+          const lvl2Re = /^(?:[IVX]+\.\s+\S|\d+\.\d+(?:\.\d+)?\.?\s+\S)/;
+
+          const sections = [];
+          let curSec = { title: 'Phần mở đầu', blocks: [] };
+
+          for (const lineObj of structuredLines) {
+            const raw = String(lineObj.rawWithTokens || '').replace(/@@(?:HL|EMPH)_MARK@@/g, '');
+            const imgs = [];
+            const cleaned = raw.replace(/@@DOCX_IMG_(\d+)@@/g, (_, idxStr) => {
+              const u = mediaList[Number(idxStr)];
+              if (u) imgs.push(u);
+              return '';
+            }).trim();
+            const text = VietnameseFontRepairEngine.repairVietnameseBrokenWords(cleaned);
+            if (!text && imgs.length === 0) continue;
+
+            const isMajorHeading = text && text.length <= 120 && lvl1Re.test(text);
+            const isSubHeading = text && text.length <= 120 && lvl2Re.test(text);
+
+            if ((isMajorHeading && curSec.blocks.length > 0) || curSec.blocks.length >= 36) {
+              sections.push(curSec);
+              curSec = { title: isMajorHeading ? text : `Trang ${sections.length + 2}`, blocks: [] };
+            }
+            curSec.blocks.push({ text, images: imgs, headingLevel: isMajorHeading ? 1 : (isSubHeading ? 2 : 0) });
+          }
+          if (curSec.blocks.length > 0 || sections.length === 0) {
+            sections.push(curSec);
+          }
+
+          const pagesText = sections.map(sec => sec.blocks.map(b => b.text).filter(Boolean).join('\n'));
+          const toc = this.extractTocFromPagesText(pagesText);
+          if (onProgress) onProgress(100, 'Hoàn tất!');
+
+          return {
+            docName: file.name,
+            fileType: 'DOCX',
+            fileSize: file.size || 0,
+            uploadedAt: new Date().toISOString(),
+            totalPages: sections.length,
+            sections,
+            pagesText,
+            toc,
+            bookmarks: [],
+            lastPage: 1
+          };
+        },
+
+        async processTheoryTxt(file, onProgress) {
+          if (onProgress) onProgress(45, 'Đang đọc tài liệu TXT...');
+          const rawText = await file.text();
+          const lines = rawText.split(/\r?\n/).map(l => l.replace(/\s+$/, ''));
+          const lvl1Re = /^(?:CHƯƠNG|Chương|PHẦN|Phần|BÀI|Bài|CHAPTER|PART)\s+[0-9IVXLCDM]+/i;
+          const lvl2Re = /^(?:[IVX]+\.\s+\S|\d+\.\d+(?:\.\d+)?\.?\s+\S)/;
+
+          const sections = [];
+          let curSec = { title: 'Phần 1', blocks: [] };
+
+          for (const line of lines) {
+            const trimmed = line.trim();
+            if (!trimmed) continue;
+            const isMajor = trimmed.length <= 120 && lvl1Re.test(trimmed);
+            const isSub = trimmed.length <= 120 && lvl2Re.test(trimmed);
+            if ((isMajor && curSec.blocks.length > 0) || curSec.blocks.length >= 42) {
+              sections.push(curSec);
+              curSec = { title: isMajor ? trimmed : `Trang ${sections.length + 2}`, blocks: [] };
+            }
+            curSec.blocks.push({ text: trimmed, images: [], headingLevel: isMajor ? 1 : (isSub ? 2 : 0) });
+          }
+          if (curSec.blocks.length > 0 || sections.length === 0) {
+            sections.push(curSec);
+          }
+
+          const pagesText = sections.map(sec => sec.blocks.map(b => b.text).filter(Boolean).join('\n'));
+          const toc = this.extractTocFromPagesText(pagesText);
+          if (onProgress) onProgress(100, 'Hoàn tất!');
+
+          return {
+            docName: file.name,
+            fileType: 'TXT',
+            fileSize: file.size || 0,
+            uploadedAt: new Date().toISOString(),
+            totalPages: sections.length,
+            sections,
+            pagesText,
+            toc,
+            bookmarks: [],
+            lastPage: 1
+          };
         }
       };
 
@@ -4955,7 +5437,16 @@
           bulkSearchQuery: '',
           bankDisplayLimit: 60,
           showcaseItems: [],
-          showcaseIndex: 0
+          showcaseIndex: 0,
+          theoryDocs: [],
+          activeTheoryDocName: null,
+          theoryCurrentPage: 1,
+          theoryZoom: 1,
+          theorySidePanel: 'TOC',
+          theorySearchQuery: '',
+          activeTheoryPdfHandle: null,
+          activeTheoryPdfHandleDocName: null,
+          theoryRenderTask: null
         },
 
         async init() {
@@ -4979,6 +5470,11 @@
           this.state.wrongBank = (await ViettulamDb.getMeta('wrong_bank_v1')) || {};
           this.state.flaggedQuestions = (await ViettulamDb.getMeta('flagged_questions_v1')) || {};
           this.state.examHistory = (await ViettulamDb.getMeta('exam_history_v1')) || [];
+          this.state.theoryDocs = await ViettulamDb.getAllTheoryDocs();
+          if (this.state.theoryDocs.length > 0) {
+            this.state.activeTheoryDocName = this.state.theoryDocs[0].docName;
+            this.state.theoryCurrentPage = this.state.theoryDocs[0].lastPage || 1;
+          }
           this.setDocuments(cleanDocs);
           this.renderExamHistoryPanel();
           this.checkSavedResumeBanner();
@@ -5496,7 +5992,7 @@
 
           this.setLeftSidebarMobileOpen(false);
 
-          ['overview', 'practice', 'exam', 'bank', 'guide'].forEach(t => {
+          ['overview', 'practice', 'exam', 'bank', 'theory', 'guide'].forEach(t => {
             const sec = document.getElementById(`tab-${t}`);
             if (sec) {
               sec.classList.toggle('hidden', t !== tabName);
@@ -5516,6 +6012,8 @@
             }
           } else if (tabName === 'bank') {
             this.renderBankView();
+          } else if (tabName === 'theory') {
+            this.renderTheoryView();
           }
 
           if (typeof GuideVideoPlayer !== 'undefined') {
@@ -5668,14 +6166,17 @@
           }
         },
 
-        async handleFilesUploaded(fileList) {
+        async handleFilesUploaded(fileList, forcedMode = null) {
           const files = Array.from(fileList || []);
           if (files.length === 0) return;
 
-          const box = document.getElementById('uploadProgressBox');
-          const txt = document.getElementById('uploadProgressText');
-          const pct = document.getElementById('uploadProgressPercent');
-          const bar = document.getElementById('uploadProgressBar');
+          const mode = forcedMode || document.getElementById('uploadClassifyModeSelect')?.value || 'AUTO';
+          const isTheoryTabUpload = forcedMode === 'THEORY' && this.state.activeTab === 'theory';
+
+          const box = document.getElementById(isTheoryTabUpload ? 'theoryUploadProgressBox' : 'uploadProgressBox');
+          const txt = document.getElementById(isTheoryTabUpload ? 'theoryUploadProgressText' : 'uploadProgressText');
+          const pct = document.getElementById(isTheoryTabUpload ? 'theoryUploadProgressPercent' : 'uploadProgressPercent');
+          const bar = document.getElementById(isTheoryTabUpload ? 'theoryUploadProgressBar' : 'uploadProgressBar');
           if (box) box.classList.remove('hidden');
 
           if (this.state.uploadAbortController) {
@@ -5684,34 +6185,94 @@
           const abortController = new AbortController();
           this.state.uploadAbortController = abortController;
 
-          let savedCount = 0;
+          let quizCount = 0;
+          let theoryCount = 0;
           let warningCount = 0;
+          let lastTheoryDocName = null;
 
           try {
             for (const file of files) {
               if (abortController.signal.aborted) break;
-              const docObj = await RealFileProcessor.processUploadedFile(
-                file,
-                (percent, msg) => {
-                  if (txt) txt.textContent = `${file.name}: ${msg}`;
-                  if (pct) pct.textContent = `${percent}%`;
-                  if (bar) bar.style.width = `${percent}%`;
-                },
-                abortController.signal
-              );
-              await ViettulamDb.saveDocument(docObj);
-              savedCount++;
-              warningCount += (docObj.questions || []).filter(q => Boolean(q.cropWarning)).length;
+
+              let targetKind = mode;
+              if (targetKind === 'AUTO') {
+                if (txt) txt.textContent = `${file.name}: Đang nhận diện loại tài liệu...`;
+                if (pct) pct.textContent = '5%';
+                if (bar) bar.style.width = '5%';
+                targetKind = await TheoryDocumentEngine.classifyFile(file);
+              }
+
+              if (targetKind === 'THEORY') {
+                const theoryDoc = await TheoryDocumentEngine.processTheoryFile(
+                  file,
+                  (percent, msg) => {
+                    if (txt) txt.textContent = `${file.name} (Lý thuyết): ${msg}`;
+                    if (pct) pct.textContent = `${percent}%`;
+                    if (bar) bar.style.width = `${percent}%`;
+                  },
+                  abortController.signal
+                );
+                await ViettulamDb.saveTheoryDoc(theoryDoc);
+                theoryCount++;
+                lastTheoryDocName = theoryDoc.docName;
+              } else {
+                const docObj = await RealFileProcessor.processUploadedFile(
+                  file,
+                  (percent, msg) => {
+                    if (txt) txt.textContent = `${file.name}: ${msg}`;
+                    if (pct) pct.textContent = `${percent}%`;
+                    if (bar) bar.style.width = `${percent}%`;
+                  },
+                  abortController.signal
+                );
+                // Nếu chọn AUTO nhưng không trích xuất được câu trắc nghiệm nào -> tự đưa sang Tài liệu lý thuyết
+                if (mode === 'AUTO' && (!docObj.questions || docObj.questions.length === 0)) {
+                  const fallbackTheory = await TheoryDocumentEngine.processTheoryFile(
+                    file,
+                    (percent, msg) => {
+                      if (txt) txt.textContent = `${file.name} (Lý thuyết): ${msg}`;
+                      if (pct) pct.textContent = `${percent}%`;
+                      if (bar) bar.style.width = `${percent}%`;
+                    },
+                    abortController.signal
+                  );
+                  await ViettulamDb.saveTheoryDoc(fallbackTheory);
+                  theoryCount++;
+                  lastTheoryDocName = fallbackTheory.docName;
+                } else {
+                  await ViettulamDb.saveDocument(docObj);
+                  quizCount++;
+                  warningCount += (docObj.questions || []).filter(q => Boolean(q.cropWarning)).length;
+                }
+              }
             }
+
             const refreshedDocs = await ViettulamDb.getAllDocuments();
+            this.state.theoryDocs = await ViettulamDb.getAllTheoryDocs();
+            if (lastTheoryDocName) {
+              this.state.activeTheoryDocName = lastTheoryDocName;
+              this.state.theoryCurrentPage = 1;
+            }
             this.setDocuments(refreshedDocs);
-            if (savedCount > 0) {
+            if (this.state.activeTab === 'theory') {
+              this.renderTheoryView();
+            }
+
+            if (quizCount > 0 && theoryCount > 0) {
+              AppUtils.showToast(`Đã nạp ${quizCount} đề trắc nghiệm & ${theoryCount} tài liệu lý thuyết!`, 'success');
+            } else if (theoryCount > 0) {
+              AppUtils.showToast(`Đã nhận diện & nạp ${theoryCount} tài liệu lý thuyết vào mục Tài Liệu!`, 'success');
+              if (this.state.activeTab !== 'theory') {
+                this.switchTab('theory');
+              }
+            } else if (quizCount > 0) {
               const warnSuffix = warningCount > 0 ? ` (${warningCount} câu có cảnh báo khung cắt — bấm ⚠️ để rà nhanh)` : '';
-              AppUtils.showToast(`Đã nạp thành công ${savedCount} tài liệu!${warnSuffix}`, warningCount > 0 ? 'warning' : 'success');
+              AppUtils.showToast(`Đã nạp thành công ${quizCount} đề trắc nghiệm!${warnSuffix}`, warningCount > 0 ? 'warning' : 'success');
             }
           } catch (err) {
             if (err && err.isCancelled) {
               const refreshedDocs = await ViettulamDb.getAllDocuments();
+              this.state.theoryDocs = await ViettulamDb.getAllTheoryDocs();
               this.setDocuments(refreshedDocs);
               AppUtils.showToast('Đã hủy nạp file. Dữ liệu đã lưu trước đó vẫn nguyên vẹn.', 'info');
             } else {
@@ -5724,6 +6285,340 @@
               if (box) box.classList.add('hidden');
             }, 900);
           }
+        },
+
+        /* ==================================================================
+         * 05 || TRÌNH ĐỌC TÀI LIỆU LÝ THUYẾT (MỤC LỤC, TÌM KIẾM, ĐÁNH DẤU)
+         * ================================================================== */
+        getActiveTheoryDoc() {
+          const docs = this.state.theoryDocs || [];
+          if (docs.length === 0) return null;
+          let found = docs.find(d => d.docName === this.state.activeTheoryDocName);
+          if (!found) {
+            found = docs[0];
+            this.state.activeTheoryDocName = found.docName;
+            this.state.theoryCurrentPage = found.lastPage || 1;
+          }
+          return found;
+        },
+
+        async releaseActiveTheoryPdfHandle() {
+          if (this.state.theoryRenderTask) {
+            try { this.state.theoryRenderTask.cancel(); } catch (e) {}
+            this.state.theoryRenderTask = null;
+          }
+          if (this.state.activeTheoryPdfHandle) {
+            try { await this.state.activeTheoryPdfHandle.destroy(); } catch (e) {}
+            this.state.activeTheoryPdfHandle = null;
+            this.state.activeTheoryPdfHandleDocName = null;
+          }
+        },
+
+        renderTheoryView() {
+          const docs = this.state.theoryDocs || [];
+          const selectEl = document.getElementById('theoryDocSelect');
+          const metaBadge = document.getElementById('theoryDocMetaBadge');
+          const delBtn = document.getElementById('btnDeleteCurrentTheoryDoc');
+          const convertBtn = document.getElementById('btnConvertTheoryToQuiz');
+          const emptyEl = document.getElementById('theoryEmptyState');
+          const workspaceEl = document.getElementById('theoryReaderWorkspace');
+
+          if (docs.length === 0) {
+            if (selectEl) selectEl.innerHTML = `<option value="">Chưa có tài liệu lý thuyết</option>`;
+            if (metaBadge) metaBadge.classList.add('hidden');
+            if (delBtn) delBtn.classList.add('hidden');
+            if (convertBtn) convertBtn.classList.add('hidden');
+            if (emptyEl) emptyEl.classList.remove('hidden');
+            if (workspaceEl) workspaceEl.classList.add('hidden');
+            return;
+          }
+
+          const activeDoc = this.getActiveTheoryDoc();
+          if (selectEl) {
+            selectEl.innerHTML = docs.map(d => {
+              const sel = d.docName === activeDoc.docName ? 'selected' : '';
+              return `<option value="${AppUtils.escapeHtml(d.docName)}" ${sel}>📖 ${AppUtils.escapeHtml(d.docName)} (${d.totalPages || 1} trang • ${AppUtils.escapeHtml(d.fileType || 'FILE')})</option>`;
+            }).join('');
+          }
+
+          if (metaBadge) {
+            const mb = activeDoc.fileSize ? ` • ${(activeDoc.fileSize / (1024 * 1024)).toFixed(1)} MB` : '';
+            metaBadge.textContent = `${activeDoc.fileType || 'FILE'} • ${activeDoc.totalPages || 1} trang${mb}`;
+            metaBadge.classList.remove('hidden');
+          }
+          if (delBtn) delBtn.classList.remove('hidden');
+          if (convertBtn) {
+            const canConvert = activeDoc.fileType === 'PDF' && Boolean(activeDoc.pdfArrayBuffer);
+            convertBtn.classList.toggle('hidden', !canConvert);
+          }
+          if (emptyEl) emptyEl.classList.add('hidden');
+          if (workspaceEl) workspaceEl.classList.remove('hidden');
+
+          this.renderTheorySidePanels();
+          this.renderTheoryCurrentPage();
+        },
+
+        renderTheorySidePanels() {
+          const doc = this.getActiveTheoryDoc();
+          if (!doc) return;
+          const panel = this.state.theorySidePanel || 'TOC';
+
+          document.querySelectorAll('.theory-panel-btn').forEach(btn => {
+            const p = btn.getAttribute('data-panel');
+            btn.className = p === panel
+              ? 'theory-panel-btn px-2 py-1.5 rounded-full font-semibold bg-[#653040] text-[#FFFFFF] transition'
+              : 'theory-panel-btn px-2 py-1.5 rounded-full font-medium text-[#7B5A64] hover:text-[#3E1D27] transition';
+          });
+
+          document.getElementById('theoryPanelToc')?.classList.toggle('hidden', panel !== 'TOC');
+          document.getElementById('theoryPanelSearch')?.classList.toggle('hidden', panel !== 'SEARCH');
+          document.getElementById('theoryPanelBookmarks')?.classList.toggle('hidden', panel !== 'BOOKMARKS');
+
+          const bookmarks = Array.isArray(doc.bookmarks) ? doc.bookmarks : [];
+          const bmCountEl = document.getElementById('theoryBookmarkCountBadge');
+          if (bmCountEl) bmCountEl.textContent = String(bookmarks.length);
+
+          // 1. Render TOC
+          const tocEl = document.getElementById('theoryPanelToc');
+          if (tocEl) {
+            const toc = Array.isArray(doc.toc) ? doc.toc : [];
+            if (toc.length === 0) {
+              tocEl.innerHTML = `<div class="p-3 rounded-xl bg-[#FAF8F4] border border-dashed border-[#E2D7BF] text-[#7B5A64] text-center">Tài liệu không có tiêu đề Chương/Mục rõ ràng. Bạn có thể dùng ô <strong>Tìm kiếm</strong> hoặc nhập số trang trực tiếp.</div>`;
+            } else {
+              tocEl.innerHTML = toc.map(item => {
+                const isCur = item.page === this.state.theoryCurrentPage;
+                const indent = item.level === 2 ? 'pl-4' : (item.level >= 3 ? 'pl-7' : 'pl-2.5');
+                return `
+                  <button type="button" data-action="theory-jump-page" data-page="${item.page}"
+                    class="w-full text-left ${indent} pr-2.5 py-2 rounded-xl transition flex items-start justify-between gap-2 ${isCur ? 'bg-[#653040] text-[#FFFFFF] font-semibold' : 'hover:bg-[#F4EFE6] text-[#3E1D27]'}">
+                    <span class="line-clamp-2 leading-snug">${AppUtils.escapeHtml(item.title)}</span>
+                    <span class="font-mono-code text-[10px] shrink-0 opacity-75">tr.${item.page}</span>
+                  </button>
+                `;
+              }).join('');
+            }
+          }
+
+          // 2. Render Bookmarks
+          const bmEl = document.getElementById('theoryPanelBookmarks');
+          if (bmEl) {
+            if (bookmarks.length === 0) {
+              bmEl.innerHTML = `<div class="p-3 rounded-xl bg-[#FAF8F4] border border-dashed border-[#E2D7BF] text-[#7B5A64] text-center">Chưa ghim trang nào. Nhấn <strong>🔖 Đánh dấu trang</strong> khi gặp bảng công thức hoặc phần trọng tâm.</div>`;
+            } else {
+              bmEl.innerHTML = bookmarks
+                .slice()
+                .sort((a, b) => a.page - b.page)
+                .map(bm => `
+                  <div class="p-2.5 rounded-xl border border-[#E2D7BF] bg-[#FAF8F4] flex items-center justify-between gap-2">
+                    <button type="button" data-action="theory-jump-page" data-page="${bm.page}" class="text-left flex-1 min-w-0 hover:text-[#AA1342] transition">
+                      <div class="font-mono-code text-[11px] font-bold text-[#653040]">Trang ${bm.page}</div>
+                      <div class="text-[11px] text-[#3E1D27] truncate">${AppUtils.escapeHtml(bm.label || `Trang đánh dấu ${bm.page}`)}</div>
+                    </button>
+                    <button type="button" data-action="theory-remove-bookmark" data-page="${bm.page}" class="w-6 h-6 rounded-full hover:bg-[#AA1342] hover:text-[#FFFFFF] text-[#7B5A64] text-[10px] font-bold transition shrink-0" title="Bỏ đánh dấu">✕</button>
+                  </div>
+                `).join('');
+            }
+          }
+
+          // 3. Render Search results if query present
+          this.renderTheorySearchResults();
+        },
+
+        renderTheorySearchResults() {
+          const resEl = document.getElementById('theorySearchResults');
+          const doc = this.getActiveTheoryDoc();
+          if (!resEl || !doc) return;
+          const kw = String(this.state.theorySearchQuery || '').trim();
+          if (!kw) {
+            resEl.innerHTML = `<div class="p-3 rounded-xl bg-[#FAF8F4] border border-dashed border-[#E2D7BF] text-[#7B5A64] text-center">Nhập từ khóa (VD: Kirchhoff, tích phân, định luật...) để tìm nhanh trong toàn bộ ${doc.totalPages || 1} trang.</div>`;
+            return;
+          }
+
+          const kwLower = kw.toLowerCase();
+          const pagesText = Array.isArray(doc.pagesText) ? doc.pagesText : [];
+          const matches = [];
+          for (let i = 0; i < pagesText.length; i++) {
+            const pTxt = String(pagesText[i] || '');
+            const pos = pTxt.toLowerCase().indexOf(kwLower);
+            if (pos !== -1) {
+              const start = Math.max(0, pos - 42);
+              const end = Math.min(pTxt.length, pos + kw.length + 78);
+              const rawSnippet = (start > 0 ? '…' : '') + pTxt.slice(start, end).replace(/\s+/g, ' ') + (end < pTxt.length ? '…' : '');
+              matches.push({ page: i + 1, snippet: rawSnippet });
+              if (matches.length >= 40) break;
+            }
+          }
+
+          if (matches.length === 0) {
+            resEl.innerHTML = `<div class="p-3 rounded-xl bg-[#FAF8F4] border border-dashed border-[#E2D7BF] text-[#7B5A64] text-center">Không tìm thấy "<strong>${AppUtils.escapeHtml(kw)}</strong>" trong tài liệu này.</div>`;
+            return;
+          }
+
+          const safeRegex = new RegExp(`(${kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+          resEl.innerHTML =
+            `<div class="font-mono-code text-[10px] font-bold text-[#7B5A64] px-1">Tìm thấy trên ${matches.length}${matches.length >= 40 ? '+' : ''} trang:</div>` +
+            matches.map(m => {
+              const highlighted = AppUtils.escapeHtml(m.snippet).replace(
+                safeRegex,
+                '<mark class="bg-[#DDB247]/60 text-[#3E1D27] px-0.5 rounded font-semibold">$1</mark>'
+              );
+              return `
+                <button type="button" data-action="theory-jump-page" data-page="${m.page}"
+                  class="w-full text-left p-2.5 rounded-xl border border-[#E2D7BF] bg-[#FAF8F4] hover:border-[#653040] hover:bg-[#F4EFE6] space-y-1 transition">
+                  <div class="font-mono-code text-[10px] font-bold text-[#AA1342]">TRANG ${m.page}</div>
+                  <div class="text-[11px] text-[#3E1D27] leading-relaxed">${highlighted}</div>
+                </button>
+              `;
+            }).join('');
+        },
+
+        async renderTheoryCurrentPage() {
+          const doc = this.getActiveTheoryDoc();
+          if (!doc) return;
+          const total = Math.max(1, doc.totalPages || 1);
+          const pageNum = Math.max(1, Math.min(total, this.state.theoryCurrentPage || 1));
+          this.state.theoryCurrentPage = pageNum;
+
+          // Lưu trang đang đọc gần nhất
+          if (doc.lastPage !== pageNum) {
+            doc.lastPage = pageNum;
+            ViettulamDb.saveTheoryDoc(doc);
+          }
+
+          const pageInput = document.getElementById('theoryPageInput');
+          const totalText = document.getElementById('theoryTotalPagesText');
+          const prevBtn = document.getElementById('btnTheoryPrevPage');
+          const nextBtn = document.getElementById('btnTheoryNextPage');
+          const bmBtn = document.getElementById('btnTheoryToggleBookmark');
+          const zoomLbl = document.getElementById('theoryZoomLabel');
+          const pdfWrap = document.getElementById('theoryPdfViewerWrap');
+          const richWrap = document.getElementById('theoryRichViewerWrap');
+          const richBody = document.getElementById('theoryRichContentBody');
+
+          if (pageInput) { pageInput.value = String(pageNum); pageInput.max = String(total); }
+          if (totalText) totalText.textContent = String(total);
+          if (prevBtn) prevBtn.disabled = pageNum <= 1;
+          if (nextBtn) nextBtn.disabled = pageNum >= total;
+          if (zoomLbl) zoomLbl.textContent = `${Math.round((this.state.theoryZoom || 1) * 100)}%`;
+
+          const isBookmarked = Array.isArray(doc.bookmarks) && doc.bookmarks.some(b => b.page === pageNum);
+          if (bmBtn) {
+            bmBtn.textContent = isBookmarked ? '🔖 Đã đánh dấu' : '🔖 Đánh dấu trang';
+            bmBtn.className = isBookmarked
+              ? 'px-3 py-1.5 rounded-full border border-[#DDB247] bg-[#FBF4DE] text-xs font-semibold text-[#3E1D27] transition'
+              : 'px-3 py-1.5 rounded-full border border-[#E2D7BF] bg-[#FAF8F4] hover:bg-[#FBF4DE] text-xs font-semibold text-[#3E1D27] transition';
+          }
+
+          if (doc.fileType === 'PDF' && doc.pdfArrayBuffer) {
+            if (pdfWrap) pdfWrap.classList.remove('hidden');
+            if (richWrap) richWrap.classList.add('hidden');
+            await this.renderTheoryPdfPageOnCanvas(doc, pageNum);
+          } else {
+            if (pdfWrap) pdfWrap.classList.add('hidden');
+            if (richWrap) richWrap.classList.remove('hidden');
+            if (richBody) {
+              const sec = (doc.sections && doc.sections[pageNum - 1]) || { title: `Trang ${pageNum}`, blocks: [] };
+              const fontScale = Math.round(14 * (this.state.theoryZoom || 1));
+              richBody.style.fontSize = `${fontScale}px`;
+              richBody.innerHTML =
+                `<div class="border-b border-[#EFE8DA] pb-2.5 flex items-center justify-between gap-2">
+                  <h3 class="font-display font-bold text-base text-[#653040]">${AppUtils.escapeHtml(sec.title || `Trang ${pageNum}`)}</h3>
+                  <span class="font-mono-code text-[11px] text-[#7B5A64]">Trang ${pageNum} / ${total}</span>
+                </div>` +
+                (sec.blocks || []).map(blk => {
+                  const imgsHtml = Array.isArray(blk.images) && blk.images.length > 0
+                    ? `<div class="my-2 flex flex-wrap gap-2">${blk.images.map(src => `<div class="pdf-img-frame rounded-xl border border-[#EFE8DA] bg-white p-1.5 inline-flex"><img src="${src}" class="max-w-full max-h-[380px] h-auto rounded-lg object-contain" /></div>`).join('')}</div>`
+                    : '';
+                  if (!blk.text) return imgsHtml;
+                  if (blk.headingLevel === 1) {
+                    return `<h4 class="font-display font-bold text-base sm:text-lg text-[#AA1342] pt-2">${AppUtils.renderRichContent(blk.text)}</h4>${imgsHtml}`;
+                  }
+                  if (blk.headingLevel === 2) {
+                    return `<h5 class="font-display font-semibold text-sm sm:text-base text-[#653040] pt-1">${AppUtils.renderRichContent(blk.text)}</h5>${imgsHtml}`;
+                  }
+                  return `<p class="leading-relaxed whitespace-pre-wrap break-words">${AppUtils.renderRichContent(blk.text)}</p>${imgsHtml}`;
+                }).join('');
+              AppUtils.triggerMathTypeset(richBody);
+            }
+          }
+        },
+
+        async renderTheoryPdfPageOnCanvas(doc, pageNum) {
+          const canvas = document.getElementById('theoryPdfCanvas');
+          if (!canvas || !doc.pdfArrayBuffer) return;
+
+          if (this.state.activeTheoryPdfHandleDocName !== doc.docName || !this.state.activeTheoryPdfHandle) {
+            await this.releaseActiveTheoryPdfHandle();
+            const copy = doc.pdfArrayBuffer.slice(0);
+            this.state.activeTheoryPdfHandle = await window.pdfjsLib.getDocument({ data: copy }).promise;
+            this.state.activeTheoryPdfHandleDocName = doc.docName;
+          }
+
+          if (this.state.theoryRenderTask) {
+            try { this.state.theoryRenderTask.cancel(); } catch (e) {}
+            this.state.theoryRenderTask = null;
+          }
+
+          try {
+            const page = await this.state.activeTheoryPdfHandle.getPage(pageNum);
+            const zoom = this.state.theoryZoom || 1;
+            const dpr = Math.min(window.devicePixelRatio || 1, 2);
+            const baseViewport = page.getViewport({ scale: 1 });
+            const wrap = document.getElementById('theoryPdfViewerWrap');
+            const availW = wrap ? Math.max(320, wrap.clientWidth - 44) : 760;
+            const fitScale = Math.min(1.65, availW / Math.max(1, baseViewport.width));
+            const displayScale = fitScale * zoom;
+            const viewport = page.getViewport({ scale: displayScale * dpr });
+
+            canvas.width = Math.floor(viewport.width);
+            canvas.height = Math.floor(viewport.height);
+            canvas.style.width = `${Math.floor(viewport.width / dpr)}px`;
+            canvas.style.height = `${Math.floor(viewport.height / dpr)}px`;
+
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            const task = page.render({ canvasContext: ctx, viewport });
+            this.state.theoryRenderTask = task;
+            await task.promise;
+            this.state.theoryRenderTask = null;
+            if (typeof page.cleanup === 'function') { try { page.cleanup(); } catch (e) {} }
+          } catch (err) {
+            if (err && err.name !== 'RenderingCancelledException') {
+              console.error(err);
+            }
+          }
+        },
+
+        async toggleTheoryBookmark(pageNum) {
+          const doc = this.getActiveTheoryDoc();
+          if (!doc) return;
+          if (!Array.isArray(doc.bookmarks)) doc.bookmarks = [];
+          const existingIdx = doc.bookmarks.findIndex(b => b.page === pageNum);
+          if (existingIdx >= 0) {
+            doc.bookmarks.splice(existingIdx, 1);
+            AppUtils.showToast(`Đã bỏ đánh dấu Trang ${pageNum}.`, 'info');
+          } else {
+            const firstLine = String((doc.pagesText && doc.pagesText[pageNum - 1]) || '').split(/\r?\n/).map(s => s.trim()).find(Boolean) || `Trang ${pageNum}`;
+            doc.bookmarks.push({ page: pageNum, label: firstLine.slice(0, 68) });
+            AppUtils.showToast(`Đã đánh dấu Trang ${pageNum}!`, 'success');
+          }
+          await ViettulamDb.saveTheoryDoc(doc);
+          this.renderTheorySidePanels();
+          this.renderTheoryCurrentPage();
+        },
+
+        async convertActiveTheoryPdfToQuiz() {
+          const doc = this.getActiveTheoryDoc();
+          if (!doc || doc.fileType !== 'PDF' || !doc.pdfArrayBuffer) return;
+          const file = new File([doc.pdfArrayBuffer.slice(0)], doc.docName, { type: 'application/pdf' });
+          await this.releaseActiveTheoryPdfHandle();
+          await ViettulamDb.deleteTheoryDoc(doc.docName);
+          this.state.theoryDocs = await ViettulamDb.getAllTheoryDocs();
+          this.state.activeTheoryDocName = this.state.theoryDocs[0]?.docName || null;
+          this.switchTab('overview');
+          await this.handleFilesUploaded([file], 'QUIZ');
         },
 
         /* ==================================================================
@@ -7807,11 +8702,21 @@
         bindEvents() {
           document.getElementById('btnExportBackup')?.addEventListener('click', async () => {
             try {
+              const rawTheoryDocs = await ViettulamDb.getAllTheoryDocs();
+              const serializedTheory = rawTheoryDocs.map(td => {
+                const clone = { ...td };
+                if (clone.pdfArrayBuffer) {
+                  clone.pdfBase64 = TheoryDocumentEngine.arrayBufferToBase64(clone.pdfArrayBuffer);
+                  delete clone.pdfArrayBuffer;
+                }
+                return clone;
+              });
               const backup = {
                 format: 'viettulam-backup',
-                version: 1,
+                version: 2,
                 exportedAt: new Date().toISOString(),
                 documents: await ViettulamDb.getAllDocuments(),
+                theoryDocs: serializedTheory,
                 meta: await ViettulamDb.getAllMeta()
               };
               const blob = new Blob([JSON.stringify(backup)], { type: 'application/json' });
@@ -7823,7 +8728,7 @@
               link.click();
               link.remove();
               setTimeout(() => URL.revokeObjectURL(url), 1000);
-              AppUtils.showToast(`Đã xuất bản sao lưu gồm ${backup.documents.length} tài liệu.`, 'success');
+              AppUtils.showToast(`Đã xuất bản sao lưu gồm ${backup.documents.length} bộ đề & ${serializedTheory.length} tài liệu lý thuyết.`, 'success');
             } catch (err) {
               AppUtils.showToast(`Không thể xuất bản sao lưu: ${err.message || err}`, 'error');
             }
@@ -7837,14 +8742,23 @@
             if (!file) return;
             try {
               const backup = JSON.parse(await file.text());
-              if (!backup || backup.format !== 'viettulam-backup' || backup.version !== 1 ||
+              if (!backup || backup.format !== 'viettulam-backup' || (backup.version !== 1 && backup.version !== 2) ||
                   !Array.isArray(backup.documents) || !Array.isArray(backup.meta) ||
                   backup.documents.some(d => !d || typeof d.docName !== 'string') ||
                   backup.meta.some(m => !m || typeof m.key !== 'string')) {
                 throw new Error('Tệp không đúng định dạng bản sao lưu Viettulam.');
               }
-              if (!window.confirm(`Khôi phục ${backup.documents.length} tài liệu và dữ liệu liên quan? Thao tác này sẽ thay thế kho hiện tại.`)) return;
-              await ViettulamDb.restoreBackup(backup);
+              const theoryList = Array.isArray(backup.theoryDocs) ? backup.theoryDocs.map(td => {
+                const clone = { ...td };
+                if (clone.pdfBase64) {
+                  clone.pdfArrayBuffer = TheoryDocumentEngine.base64ToArrayBuffer(clone.pdfBase64);
+                  delete clone.pdfBase64;
+                }
+                return clone;
+              }) : [];
+              if (!window.confirm(`Khôi phục ${backup.documents.length} bộ đề và ${theoryList.length} tài liệu lý thuyết? Thao tác này sẽ thay thế kho hiện tại.`)) return;
+              await this.releaseActiveTheoryPdfHandle();
+              await ViettulamDb.restoreBackup({ ...backup, theoryDocs: theoryList });
               const restoredDocs = await ViettulamDb.getAllDocuments();
               restoredDocs.forEach(doc => {
                 if (Array.isArray(doc.questions)) {
@@ -7852,13 +8766,17 @@
                   window.applyAuto50ChapterSplit(doc.questions, false);
                 }
               });
+              this.state.theoryDocs = await ViettulamDb.getAllTheoryDocs();
+              this.state.activeTheoryDocName = this.state.theoryDocs[0]?.docName || null;
+              this.state.theoryCurrentPage = this.state.theoryDocs[0]?.lastPage || 1;
               this.state.wrongBank = (await ViettulamDb.getMeta('wrong_bank_v1')) || {};
               this.state.flaggedQuestions = (await ViettulamDb.getMeta('flagged_questions_v1')) || {};
               this.state.examHistory = (await ViettulamDb.getMeta('exam_history_v1')) || [];
               this.setDocuments(restoredDocs);
               this.renderExamHistoryPanel();
               this.checkSavedResumeBanner();
-              AppUtils.showToast(`Đã khôi phục ${restoredDocs.length} tài liệu từ bản sao lưu.`, 'success');
+              if (this.state.activeTab === 'theory') this.renderTheoryView();
+              AppUtils.showToast(`Đã khôi phục ${restoredDocs.length} bộ đề & ${this.state.theoryDocs.length} tài liệu lý thuyết.`, 'success');
             } catch (err) {
               AppUtils.showToast(`Không thể khôi phục: ${err.message || err}`, 'error');
             }
@@ -7873,6 +8791,80 @@
           });
           document.getElementById('btnTriggerOverviewUpload')?.addEventListener('click', () => {
             document.getElementById('fileInputUpload')?.click();
+          });
+          // Sự kiện phân khu Tài Liệu Lý Thuyết
+          document.getElementById('theoryFileInputUpload')?.addEventListener('change', async e => {
+            await this.handleFilesUploaded(e.target.files, 'THEORY');
+            e.target.value = '';
+          });
+          document.getElementById('btnTriggerTheoryUploadEmpty')?.addEventListener('click', () => {
+            document.getElementById('theoryFileInputUpload')?.click();
+          });
+          document.getElementById('theoryDocSelect')?.addEventListener('change', async e => {
+            const nextName = e.target.value;
+            if (!nextName) return;
+            await this.releaseActiveTheoryPdfHandle();
+            this.state.activeTheoryDocName = nextName;
+            const doc = this.getActiveTheoryDoc();
+            this.state.theoryCurrentPage = doc?.lastPage || 1;
+            this.state.theorySearchQuery = '';
+            const sInput = document.getElementById('theorySearchInput');
+            if (sInput) sInput.value = '';
+            this.renderTheoryView();
+          });
+          document.getElementById('btnDeleteCurrentTheoryDoc')?.addEventListener('click', async () => {
+            const doc = this.getActiveTheoryDoc();
+            if (!doc) return;
+            await this.releaseActiveTheoryPdfHandle();
+            await ViettulamDb.deleteTheoryDoc(doc.docName);
+            this.state.theoryDocs = await ViettulamDb.getAllTheoryDocs();
+            this.state.activeTheoryDocName = this.state.theoryDocs[0]?.docName || null;
+            this.state.theoryCurrentPage = this.state.theoryDocs[0]?.lastPage || 1;
+            this.renderTheoryView();
+            AppUtils.showToast(`Đã xóa tài liệu "${doc.docName}".`, 'info');
+          });
+          document.getElementById('btnConvertTheoryToQuiz')?.addEventListener('click', async () => {
+            await this.convertActiveTheoryPdfToQuiz();
+          });
+          document.getElementById('btnTheoryPrevPage')?.addEventListener('click', () => {
+            if (this.state.theoryCurrentPage > 1) {
+              this.state.theoryCurrentPage -= 1;
+              this.renderTheorySidePanels();
+              this.renderTheoryCurrentPage();
+            }
+          });
+          document.getElementById('btnTheoryNextPage')?.addEventListener('click', () => {
+            const doc = this.getActiveTheoryDoc();
+            if (doc && this.state.theoryCurrentPage < (doc.totalPages || 1)) {
+              this.state.theoryCurrentPage += 1;
+              this.renderTheorySidePanels();
+              this.renderTheoryCurrentPage();
+            }
+          });
+          document.getElementById('theoryPageInput')?.addEventListener('change', e => {
+            const doc = this.getActiveTheoryDoc();
+            if (!doc) return;
+            const val = parseInt(e.target.value || '1', 10);
+            if (!Number.isNaN(val)) {
+              this.state.theoryCurrentPage = Math.max(1, Math.min(doc.totalPages || 1, val));
+              this.renderTheorySidePanels();
+              this.renderTheoryCurrentPage();
+            }
+          });
+          document.getElementById('btnTheoryToggleBookmark')?.addEventListener('click', async () => {
+            await this.toggleTheoryBookmark(this.state.theoryCurrentPage || 1);
+          });
+          document.getElementById('btnTheoryZoomIn')?.addEventListener('click', () => {
+            this.state.theoryZoom = Math.min(2.25, Math.round(((this.state.theoryZoom || 1) + 0.2) * 100) / 100);
+            this.renderTheoryCurrentPage();
+          });
+          document.getElementById('btnTheoryZoomOut')?.addEventListener('click', () => {
+            this.state.theoryZoom = Math.max(0.6, Math.round(((this.state.theoryZoom || 1) - 0.2) * 100) / 100);
+            this.renderTheoryCurrentPage();
+          });
+          document.getElementById('theorySearchInput')?.addEventListener('input', e => {
+            this.state.theorySearchQuery = e.target.value || '';
+            this.renderTheorySearchResults();
           });
           document.getElementById('btnMobileQuickUpload')?.addEventListener('click', () => {
             document.getElementById('fileInputUploadHeader')?.click();
@@ -7952,7 +8944,7 @@
           if (btnClearAll) {
             let clearConfirmTimer = null;
             btnClearAll.addEventListener('click', async () => {
-              if (this.state.documents.length === 0) {
+              if (this.state.documents.length === 0 && (this.state.theoryDocs || []).length === 0) {
                 AppUtils.showToast('Kho tài liệu hiện đang trống.', 'info');
                 return;
               }
@@ -7984,9 +8976,14 @@
                 clearInterval(this.state.examTimerId);
                 this.state.examTimerId = null;
               }
+              await this.releaseActiveTheoryPdfHandle();
+              this.state.theoryDocs = [];
+              this.state.activeTheoryDocName = null;
+              this.state.theoryCurrentPage = 1;
               document.getElementById('resumeBannerContainer')?.classList.add('hidden');
               this.setDocuments([]);
-              AppUtils.showToast('Đã xóa toàn bộ tài liệu đã lưu.', 'success');
+              if (this.state.activeTab === 'theory') this.renderTheoryView();
+              AppUtils.showToast('Đã xóa toàn bộ đề thi và tài liệu lý thuyết đã lưu.', 'success');
             });
           }
 
@@ -8606,6 +9603,28 @@
               return;
             }
 
+            if (action === 'set-theory-panel') {
+              this.state.theorySidePanel = actionBtn.getAttribute('data-panel') || 'TOC';
+              this.renderTheorySidePanels();
+              return;
+            }
+
+            if (action === 'theory-jump-page') {
+              const p = parseInt(actionBtn.getAttribute('data-page') || '1', 10);
+              if (!Number.isNaN(p)) {
+                this.state.theoryCurrentPage = p;
+                this.renderTheorySidePanels();
+                this.renderTheoryCurrentPage();
+              }
+              return;
+            }
+
+            if (action === 'theory-remove-bookmark') {
+              const p = parseInt(actionBtn.getAttribute('data-page') || '0', 10);
+              if (p > 0) await this.toggleTheoryBookmark(p);
+              return;
+            }
+
             if (action === 'load-more-bank-q') {
               this.state.bankDisplayLimit = (this.state.bankDisplayLimit || 60) + 60;
               this.renderBankView();
@@ -8696,6 +9715,18 @@
               } else if (e.key === 'ArrowLeft' && this.state.practiceCurrentIndex > 0) {
                 this.state.practiceCurrentIndex -= 1;
                 this.renderPracticeView();
+              }
+            } else if (this.state.activeTab === 'theory') {
+              const doc = this.getActiveTheoryDoc();
+              if (!doc) return;
+              if (e.key === 'ArrowRight' && this.state.theoryCurrentPage < (doc.totalPages || 1)) {
+                this.state.theoryCurrentPage += 1;
+                this.renderTheorySidePanels();
+                this.renderTheoryCurrentPage();
+              } else if (e.key === 'ArrowLeft' && this.state.theoryCurrentPage > 1) {
+                this.state.theoryCurrentPage -= 1;
+                this.renderTheorySidePanels();
+                this.renderTheoryCurrentPage();
               }
             } else if (this.state.activeTab === 'exam' && this.state.examDisplayLayout === 'SINGLE') {
               const qs = this.state.examQuestions;

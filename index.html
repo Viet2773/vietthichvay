@@ -1383,7 +1383,7 @@
     </section>
 
     <!-- ====================================================================
-         05 || VIDEO HƯỚNG DẪN SỬ DỤNG TÍCH HỢP (40 GIÂY • 4 BƯỚC CHI TIẾT)
+         06 || VIDEO HƯỚNG DẪN SỬ DỤNG TÍCH HỢP (60 GIÂY • 6 BƯỚC TỔNG QUAN)
          ==================================================================== -->
     <section id="tab-guide" class="hidden space-y-4 animate-stage">
       <!-- Thanh tiêu đề & nút thuyết minh / tải file video -->
@@ -1400,8 +1400,8 @@
             </svg>
           </div>
           <div>
-            <h2 class="font-display text-sm sm:text-base font-bold text-[#3E1D27]">Video Hướng Dẫn Chi Tiết 40 Giây — viettulam</h2>
-            <p class="text-[11px] text-[#7B5A64]">Chuẩn HD 1280×720 • 4 bước trực quan • Làm rõ chi tiết từng tính năng phần Nhập nhanh đáp án</p>
+            <h2 class="font-display text-sm sm:text-base font-bold text-[#3E1D27]">Video Hướng Dẫn Tổng Quan 1 Phút (60s) — viettulam</h2>
+            <p class="text-[11px] text-[#7B5A64]">Chuẩn HD 1280×720 • 6 bước đầy đủ toàn bộ chức năng: Nạp &amp; Phân loại file, Luyện tập/Flashcard, Cắt tay PDF, Thi thử, Ngân hàng &amp; Tài liệu lý thuyết</p>
           </div>
         </div>
 
@@ -1413,7 +1413,7 @@
 
           <button id="btnRecordGuideVideo" type="button" class="px-4 py-2 rounded-full bg-[#AA1342] hover:bg-[#8E0F37] disabled:opacity-50 text-[#FFFFFF] text-xs font-bold transition flex items-center gap-2 shadow-sm">
             <span class="w-2 h-2 rounded-full bg-[#DDB247]"></span>
-            <span id="guideRecordBtnText">⬇ Xuất &amp; Tải Video 40s (.webm)</span>
+            <span id="guideRecordBtnText">⬇ Xuất &amp; Tải Video 60s (.webm)</span>
           </button>
         </div>
       </div>
@@ -1425,18 +1425,18 @@
         <!-- Trạng thái đang xuất video -->
         <div id="guideRecordingOverlay" class="hidden absolute top-3 right-3 px-3.5 py-1.5 rounded-full bg-[#AA1342]/95 text-[#FFFFFF] text-xs font-semibold flex items-center gap-2 shadow-lg">
           <span class="w-2 h-2 rounded-full bg-[#FFFFFF] animate-ping"></span>
-          <span id="guideRecordingProgressText">Đang xuất video HD 40s... 0%</span>
+          <span id="guideRecordingProgressText">Đang xuất video HD 60s... 0%</span>
         </div>
 
         <!-- Thanh điều khiển Player -->
         <div class="bg-[#2D141C]/95 backdrop-blur-md px-4 sm:px-5 py-3 text-[#FFFFFF] space-y-2.5 border-t border-white/10">
-          <!-- Timeline 00:00 -> 00:40 -->
+          <!-- Timeline 00:00 -> 01:00 -->
           <div class="flex items-center gap-3">
             <span id="guideTimeCurrent" class="font-mono-code text-[11px] text-[#E2D7BF] w-11">00:00</span>
             <div class="relative flex-1 flex items-center">
-              <input id="guideTimelineSlider" type="range" min="0" max="40" step="0.02" value="0" class="timeline-slider w-full" />
+              <input id="guideTimelineSlider" type="range" min="0" max="60" step="0.02" value="0" class="timeline-slider w-full" />
             </div>
-            <span class="font-mono-code text-[11px] text-[#E2D7BF] w-11 text-right">00:40</span>
+            <span class="font-mono-code text-[11px] text-[#E2D7BF] w-11 text-right">01:00</span>
           </div>
 
           <!-- Nút điều khiển + Nhãn bước hiện tại -->
@@ -1463,16 +1463,18 @@
             </div>
 
             <span id="guideCurrentSceneLabel" class="font-mono-code text-[11px] text-[#DDB247] font-semibold">
-              BƯỚC 01 / 04 • Giới thiệu từng phần
+              BƯỚC 01 / 06 • Tổng quan &amp; Phân loại file
             </span>
           </div>
 
-          <!-- 4 mốc chọn bước nhanh (tổng 40 giây) -->
+          <!-- 6 mốc chọn bước nhanh (tổng 60 giây = 1 phút) -->
           <div class="flex flex-wrap items-center gap-1.5 text-[11px]">
-            <button type="button" data-guide-scene="0" class="guide-scene-chip px-3 py-1 rounded-full bg-[#653040] text-[#FFFFFF] font-semibold transition">01. Giới thiệu từng phần (0–8.5s)</button>
-            <button type="button" data-guide-scene="1" class="guide-scene-chip px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 text-[#E2D7BF] font-medium transition">02. Nạp file &amp; Làm bài (8.5–17.5s)</button>
-            <button type="button" data-guide-scene="2" class="guide-scene-chip px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 text-[#E2D7BF] font-medium transition">03. Chức năng Luyện tập &amp; Thi thử (17.5–26.5s)</button>
-            <button type="button" data-guide-scene="3" class="guide-scene-chip px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 text-[#E2D7BF] font-medium transition">04. Nhập nhanh đáp án chi tiết (26.5–40s)</button>
+            <button type="button" data-guide-scene="0" class="guide-scene-chip px-3 py-1 rounded-full bg-[#653040] text-[#FFFFFF] font-semibold transition">01. Tổng quan &amp; Nạp file (0–9s)</button>
+            <button type="button" data-guide-scene="1" class="guide-scene-chip px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 text-[#E2D7BF] font-medium transition">02. Luyện tập &amp; Flashcard (9–19s)</button>
+            <button type="button" data-guide-scene="2" class="guide-scene-chip px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 text-[#E2D7BF] font-medium transition">03. Studio Cắt PDF Pro (19–29s)</button>
+            <button type="button" data-guide-scene="3" class="guide-scene-chip px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 text-[#E2D7BF] font-medium transition">04. Thi thử &amp; Lịch sử (29–39s)</button>
+            <button type="button" data-guide-scene="4" class="guide-scene-chip px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 text-[#E2D7BF] font-medium transition">05. Ngân hàng &amp; Sửa ĐA (39–49s)</button>
+            <button type="button" data-guide-scene="5" class="guide-scene-chip px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 text-[#E2D7BF] font-medium transition">06. Tài liệu &amp; Ban đêm (49–60s)</button>
           </div>
         </div>
       </div>
@@ -1490,8 +1492,11 @@
             <span class="text-[#CE675D]">•</span>
             <span>© 2026 viettulam. Bản quyền thuộc về viettulam — Mọi quyền được bảo lưu.</span>
           </div>
-          <div class="font-mono-code text-[10px] text-[#9A7E87]">
-            LOCAL WORKSPACE • PDF / DOCX / TXT
+          <div class="flex items-center gap-2 font-mono-code text-[10px] text-[#9A7E87]">
+            <span>LOCAL WORKSPACE • PDF / DOCX / TXT</span>
+            <button id="btnCheckAppUpdate" type="button" title="Xem có gì mới & Kiểm tra phiên bản mới" class="px-2.5 py-0.5 rounded-full border border-[#E2D7BF] bg-[#FFFFFF] hover:bg-[#653040] hover:text-[#FFFFFF] hover:border-[#653040] text-[#653040] font-bold transition">
+              v12.0 • Kiểm tra cập nhật
+            </button>
           </div>
         </div>
       </footer>
@@ -1570,6 +1575,58 @@
         </button>
       </div>
       <div id="examReviewModalBody" class="flex-1 overflow-y-auto p-5 space-y-4 bg-[#FAF8F4]"></div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       MODAL 3: THÔNG BÁO PHIÊN BẢN MỚI ("CÓ GÌ MỚI")
+       ====================================================================== -->
+  <div id="whatsNewModal" class="fixed inset-0 z-[65] hidden bg-[#3E1D27]/75 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6">
+    <div class="bg-[#FFFFFF] rounded-2xl border border-[#E2D7BF] max-w-lg w-full shadow-2xl overflow-hidden animate-stage">
+      <div class="px-5 py-4 border-b border-[#EFE8DA] bg-[#653040] text-[#FFFFFF] flex items-center justify-between gap-3">
+        <div class="flex items-center gap-2.5">
+          <span class="px-2.5 py-0.5 rounded-full bg-[#DDB247] text-[#3E1D27] font-mono-code text-[11px] font-extrabold" id="whatsNewVersionBadge">v12.0</span>
+          <h3 class="text-sm font-bold">Có gì mới trên viettulam</h3>
+        </div>
+        <button id="btnCloseWhatsNewModal" type="button" class="px-2.5 py-1 rounded-full bg-white/15 hover:bg-white/25 text-xs font-semibold transition">
+          ✕
+        </button>
+      </div>
+      <div class="p-5 space-y-3 bg-[#FAF8F4]">
+        <div id="whatsNewDateText" class="font-mono-code text-[11px] text-[#7B5A64]">Cập nhật ngày 25/11/2026</div>
+        <ul id="whatsNewNotesList" class="space-y-2 text-xs sm:text-[13px] text-[#3E1D27] leading-relaxed"></ul>
+      </div>
+      <div class="px-5 py-3 border-t border-[#EFE8DA] bg-[#FFFFFF] flex items-center justify-between gap-2">
+        <button id="btnCheckRemoteFromModal" type="button" class="px-3.5 py-1.5 rounded-full border border-[#E2D7BF] bg-[#FAF8F4] hover:bg-[#EFE8DA] text-xs font-semibold text-[#3E1D27] transition">
+          🔄 Kiểm tra bản mới ngay
+        </button>
+        <button id="btnAckWhatsNew" type="button" class="px-5 py-1.5 rounded-full bg-[#653040] hover:bg-[#4E2330] text-[#FFFFFF] text-xs font-semibold transition">
+          Đã hiểu
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Banner thông báo có phiên bản mới từ GitHub Pages -->
+  <div id="updateAvailableBanner" class="hidden fixed bottom-4 left-4 z-[65] max-w-sm w-[calc(100%-2rem)] rounded-2xl border-2 border-[#DDB247] bg-[#653040] text-[#FFFFFF] shadow-2xl p-4 space-y-2.5">
+    <div class="flex items-start justify-between gap-2">
+      <div class="space-y-0.5">
+        <div class="flex items-center gap-2">
+          <span class="px-2 py-0.5 rounded-full bg-[#DDB247] text-[#3E1D27] font-mono-code text-[10px] font-extrabold">UPDATE</span>
+          <span id="updateBannerTitle" class="text-xs sm:text-sm font-bold">Đã có phiên bản mới!</span>
+        </div>
+        <div id="updateBannerDate" class="font-mono-code text-[10px] text-[#E2D7BF]"></div>
+      </div>
+      <button id="btnDismissUpdateBanner" type="button" class="text-xs text-[#E2D7BF] hover:text-[#FFFFFF] font-bold px-1.5">✕</button>
+    </div>
+    <ul id="updateBannerNotes" class="space-y-1 text-[11px] text-[#FAF8F4]/95 pl-3 list-disc"></ul>
+    <div class="flex items-center justify-end gap-2 pt-1">
+      <button id="btnLaterUpdateBanner" type="button" class="px-3 py-1.5 rounded-full bg-white/15 hover:bg-white/25 text-[11px] font-semibold transition">
+        Để sau
+      </button>
+      <button id="btnApplyUpdateNow" type="button" class="px-4 py-1.5 rounded-full bg-[#DDB247] hover:bg-[#E7C363] text-[#3E1D27] text-xs font-extrabold transition">
+        🔄 Cập nhật ngay
+      </button>
     </div>
   </div>
 
@@ -5484,6 +5541,7 @@
           this.initSidebarCollapseState();
           this.initEditorialScrollReveals();
           GuideVideoPlayer.init();
+          AppVersionManager.init();
         },
 
         /* ==================================================================
@@ -5582,6 +5640,7 @@
               self.addEventListener('activate', e => { e.waitUntil(self.clients.claim()); });
               self.addEventListener('fetch', e => {
                 if (e.request.method !== 'GET') return;
+                if (e.request.url && e.request.url.includes('version.json')) return;
                 e.respondWith(
                   caches.match(e.request).then(cached => {
                     const net = fetch(e.request).then(res => {
@@ -9747,14 +9806,198 @@
       };
 
       /* ====================================================================
-       * 12. TRÌNH PHÁT VIDEO HƯỚNG DẪN TÍCH HỢP (40 GIÂY • 4 BƯỚC • LOGO MỚI)
+       * 11B. HỆ THỐNG THÔNG BÁO PHIÊN BẢN MỚI (GITHUB PAGES + WHAT'S NEW)
+       * ==================================================================== */
+      const AppVersionManager = {
+        CURRENT_VERSION: '12.0',
+        RELEASE_DATE: '25/11/2026',
+        VERSION_JSON_URL: './version.json',
+        STORAGE_KEY: 'viettulam_seen_version_v1',
+        RELEASE_NOTES: [
+          'Tự động kiểm tra và thông báo khi có phiên bản mới trên GitHub Pages (kèm nút Cập nhật ngay).',
+          'Bổ sung kho Tài Liệu Lý Thuyết nhẹ RAM: tự phân loại file, Mục lục tự động, Tìm kiếm toàn văn & Ghim trang.',
+          'Nâng cấp Studio Cắt Tay PDF Pro (cắt riêng 2 trang, 4 tay nắm góc, phóng to 250%, Hoàn tác & Đặt lại tự động).',
+          'Tích hợp Video Hướng Dẫn Tổng Quan 1 phút (60 giây HD) trong mục Hướng Dẫn.'
+        ],
+        dismissedRemoteVersion: null,
+
+        compareVersions(a, b) {
+          const pa = String(a || '0').replace(/^v/i, '').split('.').map(n => parseInt(n, 10) || 0);
+          const pb = String(b || '0').replace(/^v/i, '').split('.').map(n => parseInt(n, 10) || 0);
+          const len = Math.max(pa.length, pb.length);
+          for (let i = 0; i < len; i++) {
+            const va = pa[i] || 0;
+            const vb = pb[i] || 0;
+            if (va !== vb) return va > vb ? 1 : -1;
+          }
+          return 0;
+        },
+
+        init() {
+          this.bindEvents();
+          this.checkLocalWhatsNew();
+          // Kiểm tra bản mới từ GitHub Pages sau khi tải trang 2.5s
+          if (location.protocol === 'http:' || location.protocol === 'https:') {
+            setTimeout(() => this.checkRemoteUpdate(false), 2500);
+            // Kiểm tra định kỳ mỗi 10 phút
+            setInterval(() => this.checkRemoteUpdate(false), 10 * 60 * 1000);
+            document.addEventListener('visibilitychange', () => {
+              if (document.visibilityState === 'visible') {
+                this.checkRemoteUpdate(false);
+              }
+            });
+          }
+        },
+
+        checkLocalWhatsNew() {
+          try {
+            const seen = localStorage.getItem(this.STORAGE_KEY);
+            if (seen && seen !== this.CURRENT_VERSION) {
+              this.openWhatsNewModal();
+            } else if (!seen) {
+              localStorage.setItem(this.STORAGE_KEY, this.CURRENT_VERSION);
+            }
+          } catch (e) {}
+        },
+
+        openWhatsNewModal() {
+          const modal = document.getElementById('whatsNewModal');
+          const badge = document.getElementById('whatsNewVersionBadge');
+          const dateEl = document.getElementById('whatsNewDateText');
+          const listEl = document.getElementById('whatsNewNotesList');
+          if (!modal) return;
+          if (badge) badge.textContent = `v${this.CURRENT_VERSION}`;
+          if (dateEl) dateEl.textContent = `Phiên bản hiện tại: v${this.CURRENT_VERSION} • Ngày ${this.RELEASE_DATE}`;
+          if (listEl) {
+            listEl.innerHTML = this.RELEASE_NOTES.map(note => `
+              <li class="flex items-start gap-2">
+                <span class="text-[#AA1342] font-bold mt-0.5">✦</span>
+                <span>${AppUtils.escapeHtml(note)}</span>
+              </li>
+            `).join('');
+          }
+          modal.classList.remove('hidden');
+        },
+
+        closeWhatsNewModal() {
+          document.getElementById('whatsNewModal')?.classList.add('hidden');
+          try {
+            localStorage.setItem(this.STORAGE_KEY, this.CURRENT_VERSION);
+          } catch (e) {}
+        },
+
+        async checkRemoteUpdate(isManual = false) {
+          if (location.protocol === 'file:') {
+            if (isManual) {
+              this.openWhatsNewModal();
+              AppUtils.showToast(`Bạn đang mở file trực tiếp (v${this.CURRENT_VERSION}).`, 'info');
+            }
+            return;
+          }
+          try {
+            const res = await fetch(`${this.VERSION_JSON_URL}?t=${Date.now()}`, { cache: 'no-store' });
+            if (!res.ok) {
+              if (isManual) {
+                this.openWhatsNewModal();
+                AppUtils.showToast(`Đang dùng v${this.CURRENT_VERSION} (chưa thấy file version.json trên host).`, 'info');
+              }
+              return;
+            }
+            const data = await res.json();
+            const remoteVer = String(data?.version || '').trim();
+            if (!remoteVer) return;
+
+            if (this.compareVersions(remoteVer, this.CURRENT_VERSION) > 0) {
+              if (!isManual && this.dismissedRemoteVersion === remoteVer) return;
+              this.showUpdateBanner(data);
+              if (isManual) {
+                this.closeWhatsNewModal();
+                AppUtils.showToast(`Phát hiện phiên bản mới v${remoteVer}!`, 'success');
+              }
+            } else if (isManual) {
+              this.openWhatsNewModal();
+              AppUtils.showToast(`Bạn đang dùng phiên bản mới nhất (v${this.CURRENT_VERSION})!`, 'success');
+            }
+          } catch (err) {
+            if (isManual) {
+              this.openWhatsNewModal();
+              AppUtils.showToast(`Không thể kiểm tra cập nhật (đang ngoại tuyến • v${this.CURRENT_VERSION}).`, 'warning');
+            }
+          }
+        },
+
+        showUpdateBanner(data) {
+          const banner = document.getElementById('updateAvailableBanner');
+          const titleEl = document.getElementById('updateBannerTitle');
+          const dateEl = document.getElementById('updateBannerDate');
+          const notesEl = document.getElementById('updateBannerNotes');
+          if (!banner) return;
+
+          banner.dataset.remoteVersion = String(data.version || '');
+          if (titleEl) titleEl.textContent = `Đã có phiên bản mới v${data.version}!`;
+          if (dateEl) dateEl.textContent = data.date ? `Phát hành ngày ${data.date}` : 'Sẵn sàng cập nhật ngay';
+          if (notesEl) {
+            const notes = Array.isArray(data.notes) && data.notes.length > 0
+              ? data.notes.slice(0, 4)
+              : ['Cải thiện hiệu năng và bổ sung tính năng mới.'];
+            notesEl.innerHTML = notes.map(n => `<li>${AppUtils.escapeHtml(n)}</li>`).join('');
+          }
+          banner.classList.remove('hidden');
+        },
+
+        async applyUpdateNow() {
+          try {
+            if ('caches' in window) {
+              const keys = await caches.keys();
+              await Promise.all(keys.map(k => caches.delete(k)));
+            }
+            if ('serviceWorker' in navigator) {
+              const regs = await navigator.serviceWorker.getRegistrations();
+              await Promise.all(regs.map(r => r.unregister()));
+            }
+          } catch (e) {}
+          const url = new URL(window.location.href);
+          url.searchParams.set('v', String(Date.now()));
+          window.location.replace(url.toString());
+        },
+
+        bindEvents() {
+          document.getElementById('btnCheckAppUpdate')?.addEventListener('click', () => {
+            this.checkRemoteUpdate(true);
+          });
+          document.getElementById('btnCheckRemoteFromModal')?.addEventListener('click', () => {
+            this.checkRemoteUpdate(true);
+          });
+          document.getElementById('btnCloseWhatsNewModal')?.addEventListener('click', () => {
+            this.closeWhatsNewModal();
+          });
+          document.getElementById('btnAckWhatsNew')?.addEventListener('click', () => {
+            this.closeWhatsNewModal();
+          });
+          const dismissFn = () => {
+            const banner = document.getElementById('updateAvailableBanner');
+            if (banner) {
+              this.dismissedRemoteVersion = banner.dataset.remoteVersion || null;
+              banner.classList.add('hidden');
+            }
+          };
+          document.getElementById('btnDismissUpdateBanner')?.addEventListener('click', dismissFn);
+          document.getElementById('btnLaterUpdateBanner')?.addEventListener('click', dismissFn);
+          document.getElementById('btnApplyUpdateNow')?.addEventListener('click', () => {
+            this.applyUpdateNow();
+          });
+        }
+      };
+
+      /* ====================================================================
+       * 12. TRÌNH PHÁT VIDEO HƯỚNG DẪN TỔNG QUAN 1 PHÚT (60 GIÂY • 6 BƯỚC HD)
        * ==================================================================== */
       const GuideVideoPlayer = {
         canvas: null,
         ctx: null,
         W: 1280,
         H: 720,
-        DURATION: 40.0,
+        DURATION: 60.0,
         rafId: null,
         tabActive: false,
         state: {
@@ -9786,28 +10029,40 @@
         },
         SCENES: [
           {
-            id: 0, start: 0, end: 8.5, tag: 'BƯỚC 01 / 04', shortName: 'Giới thiệu từng phần',
-            title: 'Giới thiệu lần lượt chức năng của từng phân khu trên viettulam',
-            sub: '1. Tổng Quan (Nạp đề & chia chương) • 2. Luyện Tập • 3. Thi Thử 60p • 4. Ngân Hàng • 5. Hướng Dẫn & Thanh bên.',
-            voice: 'Bước một. Giới thiệu từng phần của viettulam. Tổng Quan để nạp đề và chia chương. Luyện Tập để học trực tiếp. Thi Thử để làm bài sáu mươi phút. Ngân Hàng để nhập và sửa đáp án. Cuối cùng là Hướng Dẫn và thanh bên thu gọn.'
+            id: 0, start: 0, end: 9.0, tag: 'BƯỚC 01 / 06', shortName: 'Tổng quan & Phân loại file',
+            title: 'Tổng quan 6 phân khu, tự động phân loại file & Sao lưu dữ liệu',
+            sub: 'Kéo thả .PDF/.DOCX/.TXT → Tự phân loại Đề thi vs. Tài liệu lý thuyết • Tự chia 50 câu/chương • Nút Hủy & Xuất/Khôi phục (.viettulam).',
+            voice: 'Chào mừng đến với viettulam. Bước một: Tổng quan và nạp tài liệu. Thanh bên trái gồm sáu phân khu chính. Khi kéo thả file P D F, Word hoặc T X T, hệ thống tự nhận diện đề trắc nghiệm hay giáo trình lý thuyết, tự chia năm mươi câu mỗi chương, có nút hủy an toàn và xuất khôi phục bản sao lưu.'
           },
           {
-            id: 1, start: 8.5, end: 17.5, tag: 'BƯỚC 02 / 04', shortName: 'Nạp file & Làm bài',
-            title: 'Quy chuẩn file tự nhận đáp án (không cần nhập tay) & Cách làm bài',
-            sub: 'File chuẩn có "Câu 1:" + tô đỏ/highlight/in đậm/* hoặc "Đáp án: B" → Kéo thả vào Kho → Chọn đáp án ngay không nhảy trang.',
-            voice: 'Bước hai. Để web tự có đáp án mà không cần nhập tay, file P D F cần có lớp chữ kèm tô đỏ hoặc highlight; file Word tô màu, dấu sao hoặc bảng đáp án cuối file; file T X T dùng dấu sao hoặc hai dấu bằng. Kéo thả file rồi bấm Luyện tập và chọn đáp án trực tiếp.'
+            id: 1, start: 9.0, end: 19.0, tag: 'BƯỚC 02 / 06', shortName: 'Luyện tập & Flashcard',
+            title: 'Luyện tập thông minh: Từng câu, Danh sách, Flashcard & Lọc Hay sai / Gắn cờ',
+            sub: 'Phím A–D chọn đáp án • Space lật thẻ Flashcard / Hiện sẵn đáp án • Lọc ⚠️ Hay sai & 🚩 Gắn cờ • Đảo câu & đáp án trực tiếp trong ảnh PDF.',
+            voice: 'Bước hai: Không gian Luyện Tập. Bạn có ba chế độ: Từng câu, Danh sách và Lướt nhanh Flashcard lật thẻ bằng phím cách hoặc hiện sẵn toàn bộ đáp án sát giờ thi. Kết hợp lọc câu hay sai, gắn cờ, tự chuyển câu và đảo trực tiếp đáp án ngay trong ảnh P D F.'
           },
           {
-            id: 2, start: 17.5, end: 26.5, tag: 'BƯỚC 03 / 04', shortName: 'Chức năng Luyện tập & Thi thử',
-            title: 'Các chức năng của Luyện Tập (Làm bài) và Thi Thử (Bài kiểm tra)',
-            sub: 'Luyện Tập: Từng câu/Danh sách, Đảo câu+đáp án, Khôi phục, Cắt PDF • Thi Thử: Khóa đáp án → Bắt đầu 60p → Nộp bài chấm điểm.',
-            voice: 'Bước ba. Ở phần Luyện Tập có chế độ từng câu hoặc danh sách, nút gộp đảo toàn bộ câu và đáp án, nút khôi phục gốc và tùy chỉnh cắt ảnh P D F. Ở phần Thi Thử, đáp án bị khóa tới khi bấm Bắt đầu làm bài, chạy đồng hồ sáu mươi phút và bấm Nộp bài chấm thang mười.'
+            id: 2, start: 19.0, end: 29.0, tag: 'BƯỚC 03 / 06', shortName: 'Studio Cắt Tay PDF Pro',
+            title: 'Studio Cắt Tay PDF Pro: Cắt riêng 2 trang, 4 tay nắm góc & Phóng to',
+            sub: 'Bấm ✂️ Cắt khung hoặc ⚠️ Kiểm tra cắt → Chọn Trang 1 / Trang 2 • Kéo 4 góc / Phím mũi tên • Phóng to 250% • Hoàn tác & Đặt lại tự động.',
+            voice: 'Bước ba: Studio cắt tay P D F chuyên sâu. Nếu câu hỏi có cảnh báo khung cắt hoặc trải qua hai trang, nhấn Cắt khung để chỉnh riêng Trang một và Trang hai. Kéo bốn tay nắm góc, phóng to hai trăm năm mươi phần trăm, tinh chỉnh bằng phím mũi tên, hoàn tác hoặc đặt lại cắt tự động.'
           },
           {
-            id: 3, start: 26.5, end: 40.0, tag: 'BƯỚC 04 / 04', shortName: 'Nhập nhanh đáp án chi tiết',
-            title: 'Chi tiết tính năng Nhập nhanh & Sửa đáp án hàng loạt trong Ngân Hàng',
-            sub: '① Phạm vi, Từ câu số & Nạp ĐA cũ • ② Dán chuỗi ABCD- / 1A 2B • ③ Lọc Chưa gán (-) • ④ Tìm câu sửa 2 chiều • ⑤ Rà soát Đã sửa & Lưu.',
-            voice: 'Bước bốn. Chi tiết phần nhập nhanh đáp án trong Ngân Hàng. Chọn phạm vi tài liệu, đặt từ câu số hoặc bấm Nạp đáp án hiện có. Dán chuỗi liền mạch có dấu gạch ngang bỏ qua, hoặc cú pháp một A hai B. Bấm lọc Chưa gán để điền nhanh câu trống, dùng ô Tìm câu sửa theo số, khoảng câu hoặc từ khóa để bấm đổi đáp án đồng bộ hai chiều, rà soát mục Đã sửa rồi bấm Áp dụng và Lưu tất cả.'
+            id: 3, start: 29.0, end: 39.0, tag: 'BƯỚC 04 / 06', shortName: 'Thi thử & Lịch sử',
+            title: 'Phòng Thi Thử tùy chọn thời gian, chấm thang 10 & Biểu đồ Lịch sử',
+            sub: 'Chọn số câu & thời gian (15–90p hoặc Không giới hạn) • Khóa đáp án → Bắt đầu làm bài → Nộp bài xem chi tiết & theo dõi biểu đồ điểm.',
+            voice: 'Bước bốn: Phòng Thi Thử. Tùy chọn số lượng câu và thời gian từ mười lăm đến chín mươi phút hoặc không giới hạn. Đáp án được khóa đến khi bấm Bắt đầu làm bài. Sau khi nộp bài, hệ thống chấm thang điểm mười, mở bảng xem chi tiết và lưu biểu đồ lịch sử tiến độ.'
+          },
+          {
+            id: 4, start: 39.0, end: 49.0, tag: 'BƯỚC 05 / 06', shortName: 'Ngân hàng & Sửa đáp án',
+            title: 'Ngân Hàng câu hỏi: Nhập nhanh chuỗi đáp án & Tìm câu sửa đồng bộ 2 chiều',
+            sub: 'Nạp ĐA hiện có → Dán chuỗi ABCD- hoặc 1A 2B → Lọc Chưa gán (-) → Gõ số/khoảng câu để đối chiếu & bấm sửa trực tiếp rồi Lưu tất cả.',
+            voice: 'Bước năm: Ngân hàng câu hỏi và sửa đáp án hàng loạt. Bạn có thể dán chuỗi đáp án liền mạch hoặc cú pháp một A hai B, lọc câu chưa gán, gõ số câu hay khoảng câu vào ô tìm kiếm để đối chiếu đề bài và bấm đổi đáp án đồng bộ hai chiều trước khi lưu.'
+          },
+          {
+            id: 5, start: 49.0, end: 60.0, tag: 'BƯỚC 06 / 06', shortName: 'Tài liệu, Ban đêm & PWA',
+            title: 'Đọc Tài Liệu Lý Thuyết nhẹ RAM, Chế độ Ban Đêm ấm áp & Cài App Offline',
+            sub: 'Tab 📖 Tài Liệu: Mục lục tự động, Tìm kiếm toàn văn, Ghim trang công thức • Chân thanh bên: 🌙 Ban đêm + 🕯️ Dịu ảnh PDF & 📲 Cài App PWA.',
+            voice: 'Bước sáu: Trình đọc Tài Liệu Lý Thuyết và tiện ích. Giáo trình P D F được đọc mượt nhẹ bộ nhớ với mục lục tự động, tìm kiếm toàn văn và ghim trang công thức. Cuối cùng, bật chế độ Ban đêm ấm áp, Dịu ảnh P D F để bảo vệ mắt và nhấn Cài App để ôn thi ngoại tuyến mọi lúc.'
           }
         ],
 
@@ -9881,7 +10136,6 @@
           ctx.fillText(String(text || ''), x, y);
         },
 
-        // Vẽ logo mới VIETTULAM trực tiếp trên Canvas
         drawBrandLogo(x, y, size) {
           const ctx = this.ctx;
           const s = size / 64;
@@ -9892,26 +10146,16 @@
           ctx.strokeStyle = '#DBC696';
           ctx.lineWidth = 3.2;
           ctx.beginPath();
-          ctx.moveTo(15, 24);
-          ctx.lineTo(24, 41);
-          ctx.lineTo(32.5, 25.5);
-          ctx.moveTo(15, 24);
-          ctx.lineTo(22.5, 24);
-          ctx.lineTo(27.5, 34);
+          ctx.moveTo(15, 24); ctx.lineTo(24, 41); ctx.lineTo(32.5, 25.5);
+          ctx.moveTo(15, 24); ctx.lineTo(22.5, 24); ctx.lineTo(27.5, 34);
           ctx.stroke();
 
           ctx.fillStyle = '#DBC696';
-          ctx.beginPath();
-          ctx.arc(34.5, 20.5, 2.2, 0, Math.PI * 2);
-          ctx.fill();
+          ctx.beginPath(); ctx.arc(34.5, 20.5, 2.2, 0, Math.PI * 2); ctx.fill();
 
           ctx.fillStyle = '#FFFFFF';
-          ctx.beginPath();
-          ctx.moveTo(26, 47); ctx.lineTo(40.5, 19.5); ctx.lineTo(44, 19.5); ctx.lineTo(29.5, 47); ctx.closePath();
-          ctx.fill();
-          ctx.beginPath();
-          ctx.moveTo(33, 47); ctx.lineTo(44.5, 25); ctx.lineTo(48, 25); ctx.lineTo(36.5, 47); ctx.closePath();
-          ctx.fill();
+          ctx.beginPath(); ctx.moveTo(26, 47); ctx.lineTo(40.5, 19.5); ctx.lineTo(44, 19.5); ctx.lineTo(29.5, 47); ctx.closePath(); ctx.fill();
+          ctx.beginPath(); ctx.moveTo(33, 47); ctx.lineTo(44.5, 25); ctx.lineTo(48, 25); ctx.lineTo(36.5, 47); ctx.closePath(); ctx.fill();
 
           ctx.fillStyle = '#DBC696';
           ctx.beginPath();
@@ -9932,7 +10176,7 @@
           ctx.save();
           this.roundRectPath(x - pad, y - pad, w + pad * 2, h + pad * 2, r + pad);
           ctx.strokeStyle = color;
-          ctx.globalAlpha = 0.52 + pulse * 0.48;
+          ctx.globalAlpha = 0.55 + pulse * 0.45;
           ctx.lineWidth = 2.6;
           ctx.stroke();
           ctx.restore();
@@ -9966,18 +10210,18 @@
         },
 
         drawKeycap(x, y, label, pressed = false, w = 38) {
-          const h = 34;
+          const h = 32;
           const offsetY = pressed ? 2 : 0;
           if (!pressed) this.fillRoundRect(x, y + 3, w, h, 8, '#D7C9AE');
           this.fillRoundRect(x, y + offsetY, w, h, 8, pressed ? this.C.sangria : this.C.surface, pressed ? this.C.sangriaDark : this.C.blonde, 1.4);
-          this.drawText(label, x + w / 2, y + offsetY + h / 2 + 0.5, { size: 12.5, weight: '800', color: pressed ? '#FFFFFF' : this.C.ink, align: 'center', mono: true });
+          this.drawText(label, x + w / 2, y + offsetY + h / 2 + 0.5, { size: 12, weight: '800', color: pressed ? '#FFFFFF' : this.C.ink, align: 'center', mono: true });
         },
 
         drawCursor(x, y, clickP = 0) {
           const ctx = this.ctx;
           ctx.save();
           if (clickP > 0 && clickP < 1) {
-            const rad = 8 + this.easeOut(clickP) * 26;
+            const rad = 8 + this.easeOut(clickP) * 24;
             ctx.beginPath();
             ctx.arc(x, y, rad, 0, Math.PI * 2);
             ctx.strokeStyle = this.C.raspberry;
@@ -10002,586 +10246,698 @@
           ctx.restore();
         },
 
-        drawSidebar(width, activeNavIdx, t) {
+        drawSidebar(width, activeNavIdx, t, darkMode = false) {
           const ctx = this.ctx;
           const C = this.C;
           const expanded = width > 130;
-          ctx.fillStyle = C.sidebar;
+          const bg = darkMode ? '#21161A' : C.sidebar;
+          const border = darkMode ? '#463138' : C.blonde;
+          const ink = darkMode ? '#F5EFE6' : C.ink;
+          const muted = darkMode ? '#C6B1B8' : C.muted;
+          const pillBg = darkMode ? '#302126' : '#ECE3D3';
+          const cardBg = darkMode ? '#261A1E' : C.surface;
+
+          ctx.fillStyle = bg;
           ctx.fillRect(0, 0, width, this.H - 96);
-          ctx.strokeStyle = C.blonde;
+          ctx.strokeStyle = border;
           ctx.lineWidth = 1;
           ctx.beginPath(); ctx.moveTo(width, 0); ctx.lineTo(width, this.H - 96); ctx.stroke();
 
           const btnX = expanded ? 14 : (width - 36) / 2;
-          ctx.strokeStyle = C.muted;
+          ctx.strokeStyle = muted;
           ctx.lineWidth = 2;
-          [34, 40, 46].forEach(ly => {
+          [28, 34, 40].forEach(ly => {
             ctx.beginPath(); ctx.moveTo(btnX + 10, ly); ctx.lineTo(btnX + 26, ly); ctx.stroke();
           });
 
           if (expanded) {
-            this.drawBrandLogo(56, 24, 30);
-            this.drawText('VIETTULAM', 94, 40, { size: 13.5, weight: '800', color: C.ink });
-            this.fillRoundRect(14, 74, width - 28, 36, 18, '#ECE3D3', C.blonde, 1);
-            this.drawText('＋', 32, 92, { size: 16, weight: '700', color: C.raspberry, align: 'center' });
-            this.drawText('Tải đề mới', 50, 92, { size: 12.5, weight: '700', color: C.ink });
+            this.drawBrandLogo(54, 19, 28);
+            this.drawText('VIETTULAM', 90, 34, { size: 13, weight: '800', color: ink });
+            this.fillRoundRect(14, 62, width - 28, 32, 16, pillBg, border, 1);
+            this.drawText('＋', 31, 78, { size: 15, weight: '700', color: C.raspberry, align: 'center' });
+            this.drawText('Tải đề mới', 48, 78, { size: 12, weight: '700', color: ink });
           } else {
-            this.fillRoundRect((width - 36) / 2, 74, 36, 36, 18, '#ECE3D3', C.blonde, 1);
-            this.drawText('＋', width / 2, 92, { size: 16, weight: '700', color: C.raspberry, align: 'center' });
+            this.fillRoundRect((width - 34) / 2, 62, 34, 34, 17, pillBg, border, 1);
+            this.drawText('＋', width / 2, 79, { size: 15, weight: '700', color: C.raspberry, align: 'center' });
           }
 
           const navs = [
             { icon: '🗂', label: 'Tổng Quan' },
-            { icon: '📖', label: 'Luyện Tập' },
+            { icon: '📚', label: 'Luyện Tập' },
             { icon: '⏱', label: 'Thi Thử' },
             { icon: '≡', label: 'Ngân Hàng' },
+            { icon: '📖', label: 'Tài Liệu' },
             { icon: '⚙', label: 'Hướng Dẫn' }
           ];
           navs.forEach((n, idx) => {
-            const y = 128 + idx * 44;
+            const y = 108 + idx * 38;
             const isAct = idx === activeNavIdx;
             if (expanded) {
-              this.fillRoundRect(14, y, width - 28, 36, 18, isAct ? C.sangria : 'transparent');
-              this.drawText(n.icon, 32, y + 18, { size: 14, color: isAct ? '#FFFFFF' : C.muted, align: 'center' });
-              this.drawText(n.label, 50, y + 18, { size: 12.5, weight: isAct ? '700' : '500', color: isAct ? '#FFFFFF' : C.muted });
+              this.fillRoundRect(14, y, width - 28, 32, 16, isAct ? C.sangria : 'transparent');
+              this.drawText(n.icon, 31, y + 16, { size: 13.5, color: isAct ? '#FFFFFF' : muted, align: 'center' });
+              this.drawText(n.label, 48, y + 16, { size: 12, weight: isAct ? '700' : '500', color: isAct ? '#FFFFFF' : muted });
             } else {
-              this.fillRoundRect((width - 36) / 2, y, 36, 36, 18, isAct ? C.sangria : 'transparent');
-              this.drawText(n.icon, width / 2, y + 18, { size: 14, color: isAct ? '#FFFFFF' : C.muted, align: 'center' });
+              this.fillRoundRect((width - 34) / 2, y, 34, 34, 17, isAct ? C.sangria : 'transparent');
+              this.drawText(n.icon, width / 2, y + 17, { size: 13.5, color: isAct ? '#FFFFFF' : muted, align: 'center' });
             }
           });
 
           const secNow = 10 + Math.floor(t);
           const clockFull = `20:32:${String(secNow % 60).padStart(2, '0')}`;
-          const footY = this.H - 196;
-          ctx.strokeStyle = C.blonde;
+          const footY = this.H - 226;
+          ctx.strokeStyle = border;
           ctx.beginPath(); ctx.moveTo(0, footY); ctx.lineTo(width, footY); ctx.stroke();
 
           if (expanded) {
-            this.fillRoundRect(14, footY + 10, width - 28, 46, 14, C.surface, C.blonde, 1);
-            ctx.beginPath(); ctx.arc(28, footY + 26, 3.2, 0, Math.PI * 2); ctx.fillStyle = C.sunflower; ctx.fill();
-            this.drawText(clockFull, 38, footY + 26, { size: 11.5, weight: '700', color: C.ink, mono: true });
-            this.fillRoundRect(width - 48, footY + 18, 24, 15, 7, C.raspberrySoft);
-            this.drawText('VN', width - 36, footY + 26, { size: 9, weight: '700', color: C.raspberry, align: 'center', mono: true });
-            this.drawText('T2, 23/11/2026', 38, footY + 43, { size: 9.5, weight: '500', color: C.muted, mono: true });
-            this.drawText('🗑  Xóa tài liệu', 26, footY + 76, { size: 11.5, weight: '500', color: C.muted });
+            this.fillRoundRect(14, footY + 8, width - 28, 42, 12, cardBg, border, 1);
+            ctx.beginPath(); ctx.arc(26, footY + 23, 3, 0, Math.PI * 2); ctx.fillStyle = C.sunflower; ctx.fill();
+            this.drawText(clockFull, 35, footY + 23, { size: 11, weight: '700', color: ink, mono: true });
+            this.drawText('T4, 25/11/2026', 35, footY + 38, { size: 9.5, weight: '500', color: muted, mono: true });
+            this.drawText(darkMode ? '☀️  Chế độ Sáng' : '🌙  Ban đêm: TẮT', 24, footY + 66, { size: 11, weight: '600', color: muted });
+            this.drawText('📲  Cài App (Offline)', 24, footY + 88, { size: 11, weight: '600', color: muted });
+            this.drawText('🗑  Xóa tài liệu', 24, footY + 110, { size: 11, weight: '500', color: muted });
           } else {
-            this.fillRoundRect((width - 38) / 2, footY + 12, 38, 38, 10, C.surface, C.blonde, 1);
-            ctx.beginPath(); ctx.arc(width / 2, footY + 23, 2.5, 0, Math.PI * 2); ctx.fillStyle = C.sunflower; ctx.fill();
-            this.drawText('20:32', width / 2, footY + 37, { size: 9, weight: '700', color: C.ink, align: 'center', mono: true });
-            this.drawText('🗑', width / 2, footY + 72, { size: 14, color: C.muted, align: 'center' });
+            this.fillRoundRect((width - 36) / 2, footY + 10, 36, 36, 10, cardBg, border, 1);
+            this.drawText('20:32', width / 2, footY + 28, { size: 9, weight: '700', color: ink, align: 'center', mono: true });
+            this.drawText(darkMode ? '☀️' : '🌙', width / 2, footY + 64, { size: 13, align: 'center' });
+            this.drawText('📲', width / 2, footY + 88, { size: 13, align: 'center' });
+            this.drawText('🗑', width / 2, footY + 112, { size: 13, align: 'center' });
           }
         },
 
-        drawMiniDropZone(x, y, w, h, upProg, done, dragPos) {
-          const ctx = this.ctx;
-          const C = this.C;
-          this.fillRoundRect(x, y, w, h, 18, C.surface, C.blonde, 1.2);
-          this.fillRoundRect(x, y, w, 36, 18, C.bg, C.hairline, 1);
-          [C.raspberry, C.sunflower, C.copper].forEach((col, i) => {
-            ctx.beginPath(); ctx.arc(x + 20 + i * 14, y + 18, 4.5, 0, Math.PI * 2); ctx.fillStyle = col; ctx.fill();
-          });
-          this.drawText('Kho Ôn Luyện • Kéo thả hoặc chọn file (.PDF, .DOCX, .TXT)', x + 70, y + 18, { size: 12, weight: '700', color: C.ink });
-
-          const dzX = x + 20, dzY = y + 48, dzW = w - 40, dzH = 68;
-          ctx.save();
-          this.roundRectPath(dzX, dzY, dzW, dzH, 14);
-          ctx.fillStyle = dragPos ? '#F3ECE0' : C.bg;
-          ctx.fill();
-          ctx.setLineDash([7, 5]);
-          ctx.strokeStyle = dragPos ? C.sangria : C.blonde;
-          ctx.lineWidth = dragPos ? 2 : 1.4;
-          ctx.stroke();
-          ctx.restore();
-
-          if (upProg > 0 && !done) {
-            this.drawText('Đang tách câu, nhận diện đáp án đỏ/highlight & khử màu chống lộ...', dzX + 18, dzY + 23, { size: 12, weight: '700', color: C.ink });
-            this.drawText(`${Math.round(upProg * 100)}%`, dzX + dzW - 18, dzY + 23, { size: 12, weight: '800', color: C.raspberry, align: 'right', mono: true });
-            this.fillRoundRect(dzX + 18, dzY + 42, dzW - 36, 10, 5, C.hairline);
-            this.fillRoundRect(dzX + 18, dzY + 42, (dzW - 36) * upProg, 10, 5, C.sunflower);
-          } else {
-            this.drawText('📄  Thả tệp .PDF / .DOCX / .TXT vào đây để web tự đọc câu hỏi & đáp án', dzX + 18, dzY + 34, { size: 12.5, weight: '600', color: C.ink });
-            this.fillRoundRect(dzX + dzW - 148, dzY + 18, 132, 32, 16, C.sangria);
-            this.drawText('＋ Nạp file đề', dzX + dzW - 82, dzY + 34, { size: 11.5, weight: '700', color: '#FFFFFF', align: 'center' });
-          }
-
-          if (done) {
-            const cardW = (w - 60) / 3;
-            [
-              { tag: 'CH 01', name: 'Chương 1 (Câu 1 - 50)', cnt: '50 câu • Đã nhận ĐA' },
-              { tag: 'CH 02', name: 'Chương 2 (Câu 51 - 100)', cnt: '50 câu • Đã nhận ĐA' },
-              { tag: 'CH 03', name: 'Chương 3 (Câu 101 - 120)', cnt: '20 câu • Đã nhận ĐA' }
-            ].forEach((ch, idx) => {
-              const cx = x + 20 + idx * (cardW + 10);
-              const cy = y + 130;
-              this.fillRoundRect(cx, cy, cardW, 190, 14, C.bg, idx === 0 ? C.sangria : C.blonde, idx === 0 ? 1.8 : 1);
-              this.fillRoundRect(cx + 14, cy + 14, 52, 22, 11, C.raspberrySoft);
-              this.drawText(ch.tag, cx + 40, cy + 25, { size: 10, weight: '800', color: C.raspberry, align: 'center', mono: true });
-              this.drawText(ch.name, cx + 14, cy + 56, { size: 13.5, weight: '800', color: C.ink });
-              this.drawText(ch.cnt, cx + 14, cy + 80, { size: 11.5, weight: '600', color: C.muted });
-              this.drawText('De_Ky_Thuat_Dien.pdf', cx + 14, cy + 104, { size: 11, weight: '500', color: '#9A7E87', mono: true });
-              this.fillRoundRect(cx + 14, cy + 142, cardW / 2 - 18, 34, 17, C.sangria);
-              this.drawText('Luyện tập', cx + 14 + (cardW / 2 - 18) / 2, cy + 159, { size: 11.5, weight: '700', color: '#FFFFFF', align: 'center' });
-              this.fillRoundRect(cx + cardW / 2 + 4, cy + 142, cardW / 2 - 18, 34, 17, C.surface, C.blonde, 1);
-              this.drawText('Thi thử', cx + cardW / 2 + 4 + (cardW / 2 - 18) / 2, cy + 159, { size: 11.5, weight: '700', color: C.ink, align: 'center' });
-            });
-          }
-
-          if (dragPos) {
-            ctx.save();
-            ctx.shadowColor = 'rgba(45, 20, 28, 0.25)';
-            ctx.shadowBlur = 14;
-            this.fillRoundRect(dragPos.x - 110, dragPos.y - 20, 224, 40, 12, C.sangria, C.sunflower, 1.5);
-            this.drawText('📕 De_Ky_Thuat_Dien.pdf', dragPos.x + 2, dragPos.y, { size: 12, weight: '700', color: '#FFFFFF', align: 'center' });
-            ctx.restore();
-          }
-        },
-
+        // ====================================================================
+        // SCENE 1 (0–9s): TỔNG QUAN, TỰ ĐỘNG PHÂN LOẠI FILE & SAO LƯU
+        // ====================================================================
         drawScene1(lt, t) {
           const C = this.C;
-          const expandP = this.easeOut(this.seg(lt, 0.0, 0.55));
-          const sbW = this.lerp(60, 220, expandP);
-          const focusIdx = Math.min(4, Math.floor(lt / 1.7));
-          this.drawSidebar(sbW, focusIdx, t);
+          const sbW = 212;
+          const activeNav = lt < 1.2 ? 0 : (lt < 2.2 ? 1 : (lt < 3.2 ? 2 : (lt < 4.2 ? 3 : (lt < 5.2 ? 4 : 0))));
+          this.drawSidebar(sbW, activeNav, t, false);
 
-          const mainX = sbW + 30;
-          const mainW = this.W - sbW - 56;
-          this.fillRoundRect(mainX, 24, mainW, 64, 18, C.surface, C.blonde, 1.2);
-          this.fillRoundRect(mainX + 18, 40, 134, 30, 15, C.sangria);
-          this.drawText('5 PHÂN KHU CHÍNH', mainX + 85, 55, { size: 11, weight: '800', color: '#FFFFFF', align: 'center', mono: true });
-          this.drawText('Giới thiệu lần lượt chức năng từng mục trên thanh điều hướng viettulam', mainX + 166, 55, { size: 15, weight: '800', color: C.ink });
+          const mx = sbW + 24, mw = this.W - sbW - 48;
+          // Cửa sổ Kho Ôn Luyện
+          this.fillRoundRect(mx, 22, mw, 582, 22, C.surface, C.blonde, 1.4);
+          this.fillRoundRect(mx, 22, mw, 36, 22, C.bg, C.hairline, 1);
+          [C.raspberry, C.sunflower, C.copper].forEach((col, i) => {
+            this.ctx.beginPath(); this.ctx.arc(mx + 22 + i * 14, 40, 4.5, 0, Math.PI * 2); this.ctx.fillStyle = col; this.ctx.fill();
+          });
+          this.drawText('viettulam.app — Kho Ôn Luyện & Phân Loại Tự Động', mx + mw / 2, 40, { size: 11.5, weight: '600', color: C.muted, align: 'center', mono: true });
 
-          const sections = [
-            { idx: 0, badge: '01 • TỔNG QUAN', title: 'Kho Ôn Luyện & Nạp File Đề', accent: C.sangria, bullets: ['• Kéo thả nhiều file .PDF, .DOCX, .TXT cùng lúc', '• Tự nhận diện câu hỏi, đáp án & chia 50 câu/chương', '• Bấm trực tiếp vào từng chương để vào học hoặc thi'] },
-            { idx: 1, badge: '02 • LUYỆN TẬP', title: 'Học Trực Tiếp Không Nhảy Trang', accent: C.copper, bullets: ['• Chọn đáp án trực tiếp ngay khi mở, báo đúng/sai tức thì', '• Chế độ Từng câu (phím tắt A–D, ←/→) hoặc Danh sách', '• 1 nút Đảo câu & đáp án (cả ảnh PDF) + Khôi phục gốc'] },
-            { idx: 2, badge: '03 • THI THỬ', title: 'Phòng Kiểm Tra 60 Phút Chuyên Nghiệp', accent: C.raspberry, bullets: ['• Chọn số câu (20/40/50/Tất cả) & đảo đề trước khi thi', '• Khóa đáp án cho tới khi nhấn ▶ Bắt đầu làm bài', '• Đếm ngược 60 phút, nộp bài chấm thang 10 & xem chi tiết'] },
-            { idx: 3, badge: '04 • NGÂN HÀNG', title: 'Quản Lý & Nhập Nhanh Đáp Án 2 Chiều', accent: C.sangria, bullets: ['• Tìm kiếm câu hỏi, sửa lẻ hoặc xóa câu nhanh gọn', '• Dán chuỗi ABCD / 1A 2B để gán hàng loạt siêu tốc', '• Lọc Chưa gán (-), Tìm câu sửa 2 chiều & lưu IndexedDB'] },
-            { idx: 4, badge: '05 • HƯỚNG DẪN & THANH BÊN', title: 'Video Trực Quan & Điều Hướng Kiểu Gemini', accent: C.sunflower, bullets: ['• Xem lại video hướng dẫn trực tiếp ngay trong web', '• Bấm ☰ hoặc vùng trống khi thanh đóng để mở rộng', '• Đồng hồ thời gian thực VN & nút Xóa toàn bộ dữ liệu'] }
+          // Header Kho Ôn Luyện + nút Backup
+          this.drawText('📚 Kho Ôn Luyện', mx + 24, 82, { size: 18, weight: '800', color: C.ink });
+          this.fillRoundRect(mx + mw - 270, 68, 134, 28, 14, C.surface, C.blonde, 1.2);
+          this.drawText('⬇ Xuất sao lưu', mx + mw - 203, 82, { size: 11, weight: '700', color: C.ink, align: 'center' });
+          this.fillRoundRect(mx + mw - 126, 68, 102, 28, 14, C.surface, C.blonde, 1.2);
+          this.drawText('⬆ Khôi phục', mx + mw - 75, 82, { size: 11, weight: '700', color: C.ink, align: 'center' });
+
+          // 3 thẻ chỉ số
+          const stats = [
+            { lbl: 'Tài liệu đã nạp', val: lt > 6.5 ? '2' : '0', tag: '↗ FILES', col: C.sangria },
+            { lbl: 'Tổng số câu hỏi', val: lt > 6.5 ? '329' : '0', tag: '↗ ITEMS', col: C.raspberry },
+            { lbl: 'Chương học', val: lt > 6.5 ? '7' : '0', tag: '50/CHƯƠNG', col: C.copper }
           ];
-
-          const cardW = (mainW - 16) / 2;
-          sections.forEach(sc => {
-            const isFocus = sc.idx === focusIdx;
-            const isWide = sc.idx === 4;
-            const cx = isWide ? mainX : mainX + (sc.idx % 2) * (cardW + 16);
-            const cy = isWide ? 470 : 106 + Math.floor(sc.idx / 2) * 182;
-            const cw = isWide ? mainW : cardW;
-            const ch = isWide ? 140 : 166;
-            this.fillRoundRect(cx, cy, cw, ch, 16, isFocus ? '#FFFDF8' : C.surface, isFocus ? sc.accent : C.blonde, isFocus ? 2.4 : 1);
-            if (isFocus) this.drawSpotlightRing(cx, cy, cw, ch, 16, t, C.sunflower);
-            this.fillRoundRect(cx + 16, cy + 14, isWide ? 196 : 136, 24, 12, isFocus ? sc.accent : C.sidebar);
-            this.drawText(sc.badge, cx + 16 + (isWide ? 98 : 68), cy + 26, { size: 10.5, weight: '800', color: isFocus ? (sc.accent === C.sunflower ? C.ink : '#FFFFFF') : C.ink, align: 'center', mono: true });
-            this.drawText(sc.title, cx + 16, cy + 56, { size: 14.5, weight: '800', color: isFocus ? C.sangria : C.ink });
-            if (isWide) {
-              sc.bullets.forEach((b, bi) => this.drawText(b, cx + 16 + bi * ((cw - 32) / 3), cy + 96, { size: 11.5, weight: isFocus ? '600' : '500', color: isFocus ? C.ink : C.muted }));
-            } else {
-              sc.bullets.forEach((b, bi) => this.drawText(b, cx + 16, cy + 88 + bi * 25, { size: 12, weight: isFocus ? '600' : '500', color: isFocus ? C.ink : C.muted }));
-            }
+          const cw = (mw - 76) / 3;
+          stats.forEach((st, i) => {
+            const cx = mx + 24 + i * (cw + 14);
+            this.fillRoundRect(cx, 110, cw, 74, 14, C.bg, C.blonde, 1);
+            this.drawText(st.lbl, cx + 14, 128, { size: 11, weight: '600', color: C.muted });
+            this.drawText(st.val, cx + 14, 156, { size: 24, weight: '800', color: C.ink });
+            this.drawText(st.tag, cx + 80, 160, { size: 10, weight: '700', color: st.col, mono: true });
           });
 
-          if (expandP > 0.7) this.drawSpotlightRing(14, 128 + focusIdx * 44, sbW - 28, 36, 18, t, C.sunflower);
-          const prevIdx = Math.max(0, focusIdx - 1);
-          const subSeg = (lt - focusIdx * 1.7) / 1.7;
-          const cursorY = focusIdx === 0
-            ? this.lerp(44, 147, this.easeOut(this.seg(subSeg, 0, 0.35)))
-            : this.lerp(128 + prevIdx * 44 + 19, 128 + focusIdx * 44 + 19, this.easeInOut(this.seg(subSeg, 0, 0.28)));
-          this.drawCursor(132, cursorY, this.seg(subSeg, 0.25, 0.55));
+          // Dropzone với bộ chọn Tự động phân loại + Progress bar + Nút Hủy
+          const dzX = mx + 24, dzY = 198, dzW = mw - 48, dzH = 122;
+          this.ctx.save();
+          this.roundRectPath(dzX, dzY, dzW, dzH, 16);
+          this.ctx.fillStyle = C.bg; this.ctx.fill();
+          this.ctx.setLineDash([7, 5]); this.ctx.strokeStyle = C.sangria; this.ctx.lineWidth = 1.5; this.ctx.stroke();
+          this.ctx.restore();
+
+          this.drawText('📄 Kéo thả hoặc chọn file (.PDF, .DOCX, .TXT)', dzX + 18, dzY + 26, { size: 13, weight: '700', color: C.ink });
+          this.fillRoundRect(dzX + dzW - 294, dzY + 12, 158, 28, 14, C.surface, C.sunflower, 1.5);
+          this.drawText('✨ Tự động phân loại ▾', dzX + dzW - 215, dzY + 26, { size: 11, weight: '700', color: C.sangria, align: 'center' });
+          this.fillRoundRect(dzX + dzW - 126, dzY + 12, 112, 28, 14, C.sangria);
+          this.drawText('Chọn từ máy', dzX + dzW - 70, dzY + 26, { size: 11, weight: '700', color: '#FFFFFF', align: 'center' });
+
+          // Thanh tiến trình nạp 2 file (1 Đề thi, 1 Giáo trình)
+          const upP = this.seg(lt, 4.5, 7.2);
+          if (upP > 0) {
+            this.fillRoundRect(dzX + 18, dzY + 54, dzW - 36, 52, 12, C.surface, C.blonde, 1);
+            const pctNum = Math.round(upP * 100);
+            const msg = upP < 0.5 ? 'Đang cắt câu hỏi (Pha 2 • Tối ưu RAM)...' : (upP < 1 ? 'Giao_Trinh_Mach.pdf → Nhận diện Tài liệu Lý thuyết...' : 'Hoàn tất phân loại 2 file!');
+            this.drawText(msg, dzX + 32, dzY + 72, { size: 11.5, weight: '700', color: C.ink });
+            this.drawText(`${pctNum}%`, dzX + dzW - 110, dzY + 72, { size: 11, weight: '800', color: C.raspberry, align: 'right', mono: true });
+            this.fillRoundRect(dzX + dzW - 96, dzY + 61, 62, 22, 11, C.raspberrySoft, C.raspberry, 1);
+            this.drawText('✕ Hủy', dzX + dzW - 65, dzY + 72, { size: 10, weight: '700', color: C.raspberry, align: 'center' });
+            this.fillRoundRect(dzX + 32, dzY + 88, dzW - 64, 7, 3.5, C.hairline);
+            this.fillRoundRect(dzX + 32, dzY + 88, (dzW - 64) * upP, 7, 3.5, C.sunflower);
+          }
+
+          // Kết quả 2 luồng định tuyến rõ ràng
+          const resA = this.easeOut(this.seg(lt, 6.2, 7.2));
+          if (resA > 0.02) {
+            this.ctx.save(); this.ctx.globalAlpha = resA;
+            const bW = (dzW - 16) / 2;
+            this.fillRoundRect(dzX, 336, bW, 112, 16, C.surface, C.sangria, 1.4);
+            this.fillRoundRect(dzX + 14, 350, 124, 22, 11, C.sangria);
+            this.drawText('📝 ĐỀ TRẮC NGHIỆM', dzX + 76, 361, { size: 10, weight: '800', color: '#FFFFFF', align: 'center', mono: true });
+            this.drawText('mach1.pdf  (329 câu • 7 chương)', dzX + 14, 392, { size: 13.5, weight: '700', color: C.ink });
+            this.drawText('Tự chia 50 câu/chương • Lưu IndexedDB', dzX + 14, 418, { size: 11.5, color: C.muted });
+
+            this.fillRoundRect(dzX + bW + 16, 336, bW, 112, 16, C.surface, C.sunflower, 1.6);
+            this.fillRoundRect(dzX + bW + 30, 350, 148, 22, 11, C.sunflower);
+            this.drawText('📖 TÀI LIỆU LÝ THUYẾT', dzX + bW + 104, 361, { size: 10, weight: '800', color: C.ink, align: 'center', mono: true });
+            this.drawText('Giao_Trinh_Mach.pdf  (124 trang)', dzX + bW + 30, 392, { size: 13.5, weight: '700', color: C.ink });
+            this.drawText('Tự chuyển vào mục Tài Liệu • Đọc nhẹ RAM', dzX + bW + 30, 418, { size: 11.5, color: C.muted });
+            this.ctx.restore();
+          }
+
+          // Backup highlight ở cuối scene 1
+          if (lt > 7.4) {
+            this.drawSpotlightRing(mx + mw - 270, 68, 246, 28, 14, t, C.sunflower);
+            this.drawStepCallout(mx + mw - 360, 108, '3', 'Xuất / Khôi phục toàn bộ kho (.viettulam)', C.sangria, this.seg(lt, 7.4, 7.9));
+          } else if (lt > 4.2) {
+            this.drawSpotlightRing(dzX + dzW - 294, dzY + 12, 158, 28, 14, t, C.sunflower);
+            this.drawStepCallout(dzX + 20, 466, '2', 'Tự nhận diện Đề thi vs. Giáo trình & có nút Hủy', C.raspberry, this.seg(lt, 4.4, 4.9));
+          } else {
+            this.drawSpotlightRing(14, 108 + activeNav * 38, sbW - 28, 32, 16, t, C.sunflower);
+            this.drawStepCallout(sbW + 18, 108 + activeNav * 38, '1', '6 phân khu trên thanh bên thu gọn', C.sangria, 1);
+          }
+
+          // File bay vào dropzone
+          if (lt >= 3.2 && lt <= 4.7) {
+            const p = this.easeInOut(this.seg(lt, 3.2, 4.5));
+            const fx = this.lerp(mx + mw - 140, dzX + 240, p);
+            const fy = this.lerp(130, dzY + 34, p);
+            this.fillRoundRect(fx, fy, 156, 36, 10, C.sangria, C.sunflower, 1.5);
+            this.drawText('📄 mach1.pdf + PDF', fx + 78, fy + 18, { size: 11, weight: '700', color: '#FFFFFF', align: 'center' });
+            this.drawCursor(fx + 140, fy + 26, this.seg(lt, 4.4, 4.7));
+          }
         },
 
+        // ====================================================================
+        // SCENE 2 (9–19s): LUYỆN TẬP, FLASHCARD, HAY SAI / GẮN CỜ & ĐẢO ĐỀ
+        // ====================================================================
         drawScene2(lt, t) {
           const C = this.C;
           const sbW = 60;
-          const mainX = sbW + 30;
-          const mainW = this.W - sbW - 56;
+          this.drawSidebar(sbW, 1, t, false);
+          const mx = sbW + 24, mw = this.W - sbW - 48;
+          const isFlashcard = lt >= 5.2;
+          const isFlipped = lt >= 7.2;
+          const isPicked = lt >= 2.2 && !isFlashcard;
+          const isShuffled = lt >= 3.8 && !isFlashcard;
 
-          if (lt < 5.0) {
-            this.drawSidebar(sbW, 0, t);
-            this.fillRoundRect(mainX, 18, mainW, 242, 18, C.surface, C.sangria, 1.5);
-            this.fillRoundRect(mainX + 18, 32, 232, 26, 13, C.sangria);
-            this.drawText('📌 GHI CHÚ FILE TỰ NHẬN ĐÁP ÁN', mainX + 134, 45, { size: 11, weight: '800', color: '#FFFFFF', align: 'center', mono: true });
-            this.drawText('Để web tự có đáp án luôn (không cần nhập tay), file cần đúng 1 trong các dấu hiệu sau:', mainX + 264, 45, { size: 12.5, weight: '700', color: C.ink });
+          // Thanh điều khiển 2 tầng Luyện Tập
+          this.fillRoundRect(mx, 20, mw, 92, 18, C.surface, C.blonde, 1.2);
+          this.fillRoundRect(mx + 16, 30, 260, 30, 10, C.bg, C.blonde, 1);
+          this.drawText('mach1.pdf (329 câu) ▾', mx + 28, 45, { size: 11.5, weight: '700', color: C.ink });
+          this.fillRoundRect(mx + 286, 30, 220, 30, 10, C.bg, C.blonde, 1);
+          this.drawText('Chương 1 (Câu 1 - 50) ▾', mx + 298, 45, { size: 11.5, weight: '700', color: C.ink });
 
-            const colW = (mainW - 60) / 3;
-            const specs = [
-              { ext: '📕 FILE .PDF', tag: 'CÓ LỚP CHỮ', bg: C.raspberry, lines: ['• Bắt đầu mỗi câu: "Câu 1:" / "Bài 1:"', '• Đáp án đúng tô CHỮ ĐỎ hoặc', '  HIGHLIGHT NỀN (vàng/xanh/hồng)', '• Hoặc in đậm riêng nhãn A./B., *A.', '✓ Web tự khử màu đỏ/highlight chống lộ!'] },
-              { ext: '📘 FILE .DOCX', tag: 'WORD CHUẨN', bg: C.sangria, lines: ['• Bắt đầu câu: "Câu 1:" hoặc số thứ tự', '• Đáp án đúng tô highlight / màu chữ', '• Hoặc in đậm, gạch chân nhãn A./B.', '• Hoặc đặt *A. / bảng 1A 2B cuối file', '✓ Giữ nguyên thụt dòng code C/C++!'] },
-              { ext: '📄 FILE .TXT', tag: 'UTF-8', bg: C.copper, lines: ['• Mỗi câu bắt đầu bằng "Câu 1:"', '• Đánh dấu đúng bằng *A. hoặc ==ĐA==', '• Hoặc dòng "Đáp án: B" ngay dưới câu', '• Hỗ trợ công thức LaTeX ($...$)', '✓ Nhẹ, nạp hàng trăm câu dưới 1 giây!'] }
-            ];
-            const specHighlight = lt < 1.65 ? Math.min(2, Math.floor(lt / 0.55)) : -1;
-            specs.forEach((sp, i) => {
-              const sx = mainX + 18 + i * (colW + 12);
-              const hl = specHighlight === i;
-              this.fillRoundRect(sx, 72, colW, 174, 14, C.bg, hl ? C.sunflower : C.blonde, hl ? 2.2 : 1);
-              this.fillRoundRect(sx + 12, 84, 134, 24, 8, sp.bg);
-              this.drawText(sp.ext, sx + 79, 96, { size: 11, weight: '800', color: '#FFFFFF', align: 'center', mono: true });
-              this.drawText(sp.tag, sx + colW - 12, 96, { size: 9, weight: '700', color: C.muted, align: 'right', mono: true });
-              sp.lines.forEach((ln, li) => this.drawText(ln, sx + 12, 128 + li * 25, { size: 11.5, weight: li === 4 ? '700' : '500', color: li === 4 ? C.sangria : C.ink }));
-            });
-
-            const dragging = lt >= 1.35 && lt < 2.65;
-            const dragP = this.easeInOut(this.seg(lt, 1.35, 2.6));
-            const dragPos = dragging ? { x: this.lerp(1040, 560, dragP), y: this.lerp(290, 354, dragP) } : null;
-            const upProg = lt >= 2.65 && lt < 3.75 ? this.easeOut(this.seg(lt, 2.65, 3.7)) : (lt >= 3.75 ? 1 : 0);
-            const done = lt >= 3.75;
-            this.drawMiniDropZone(mainX, 274, mainW, 336, upProg, done, dragPos);
-
-            if (dragging) {
-              this.drawSpotlightRing(mainX + 20, 322, mainW - 40, 68, 14, t, C.sunflower);
-              this.drawCursor(dragPos.x + 12, dragPos.y + 8, 0);
-            } else if (upProg > 0 && !done) {
-              this.drawStepCallout(mainX + 610, 320, '2', 'Tự đọc đáp án & khử màu chống lộ!', C.raspberry, 1);
-              this.drawCursor(560, 354, this.seg(lt, 2.62, 2.95));
-            } else if (done) {
-              this.drawSpotlightRing(mainX + 20, 404, (mainW - 60) / 3, 190, 12, t, C.sunflower);
-              this.drawStepCallout(mainX + 410, 466, '3', 'Tự chia 50 câu/chương — Bấm Luyện tập!', C.sangria, 1);
-              const p = this.easeInOut(this.seg(lt, 3.8, 4.55));
-              this.drawCursor(this.lerp(560, mainX + 100, p), this.lerp(354, 575, p), this.seg(lt, 4.58, 4.92));
-            }
-            return;
-          }
-
-          const slt = lt - 5.0;
-          this.drawSidebar(sbW, 1, t);
-          const qW = mainW * 0.72, qY = 24, qH = 516;
-          const isQ2 = slt >= 2.2;
-          const q1PickedWrong = slt >= 0.9 && !isQ2;
-          const q2PickedRight = slt >= 3.1 && isQ2;
-
-          this.fillRoundRect(mainX, qY, qW, qH, 18, C.surface, C.blonde, 1.2);
-          this.fillRoundRect(mainX + 20, qY + 18, 52, 26, 13, C.sangria);
-          this.drawText(isQ2 ? '#02' : '#01', mainX + 46, qY + 31, { size: 12, weight: '800', color: '#FFFFFF', align: 'center', mono: true });
-          this.drawText(isQ2 ? 'Câu 2 • Chương 1 (Câu 1 - 50)' : 'Câu 1 • Chương 1 (Câu 1 - 50)', mainX + 86, qY + 31, { size: 14, weight: '700' });
-          this.fillRoundRect(mainX + qW - 234, qY + 18, 214, 26, 13, C.sunflowerSoft, C.sunflower, 1);
-          this.drawText('✓ Chọn trực tiếp • Không nhảy trang', mainX + qW - 127, qY + 31, { size: 10.5, weight: '700', color: C.ink, align: 'center' });
-
-          this.fillRoundRect(mainX + 20, qY + 62, qW - 40, 146, 14, C.bg, C.hairline, 1);
-          this.drawText(
-            isQ2 ? 'Câu 2: Đơn vị chuẩn đo điện dung C của tụ điện trong hệ đo lường quốc tế SI là gì?' : 'Câu 1: Định luật Ohm cho đoạn mạch chỉ có điện trở thuần R được viết như thế nào?',
-            mainX + 38, qY + 106, { size: 15.5, weight: '700' }
-          );
-          this.drawText(
-            isQ2 ? '(Nhấn phím → để sang câu tiếp, nhấn phím B hoặc 2 để chọn đáp án tức thì)' : '(Mở Luyện Tập là làm bài ngay, không cần bấm bắt đầu — sai hiện đỏ, đúng hiện vàng)',
-            mainX + 38, qY + 148, { size: 12.5, weight: '500', color: C.muted }
-          );
-
-          const opts = isQ2
-            ? [{ l: 'A', t: 'Ohm (Ω)', right: false }, { l: 'B', t: 'Farad (F)', right: true }, { l: 'C', t: 'Henry (H)', right: false }, { l: 'D', t: 'Volt (V)', right: false }]
-            : [{ l: 'A', t: 'I = U / R', right: true }, { l: 'B', t: 'I = U · R', right: false }, { l: 'C', t: 'I = R / U', right: false }, { l: 'D', t: 'I = U² / R', right: false }];
-
-          opts.forEach((ob, i) => {
-            const ow = (qW - 52) / 2;
-            const ox = mainX + 20 + (i % 2) * (ow + 12);
-            const oy = qY + 230 + Math.floor(i / 2) * 80;
-            let bg = C.bg, brd = C.blonde, lw = 1.2, bBg = C.surface, bTxt = C.ink;
-            if (q1PickedWrong) {
-              if (ob.l === 'C') { bg = C.raspberrySoft; brd = C.raspberry; lw = 2; bBg = C.raspberry; bTxt = '#FFFFFF'; }
-              else if (ob.right) { bg = C.sunflowerSoft; brd = C.sunflower; lw = 2; bBg = C.sunflower; bTxt = C.ink; }
-            } else if (q2PickedRight && ob.right) {
-              bg = C.sunflowerSoft; brd = C.sunflower; lw = 2.2; bBg = C.sunflower; bTxt = C.ink;
-            }
-            this.fillRoundRect(ox, oy, ow, 66, 12, bg, brd, lw);
-            this.fillRoundRect(ox + 14, oy + 17, 32, 32, 8, bBg, brd, 1);
-            this.drawText(ob.l, ox + 30, oy + 33, { size: 13, weight: '800', color: bTxt, align: 'center', mono: true });
-            this.drawText(ob.t, ox + 58, oy + 33, { size: 15, weight: '700', mono: true });
+          // Tầng 2: 3 chế độ + Bộ lọc Hay sai / Gắn cờ + Đảo câu & đáp án
+          const modes = [
+            { lbl: '🎯 Từng câu', act: !isFlashcard, w: 92 },
+            { lbl: '📋 Danh sách', act: false, w: 98 },
+            { lbl: '🃏 Lướt nhanh', act: isFlashcard, w: 108 }
+          ];
+          let bx = mx + 16;
+          modes.forEach(m => {
+            this.fillRoundRect(bx, 72, m.w, 28, 14, m.act ? C.sangria : C.bg, C.blonde, 1);
+            this.drawText(m.lbl, bx + m.w / 2, 86, { size: 11, weight: '700', color: m.act ? '#FFFFFF' : C.muted, align: 'center' });
+            bx += m.w + 6;
           });
 
-          const navX = mainX + qW + 18, navW = mainW - qW - 18;
-          this.fillRoundRect(navX, qY, navW, 386, 18, C.surface, C.blonde, 1.2);
-          this.drawText('BẢNG CÂU HỎI', navX + 18, qY + 26, { size: 11, weight: '800', mono: true });
-          for (let n = 0; n < 20; n++) {
-            const bw = (navW - 60) / 5;
-            const bx = navX + 18 + (n % 5) * (bw + 6);
-            const by = qY + 96 + Math.floor(n / 5) * 42;
-            let bg = C.bg, tc = C.ink, brd = C.blonde;
-            if (n === 0 && (q1PickedWrong || isQ2)) { bg = C.raspberry; tc = '#FFFFFF'; brd = C.raspberry; }
-            else if (n === 1 && q2PickedRight) { bg = C.sunflower; tc = C.ink; brd = C.sunflower; }
-            const isCur = (n === 0 && !isQ2) || (n === 1 && isQ2);
-            this.fillRoundRect(bx, by, bw, 34, 8, bg, isCur ? C.sangria : brd, isCur ? 2.2 : 1);
-            this.drawText(n + 1, bx + bw / 2, by + 17, { size: 11.5, weight: '700', color: tc, align: 'center', mono: true });
-          }
+          this.fillRoundRect(bx + 6, 72, 104, 28, 14, C.sunflowerSoft, C.sunflower, 1);
+          this.drawText('⚡ Tự chuyển', bx + 58, 86, { size: 10.5, weight: '700', color: C.ink, align: 'center' });
 
-          this.fillRoundRect(navX, qY + 402, navW, 176, 18, C.surface, C.sangria, 1.5);
-          this.drawText('PHÍM TẮT LÀM BÀI', navX + navW / 2, qY + 428, { size: 11, weight: '800', color: C.sangria, align: 'center', mono: true });
-          this.drawKeycap(navX + 18, qY + 452, 'A', false, 38);
-          this.drawKeycap(navX + 62, qY + 452, 'B', slt >= 2.95 && slt < 3.55, 38);
-          this.drawKeycap(navX + 106, qY + 452, 'C', false, 38);
-          this.drawKeycap(navX + 150, qY + 452, 'D', false, 38);
-          this.drawKeycap(navX + 200, qY + 452, '←', false, 40);
-          this.drawKeycap(navX + 246, qY + 452, '→', slt >= 2.02 && slt < 2.55, 40);
-          this.drawText('A–D / 1–4: Chọn đáp án tức thì', navX + navW / 2, qY + 516, { size: 11.5, weight: '600', color: C.ink, align: 'center' });
-          this.drawText('← / →: Chuyển câu không giật trang', navX + navW / 2, qY + 542, { size: 11.5, weight: '500', color: C.muted, align: 'center' });
+          this.fillRoundRect(bx + 118, 72, 106, 28, 14, C.raspberrySoft, C.copper, 1);
+          this.drawText('⚠️ Hay sai (4)', bx + 171, 86, { size: 10.5, weight: '700', color: C.raspberry, align: 'center' });
 
-          if (slt < 1.95) {
-            const p = this.easeInOut(this.seg(slt, 0.08, 0.78));
-            this.drawCursor(this.lerp(mainX + 520, mainX + 210, p), this.lerp(qY + 420, qY + 324, p), this.seg(slt, 0.82, 1.18));
-            if (q1PickedWrong) this.drawStepCallout(mainX + 250, qY + 232, '4', 'Cập nhật đúng/sai tại chỗ, không nhảy trang!', C.sangria, 1);
-          }
-        },
+          this.fillRoundRect(bx + 230, 72, 102, 28, 14, C.bg, C.blonde, 1);
+          this.drawText('🚩 Gắn cờ (3)', bx + 281, 86, { size: 10.5, weight: '700', color: C.ink, align: 'center' });
 
-        drawScene3(lt, t) {
-          const ctx = this.ctx;
-          const C = this.C;
-          const sbW = 60, mainX = sbW + 30, mainW = this.W - sbW - 56;
+          this.fillRoundRect(mx + mw - 304, 72, 152, 28, 14, C.sangria);
+          this.drawText('🔀 Đảo câu & đáp án', mx + mw - 228, 86, { size: 11, weight: '700', color: '#FFFFFF', align: 'center' });
+          this.fillRoundRect(mx + mw - 144, 72, 128, 28, 14, isShuffled ? C.sunflowerSoft : C.bg, isShuffled ? C.sunflower : C.blonde, 1);
+          this.drawText('↩️ Khôi phục gốc', mx + mw - 80, 86, { size: 10.5, weight: '700', color: C.ink, align: 'center' });
 
-          if (lt < 4.5) {
-            this.drawSidebar(sbW, 1, t);
-            const shuffled = lt >= 1.05 && lt < 2.55;
-            const restored = lt >= 2.55;
-            const menuOpen = lt >= 3.25;
-            const tbY = 20;
+          // Cột trái: Thẻ câu hỏi / Flashcard
+          const qW = mw - 266;
+          this.fillRoundRect(mx, 126, qW, 470, 20, C.surface, isFlashcard && isFlipped ? C.sunflower : C.blonde, isFlashcard && isFlipped ? 2.2 : 1.2);
 
-            this.fillRoundRect(mainX, tbY, mainW, 100, 18, C.surface, C.blonde, 1.2);
-            this.fillRoundRect(mainX + 18, tbY + 12, 340, 32, 10, C.bg, C.blonde, 1);
-            this.drawText('De_Ky_Thuat_Dien.pdf (120 câu)     ▾', mainX + 32, tbY + 28, { size: 12, weight: '600' });
-            this.fillRoundRect(mainX + 370, tbY + 12, 280, 32, 10, C.bg, C.blonde, 1);
-            this.drawText('Chương 1 (Câu 1 - 50)            ▾', mainX + 384, tbY + 28, { size: 12, weight: '600' });
-            this.fillRoundRect(mainX + mainW - 116, tbY + 12, 98, 32, 16, C.bg, C.blonde, 1);
-            this.drawText('♻️ Làm lại', mainX + mainW - 67, tbY + 28, { size: 11.5, weight: '700', align: 'center' });
+          if (!isFlashcard) {
+            this.fillRoundRect(mx + 18, 142, 56, 24, 12, C.sangria);
+            this.drawText(isShuffled ? '#18' : '#01', mx + 46, 154, { size: 11, weight: '800', color: '#FFFFFF', align: 'center', mono: true });
+            this.drawText(isShuffled ? 'Câu 1.1.0,25.18 (Đã đảo A↔C)' : 'Câu 1.1.0,25.1', mx + 84, 154, { size: 13.5, weight: '700', color: C.ink });
+            this.fillRoundRect(mx + qW - 196, 142, 82, 24, 12, C.raspberrySoft, C.copper, 1);
+            this.drawText('🚩 Gắn cờ', mx + qW - 155, 154, { size: 11, weight: '700', color: C.raspberry, align: 'center' });
+            this.fillRoundRect(mx + qW - 106, 142, 90, 24, 12, C.bg, C.blonde, 1);
+            this.drawText('✂️ Cắt khung', mx + qW - 61, 154, { size: 11, weight: '700', color: C.ink, align: 'center' });
 
-            const shufX = mainX + mainW - 352, restX = mainX + mainW - 174;
-            this.fillRoundRect(shufX, tbY + 60, 170, 28, 14, C.sangria);
-            this.drawText('🔀 Đảo câu & đáp án', shufX + 85, tbY + 74, { size: 11.5, weight: '700', color: '#FFFFFF', align: 'center' });
-            this.fillRoundRect(restX, tbY + 60, 156, 28, 14, shuffled ? C.sunflowerSoft : C.bg, shuffled ? C.sunflower : C.blonde, shuffled ? 1.8 : 1);
-            this.drawText('↩️ Khôi phục ban đầu', restX + 78, tbY + 74, { size: 11, weight: '700', color: shuffled ? C.ink : C.muted, align: 'center' });
+            // Ảnh đề bài PDF
+            this.fillRoundRect(mx + 18, 180, qW - 36, 168, 14, '#FFFFFF', C.hairline, 1.2);
+            this.drawText('Quan hệ giữa dòng điện và điện áp trên phần tử điện dung C là:', mx + 36, 212, { size: 14, weight: '700', color: C.ink });
+            this.drawText(isShuffled ? 'a. uC = C·∫iC dt          b. iC = (1/C)·∫uC dt' : 'a. iC = C·(duC / dt)       b. iC = (1/C)·∫uC dt', mx + 36, 260, { size: 13.5, weight: '600', color: C.ink, mono: true });
+            this.drawText(isShuffled ? 'c. iC = C·(duC / dt)      d. uC = C·(diC / dt)' : 'c. uC = C·∫iC dt           d. uC = C·(diC / dt)', mx + 36, 304, { size: 13.5, weight: '600', color: C.ink, mono: true });
 
-            const qY = 136;
-            this.fillRoundRect(mainX, qY, mainW, 470, 18, C.surface, C.blonde, 1.2);
-            this.fillRoundRect(mainX + 22, qY + 18, 52, 26, 13, shuffled ? C.raspberry : C.sangria);
-            this.drawText(shuffled ? '#27' : '#01', mainX + 48, qY + 31, { size: 12, weight: '800', color: '#FFFFFF', align: 'center', mono: true });
-            this.drawText(shuffled ? 'Câu 27 • Đã đảo vị trí câu & xáo trộn 4 phương án A/B/C/D' : (restored ? 'Câu 1 • Đã khôi phục nguyên thứ tự & đáp án ban đầu' : 'Câu 1 • Chương 1 (Câu 1 - 50)'), mainX + 86, qY + 31, { size: 14, weight: '700', color: shuffled ? C.raspberry : C.ink });
-
-            const toolX = mainX + mainW - 132, toolY = qY + 17;
-            this.fillRoundRect(toolX, toolY, 110, 28, 14, C.bg, C.blonde, 1);
-            this.drawText('⋯ Tùy chỉnh', toolX + 55, toolY + 14, { size: 11.5, weight: '700', align: 'center' });
-
-            this.fillRoundRect(mainX + 22, qY + 62, mainW - 44, 290, 14, '#FFFFFF', C.hairline, 1.2);
-            const eqs = shuffled
-              ? ['a. Ů₁ = A₁₁İ₁ + A₁₂İ₂', 'b. Ů₁ = A₁₁Ů₂ - A₁₂İ₂', 'c. Ů₁ = A₁₁Ů₂ + A₁₂İ₂  (Đúng)', 'd. Ů₁ = A₁₁Ů₂ + A₂₁İ₂']
-              : ['a. Ů₁ = A₁₁Ů₂ + A₁₂İ₂  (Đúng)', 'b. Ů₁ = A₁₁Ů₂ + A₂₁İ₂', 'c. Ů₁ = A₁₁Ů₂ - A₁₂İ₂', 'd. Ů₁ = A₁₁İ₁ + A₁₂İ₂'];
-            eqs.forEach((eq, idx) => {
-              const ex = mainX + 58 + (idx % 2) * 480;
-              const ey = qY + 168 + Math.floor(idx / 2) * 78;
-              this.fillRoundRect(ex - 14, ey - 22, 430, 48, 10, C.bg, C.hairline, 1);
-              this.drawText(eq, ex + 4, ey + 2, { size: 14, weight: '600', color: C.ink, mono: true });
+            // 4 nút đáp án A B C D
+            const optW = (qW - 66) / 4;
+            ['A', 'B', 'C', 'D'].forEach((ltr, idx) => {
+              const ox = mx + 18 + idx * (optW + 10);
+              const isRight = isShuffled ? ltr === 'C' : ltr === 'A';
+              const bgOpt = isPicked && isRight ? C.sunflowerSoft : C.bg;
+              const bdOpt = isPicked && isRight ? C.sunflower : C.blonde;
+              this.fillRoundRect(ox, 368, optW, 56, 12, bgOpt, bdOpt, isPicked && isRight ? 2 : 1);
+              this.fillRoundRect(ox + 12, 382, 28, 28, 8, isPicked && isRight ? C.sunflower : C.surface, bdOpt, 1);
+              this.drawText(ltr, ox + 26, 396, { size: 12, weight: '800', color: C.ink, align: 'center', mono: true });
+              this.drawText(`Đáp án ${ltr}`, ox + 48, 396, { size: 12.5, weight: '700', color: C.ink });
             });
 
-            if (lt < 1.05) {
-              this.drawSpotlightRing(shufX, tbY + 60, 170, 28, 14, t, C.sunflower);
-              this.drawStepCallout(shufX - 310, tbY + 104, '1', '1 nút đảo toàn bộ câu hỏi + đáp án (cả PDF)', C.raspberry, 1);
-            } else if (lt < 2.55) {
-              this.drawSpotlightRing(restX, tbY + 60, 156, 28, 14, t, C.sunflower);
-              this.drawStepCallout(restX - 285, tbY + 104, '2', 'Bấm Khôi phục trả lại nguyên thứ tự gốc', C.sangria, 1);
-            } else if (menuOpen) {
-              const mx = toolX - 114, my = toolY + 34;
-              this.fillRoundRect(mx, my, 224, 156, 14, C.surface, C.blonde, 1.2);
-              ['🔀 Đảo đáp án câu này', '🧹 Gọt dòng lẹm đáy PDF', '⬆️ Mở rộng đỉnh (+16px)', '✂️ Cắt lại khung PDF'].forEach((m, idx) => {
-                const iy = my + 8 + idx * 36;
-                if (idx === 1 || idx === 3) this.fillRoundRect(mx + 8, iy, 208, 32, 8, idx === 3 ? C.sunflowerSoft : C.bg);
-                this.drawText(m, mx + 18, iy + 16, { size: 12, weight: (idx === 1 || idx === 3) ? '700' : '500' });
-              });
-              this.drawStepCallout(mx - 315, my + 48, '3', 'Gọt lẹm đáy hoặc mở Studio cắt khung PDF', C.sangria, 1);
-            }
+            // Phím tắt
+            this.drawText('Phím tắt:', mx + 22, 464, { size: 11.5, weight: '700', color: C.muted });
+            ['A', 'B', 'C', 'D', '←', '→'].forEach((k, i) => {
+              this.drawKeycap(mx + 92 + i * 44, 448, k, isPicked && k === 'A', 36);
+            });
+            this.drawStepCallout(mx + 20, 520, isShuffled ? '2' : '1', isShuffled ? 'Đảo trực tiếp cả thứ tự câu & phương án trong ảnh PDF' : 'Chọn đáp án tức thì (A-D) • Lọc Hay sai / Gắn cờ', C.sangria, 1);
+          } else {
+            // Chế độ Lướt nhanh Flashcard
+            this.fillRoundRect(mx + 18, 140, qW - 36, 40, 12, C.bg, C.blonde, 1);
+            this.drawText('⚡ ÔN CẤP TỐC', mx + 32, 160, { size: 11, weight: '800', color: C.raspberry, mono: true });
+            this.fillRoundRect(mx + 142, 146, 142, 28, 14, C.sangria);
+            this.drawText('🃏 Lật thẻ Flashcard', mx + 213, 160, { size: 11, weight: '700', color: '#FFFFFF', align: 'center' });
+            this.fillRoundRect(mx + 292, 146, 160, 28, 14, C.surface, C.blonde, 1);
+            this.drawText('👁️ Hiện sẵn đáp án', mx + 372, 160, { size: 11, weight: '700', color: C.muted, align: 'center' });
 
-            if (lt < 1.45) {
-              const p = this.easeInOut(this.seg(lt, 0.08, 0.9));
-              this.drawCursor(this.lerp(mainX + 440, shufX + 85, p), this.lerp(qY + 140, tbY + 74, p), this.seg(lt, 0.94, 1.28));
-            } else if (lt < 2.85) {
-              const p = this.easeInOut(this.seg(lt, 1.5, 2.4));
-              this.drawCursor(this.lerp(shufX + 85, restX + 78, p), tbY + 74, this.seg(lt, 2.44, 2.76));
+            this.fillRoundRect(mx + 18, 196, 150, 24, 12, isFlipped ? C.sunflowerSoft : C.bg);
+            this.drawText(isFlipped ? 'MẶT SAU • ĐÁP ÁN' : 'MẶT TRƯỚC • CÂU HỎI', mx + 93, 208, { size: 10.5, weight: '800', color: C.ink, align: 'center', mono: true });
+            this.drawText('Câu 1.1.0,25.1: Quan hệ giữa dòng điện và điện áp trên phần tử điện dung C là:', mx + 24, 250, { size: 14.5, weight: '700', color: C.ink });
+
+            if (!isFlipped) {
+              this.fillRoundRect(mx + qW / 2 - 125, 316, 250, 44, 22, C.sangria);
+              this.drawText('🔄 Lật thẻ xem đáp án (Space)', mx + qW / 2, 338, { size: 12.5, weight: '700', color: '#FFFFFF', align: 'center' });
+              this.drawKeycap(mx + qW / 2 - 50, 386, 'SPACE', lt > 6.8, 100);
             } else {
-              const p = this.easeInOut(this.seg(lt, 2.85, 3.22));
-              this.drawCursor(this.lerp(restX + 78, toolX + 55, p), this.lerp(tbY + 74, toolY + 14, p), this.seg(lt, 3.24, 3.58));
+              this.fillRoundRect(mx + 24, 288, qW - 48, 86, 16, C.sunflowerSoft, C.sunflower, 2);
+              this.drawText('✓ ĐÁP ÁN ĐÚNG: A — iC = C · (duC / dt)', mx + 44, 331, { size: 16, weight: '800', color: C.sangria });
+              this.drawStepCallout(mx + 24, 410, '3', 'Lật thẻ bằng Space hoặc bật "Hiện sẵn đáp án" để lướt 200 câu sát giờ thi', C.raspberry, 1);
             }
-            return;
+            this.drawSpotlightRing(mx + 218, 72, 108, 28, 14, t, C.sunflower);
           }
 
-          const slt = lt - 4.5;
-          this.drawSidebar(sbW, 2, t);
-          const started = slt >= 1.35, pickedA = slt >= 2.35, submitted = slt >= 3.25;
-          const tbY = 20;
-          this.fillRoundRect(mainX, tbY, mainW, 98, 18, C.surface, C.blonde, 1.2);
+          // Cột phải: Bảng câu hỏi
+          const sx = mx + qW + 16, sw = 250;
+          this.fillRoundRect(sx, 126, sw, 470, 20, C.surface, C.blonde, 1.2);
+          this.drawText('BẢNG CÂU HỎI', sx + 16, 150, { size: 11, weight: '800', color: C.ink, mono: true });
+          this.drawText('Độ chính xác: 92%', sx + 16, 178, { size: 10.5, weight: '600', color: C.muted, mono: true });
+          this.fillRoundRect(sx + 16, 192, sw - 32, 7, 3.5, C.hairline);
+          this.fillRoundRect(sx + 16, 192, (sw - 32) * 0.65, 7, 3.5, C.sunflower);
 
-          const timerX = mainX + mainW - 376, startX = mainX + mainW - 266, subX = mainX + mainW - 96;
-          this.fillRoundRect(timerX, tbY + 12, 98, 32, 16, C.sangria);
-          const remSec = started ? Math.max(0, 3600 - Math.floor((slt - 1.35) * 18)) : 3600;
-          this.drawText(this.formatClock(remSec), timerX + 54, tbY + 28, { size: 12, weight: '800', color: '#FFFFFF', align: 'center', mono: true });
-
-          this.fillRoundRect(startX, tbY + 12, 160, 32, 16, started ? C.sidebar : C.raspberry, started ? C.sunflower : null, 1.5);
-          this.drawText(submitted ? '✓ Đã nộp bài' : (started ? '● Đang thi' : '▶ Bắt đầu làm bài'), startX + 80, tbY + 28, { size: 11.5, weight: '700', color: started ? C.ink : '#FFFFFF', align: 'center' });
-
-          this.fillRoundRect(subX, tbY + 12, 82, 32, 16, started && !submitted ? C.raspberry : C.raspberrySoft, C.raspberry, 1);
-          this.drawText('Nộp bài', subX + 41, tbY + 28, { size: 11.5, weight: '700', color: started && !submitted ? '#FFFFFF' : C.raspberry, align: 'center' });
-
-          let cardY = 132;
-          if (!started) {
-            this.fillRoundRect(mainX, cardY, mainW, 48, 14, '#FBF6E8', C.sunflower, 1.5);
-            this.drawText('🔒 Phòng thi đang chờ bắt đầu — Đáp án đang KHÓA & đồng hồ 60:00 chưa chạy. Bấm ▶ Bắt đầu làm bài!', mainX + 22, cardY + 24, { size: 12.5, weight: '700' });
-            this.drawSpotlightRing(startX, tbY + 12, 160, 32, 16, t, C.sunflower);
-            cardY = 194;
-          } else if (submitted) {
-            this.fillRoundRect(mainX, cardY, mainW, 74, 16, '#FBF6E8', C.sunflower, 2);
-            this.drawText('KẾT QUẢ BÀI THI THỬ', mainX + 24, cardY + 20, { size: 10.5, weight: '800', color: C.raspberry, mono: true });
-            this.drawText('Điểm: 9.25 / 10   •   Đúng 37 / 40 câu hỏi', mainX + 24, cardY + 48, { size: 19, weight: '800' });
-            cardY = 222;
+          for (let i = 0; i < 25; i++) {
+            const r = Math.floor(i / 5), c = i % 5;
+            const gx = sx + 16 + c * 44, gy = 216 + r * 40;
+            const fill = i === 0 && isPicked ? C.sunflower : (i < 12 ? (i === 4 ? C.raspberry : C.sunflower) : C.bg);
+            const tc = i === 4 ? '#FFFFFF' : C.ink;
+            this.fillRoundRect(gx, gy, 38, 32, 8, fill, C.blonde, 1);
+            this.drawText(String(i + 1), gx + 19, gy + 16, { size: 11, weight: '700', color: tc, align: 'center', mono: true });
+            if (i === 0 || i === 4) {
+              this.ctx.beginPath(); this.ctx.arc(gx + 34, gy + 4, 4, 0, Math.PI * 2); this.ctx.fillStyle = C.copper; this.ctx.fill();
+            }
           }
-
-          this.fillRoundRect(mainX, cardY, mainW, 608 - cardY, 18, C.surface, C.blonde, 1.2);
-          this.drawText('Câu 1/40: Trong mạch RLC nối tiếp xảy ra hiện tượng cộng hưởng điện áp khi nào?', mainX + 26, cardY + 36, { size: 15, weight: '700' });
-          [
-            { l: 'A', t: 'ZL = ZC  (Cảm kháng bằng dung kháng)', right: true },
-            { l: 'B', t: 'ZL > ZC', right: false },
-            { l: 'C', t: 'R = 0', right: false },
-            { l: 'D', t: 'ZL < ZC', right: false }
-          ].forEach((ob, i) => {
-            const ow = (mainW - 64) / 2;
-            const ox = mainX + 26 + (i % 2) * (ow + 12);
-            const oy = cardY + 66 + Math.floor(i / 2) * 72;
-            let bg = started ? C.bg : '#F7F4ED', brd = C.blonde, lw = 1.2;
-            if (submitted && ob.right) { bg = C.sunflowerSoft; brd = C.sunflower; lw = 2.2; }
-            else if (pickedA && ob.l === 'A') { bg = '#F7EEF1'; brd = C.sangria; lw = 2; }
-            ctx.save();
-            if (!started) ctx.globalAlpha = 0.62;
-            this.fillRoundRect(ox, oy, ow, 58, 12, bg, brd, lw);
-            this.fillRoundRect(ox + 12, oy + 15, 28, 28, 7, (pickedA && ob.l === 'A') ? C.sangria : C.surface, brd, 1);
-            this.drawText(ob.l, ox + 26, oy + 29, { size: 12, weight: '800', color: (pickedA && ob.l === 'A') ? '#FFFFFF' : C.ink, align: 'center', mono: true });
-            this.drawText(ob.t, ox + 52, oy + 29, { size: 13.5, weight: '600' });
-            ctx.restore();
-          });
-
-          if (started && !submitted) {
-            this.drawSpotlightRing(subX, tbY + 12, 82, 32, 16, t, C.sunflower);
-            this.drawStepCallout(subX - 245, tbY + 52, '4', 'Làm xong bấm Nộp bài để chấm điểm thang 10!', C.raspberry, 1);
-          }
-
-          let cx = startX + 80, cy = tbY + 28, clickP = 0;
-          if (slt < 1.6) {
-            const p = this.easeInOut(this.seg(slt, 0.1, 1.25));
-            cx = this.lerp(mainX + 250, startX + 80, p); cy = this.lerp(cardY + 120, tbY + 28, p); clickP = this.seg(slt, 1.28, 1.58);
-          } else if (slt < 2.6) {
-            const p = this.easeInOut(this.seg(slt, 1.65, 2.25));
-            cx = this.lerp(startX + 80, mainX + 200, p); cy = this.lerp(tbY + 28, cardY + 83, p); clickP = this.seg(slt, 2.28, 2.58);
-          } else {
-            const p = this.easeInOut(this.seg(slt, 2.62, 3.16));
-            cx = this.lerp(mainX + 200, subX + 44, p); cy = this.lerp(cardY + 83, tbY + 28, p); clickP = this.seg(slt, 3.2, 3.58);
-          }
-          this.drawCursor(cx, cy, clickP);
         },
 
-        drawScene4(lt, t) {
-          const ctx = this.ctx;
+        // ====================================================================
+        // SCENE 3 (19–29s): STUDIO CẮT TAY PDF PRO (2 TRANG, 4 GÓC, ZOOM)
+        // ====================================================================
+        drawScene3(lt, t) {
           const C = this.C;
-          const sbW = 60, mainX = sbW + 30, mainW = this.W - sbW - 56;
-          this.drawSidebar(sbW, 3, t);
+          // Nền tối modal Studio
+          this.ctx.fillStyle = 'rgba(42, 23, 30, 0.92)';
+          this.ctx.fillRect(0, 0, this.W, this.H - 96);
 
-          const phase = lt < 2.2 ? 0 : (lt < 4.8 ? 1 : (lt < 7.4 ? 2 : (lt < 10.2 ? 3 : 4)));
-          const subSteps = ['① Phạm vi & Nạp ĐA cũ', '② Dán chuỗi / Dấu "-"', '③ Lọc Chưa gán (-)', '④ Tìm & Sửa 2 chiều', '⑤ Rà soát & Lưu tất cả'];
-          const sw = (mainW - 32) / 5;
-          subSteps.forEach((txt, i) => {
-            const sx = mainX + i * (sw + 8);
-            const act = i === phase, past = i < phase;
-            this.fillRoundRect(sx, 18, sw, 34, 11, act ? C.sangria : (past ? C.sunflowerSoft : C.surface), act ? C.sangria : (past ? C.sunflower : C.blonde), act ? 1.5 : 1);
-            this.drawText(txt, sx + sw / 2, 35, { size: 11, weight: act || past ? '700' : '600', color: act ? '#FFFFFF' : C.ink, align: 'center' });
+          const mw = 1040, mh = 576, mx = (this.W - mw) / 2, my = 22;
+          this.fillRoundRect(mx, my, mw, mh, 20, C.surface, C.blonde, 1.5);
+
+          // Header Modal
+          this.fillRoundRect(mx, my, mw, 48, 20, C.bg, C.hairline, 1);
+          this.drawText('✂️ Studio Cắt Tay: Câu 1.1.0,25.18 (Câu trải 2 trang)', mx + 22, my + 24, { size: 14, weight: '800', color: C.ink });
+          this.fillRoundRect(mx + mw - 86, my + 10, 68, 28, 14, C.surface, C.blonde, 1);
+          this.drawText('✕ Đóng', mx + mw - 52, my + 24, { size: 11, weight: '700', color: C.ink, align: 'center' });
+
+          // Toolbar: Trang 1 / Trang 2, Zoom, Hoàn tác, Đặt lại tự động
+          const tbY = my + 48;
+          this.ctx.fillStyle = C.sidebar;
+          this.ctx.fillRect(mx + 1, tbY, mw - 2, 46);
+          const onPage2 = lt >= 5.2;
+          const zoomPct = lt >= 3.2 && lt < 5.2 ? 125 : 100;
+
+          // Page tabs
+          this.fillRoundRect(mx + 18, tbY + 8, 178, 30, 15, C.surface, C.blonde, 1);
+          this.fillRoundRect(mx + 21, tbY + 11, 84, 24, 12, !onPage2 ? C.sangria : 'transparent');
+          this.drawText('Trang 1 ✓', mx + 63, tbY + 23, { size: 11, weight: '700', color: !onPage2 ? '#FFFFFF' : C.muted, align: 'center' });
+          this.fillRoundRect(mx + 109, tbY + 11, 84, 24, 12, onPage2 ? C.sangria : 'transparent');
+          this.drawText(onPage2 ? 'Trang 2 ✓' : 'Trang 2', mx + 151, tbY + 23, { size: 11, weight: '700', color: onPage2 ? '#FFFFFF' : C.muted, align: 'center' });
+
+          // Zoom control
+          this.fillRoundRect(mx + 208, tbY + 8, 138, 30, 15, C.surface, C.blonde, 1);
+          this.drawText(`−   ${zoomPct}%   ＋`, mx + 277, tbY + 23, { size: 11.5, weight: '700', color: C.sangria, align: 'center', mono: true });
+
+          // Undo & Reset auto
+          this.fillRoundRect(mx + mw - 306, tbY + 8, 114, 30, 15, C.surface, C.blonde, 1);
+          this.drawText('↩ Hoàn tác', mx + mw - 249, tbY + 23, { size: 11, weight: '700', color: C.ink, align: 'center' });
+          this.fillRoundRect(mx + mw - 184, tbY + 8, 166, 30, 15, C.sunflowerSoft, C.sunflower, 1.2);
+          this.drawText('♻️ Đặt lại cắt tự động', mx + mw - 101, tbY + 23, { size: 11, weight: '700', color: C.ink, align: 'center' });
+
+          // Vùng Canvas PDF giả lập
+          const cvY = tbY + 46, cvH = mh - 148;
+          this.ctx.fillStyle = '#2A171E';
+          this.ctx.fillRect(mx + 1, cvY, mw - 2, cvH);
+
+          const pageW = zoomPct === 125 ? 760 : 660;
+          const pageH = cvH - 28;
+          const px = mx + (mw - pageW) / 2, py = cvY + 14;
+          this.fillRoundRect(px, py, pageW, pageH, 8, '#FFFFFF');
+
+          if (!onPage2) {
+            this.drawText('Câu 1.1.0,25.18: Cho nhánh ab như hình vẽ. Giả sử biết e1, e2 và i.', px + 36, py + 54, { size: 14.5, weight: '600', color: '#111827' });
+            this.drawText('Phương trình tìm u là:', px + 36, py + 84, { size: 14.5, weight: '600', color: '#111827' });
+            // Sơ đồ mạch điện minh họa
+            this.ctx.strokeStyle = '#111827'; this.ctx.lineWidth = 2;
+            this.ctx.beginPath();
+            this.ctx.moveTo(px + 200, py + 210); this.ctx.lineTo(px + 200, py + 145); this.ctx.lineTo(px + 440, py + 145); this.ctx.lineTo(px + 440, py + 210);
+            this.ctx.stroke();
+            [px + 280, px + 365].forEach((cx, i) => {
+              this.ctx.fillStyle = '#FFFFFF'; this.ctx.beginPath(); this.ctx.arc(cx, py + 145, 18, 0, Math.PI * 2); this.ctx.fill(); this.ctx.stroke();
+              this.drawText(i === 0 ? 'e1' : 'e2', cx, py + 116, { size: 13, weight: '700', color: '#111827', align: 'center' });
+              this.drawText('→', cx, py + 146, { size: 14, weight: '700', color: '#111827', align: 'center' });
+            });
+            this.drawText('a                  u →                  b', px + 320, py + 224, { size: 14, weight: '700', color: '#111827', align: 'center' });
+            this.drawText('Trang 4', px + pageW - 44, py + pageH - 26, { size: 12, weight: '500', color: '#6B7280', align: 'right' });
+
+            // Khung cắt kéo 4 góc mở rộng xuống trọn hình mạch điện
+            const dragP = this.easeInOut(this.seg(lt, 1.0, 2.8));
+            const rX0 = px + 22, rY0 = py + 32, rX1 = px + pageW - 22;
+            const rY1 = this.lerp(py + 132, py + 252, dragP);
+
+            // Phủ mờ ngoài khung
+            this.ctx.fillStyle = 'rgba(30, 15, 22, 0.32)';
+            this.ctx.fillRect(px, py, pageW, rY0 - py);
+            this.ctx.fillRect(px, rY1, pageW, py + pageH - rY1);
+            this.ctx.strokeStyle = C.raspberry; this.ctx.lineWidth = 3;
+            this.ctx.strokeRect(rX0, rY0, rX1 - rX0, rY1 - rY0);
+            [[rX0, rY0], [rX1, rY0], [rX0, rY1], [rX1, rY1]].forEach(([hx, hy]) => {
+              this.fillRoundRect(hx - 6, hy - 6, 12, 12, 2, C.sunflower, C.ink, 2);
+            });
+            this.drawCursor(rX1, rY1, this.seg(lt, 2.7, 3.0));
+          } else {
+            // Trang 2: các đáp án a b c d
+            this.drawText('a. u = e1 + e2                         b. u = e1 − e2', px + 44, py + 76, { size: 15, weight: '600', color: '#111827' });
+            this.drawText('c. u = e2 − e1                         d. u = e2 − e1 + i', px + 44, py + 124, { size: 15, weight: '600', color: '#111827' });
+            const rX0 = px + 24, rY0 = py + 44, rX1 = px + pageW - 24, rY1 = py + 154;
+            this.ctx.fillStyle = 'rgba(30, 15, 22, 0.32)';
+            this.ctx.fillRect(px, py, pageW, rY0 - py);
+            this.ctx.fillRect(px, rY1, pageW, py + pageH - rY1);
+            this.ctx.strokeStyle = C.raspberry; this.ctx.lineWidth = 3;
+            this.ctx.strokeRect(rX0, rY0, rX1 - rX0, rY1 - rY0);
+            [[rX0, rY0], [rX1, rY0], [rX0, rY1], [rX1, rY1]].forEach(([hx, hy]) => {
+              this.fillRoundRect(hx - 6, hy - 6, 12, 12, 2, C.sunflower, C.ink, 2);
+            });
+            this.drawSpotlightRing(mx + 109, tbY + 11, 84, 24, 12, t, C.sunflower);
+          }
+
+          // Footer Modal
+          const ftY = my + mh - 54;
+          this.fillRoundRect(mx, ftY, mw, 54, 16, C.bg, C.hairline, 1);
+          this.drawText(onPage2 ? 'Trang 2: 612 × 110 px • Đã chọn 2 trang (tự nối dọc liền mạch)' : 'Trang 1: 616 × 220 px • Kéo 4 tay nắm góc hoặc nhấn ↑ ↓ ← →', mx + 22, ftY + 27, { size: 11.5, weight: '700', color: C.ink, mono: true });
+          this.fillRoundRect(mx + mw - 152, ftY + 11, 134, 32, 16, C.sangria);
+          this.drawText('💾 Lưu vùng cắt', mx + mw - 85, ftY + 27, { size: 12, weight: '700', color: '#FFFFFF', align: 'center' });
+
+          if (onPage2 && lt > 7.4) {
+            this.drawSpotlightRing(mx + mw - 152, ftY + 11, 134, 32, 16, t, C.sunflower);
+            this.drawStepCallout(mx + mw - 380, ftY - 40, '3', 'Tự cắt sạch 2 trang & nối dọc thành 1 ảnh hoàn chỉnh', C.sangria, 1);
+          } else if (lt > 3.2 && lt < 5.2) {
+            this.drawSpotlightRing(mx + 208, tbY + 8, 138, 30, 15, t, C.sunflower);
+            this.drawStepCallout(mx + 208, tbY + 48, '2', 'Phóng to tới 250% để khoanh sát từng nét chữ', C.raspberry, 1);
+          } else if (!onPage2) {
+            this.drawStepCallout(mx + 28, cvY + 22, '1', 'Kéo 4 tay nắm góc lấy trọn sơ đồ mạch cuối trang', C.sangria, 1);
+          }
+        },
+
+        // ====================================================================
+        // SCENE 4 (29–39s): THI THỬ TÙY CHỌN THỜI GIAN & BIỂU ĐỒ LỊCH SỬ
+        // ====================================================================
+        drawScene4(lt, t) {
+          const C = this.C;
+          const sbW = 60;
+          this.drawSidebar(sbW, 2, t, false);
+          const mx = sbW + 24, mw = this.W - sbW - 48;
+          const started = lt >= 3.0;
+          const submitted = lt >= 5.6;
+
+          // Thanh điều khiển Thi Thử
+          this.fillRoundRect(mx, 20, mw, 76, 18, C.surface, C.blonde, 1.2);
+          const pills = [
+            { x: mx + 16, w: 200, txt: 'mach1.pdf (329 câu) ▾' },
+            { x: mx + 224, w: 120, txt: '40 câu ▾' },
+            { x: mx + 352, w: 150, txt: '⏱ 45 phút / ∞ ▾' }
+          ];
+          pills.forEach(p => {
+            this.fillRoundRect(p.x, 42, p.w, 32, 10, C.bg, C.blonde, 1);
+            this.drawText(p.txt, p.x + 12, 58, { size: 11.5, weight: '700', color: C.ink });
           });
 
-          const boxY = 62;
-          this.fillRoundRect(mainX, boxY, mainW, 556, 18, C.surface, C.blonde, 1.2);
+          // Đồng hồ + Bắt đầu + Nộp bài
+          const secLeft = started ? Math.max(0, 2700 - Math.floor((lt - 3.0) * 18)) : 2700;
+          const clockTxt = `${String(Math.floor(secLeft / 60)).padStart(2, '0')}:${String(secLeft % 60).padStart(2, '0')}`;
+          this.fillRoundRect(mx + mw - 384, 42, 92, 32, 16, C.sangria);
+          this.drawText(clockTxt, mx + mw - 338, 58, { size: 12.5, weight: '800', color: C.sunflower, align: 'center', mono: true });
 
-          const loadedOldDemo = lt >= 1.05 && lt < 2.2;
-          const baseKey = 'ABCD-BADAB';
-          const typedLen = lt < 2.2 ? 0 : Math.min(baseKey.length, Math.floor(this.seg(lt, 2.2, 3.85) * baseKey.length));
-          const fixedSlot5 = lt >= 6.45;
-          const fixedSlot3 = lt >= 9.35;
-          const savedAll = lt >= 11.45;
+          this.fillRoundRect(mx + mw - 282, 42, 164, 32, 16, started ? C.sunflowerSoft : C.raspberry, started ? C.sunflower : C.raspberry, 1);
+          this.drawText(submitted ? '✓ Đã nộp bài' : (started ? '● Đang làm bài' : '▶ Bắt đầu làm bài'), mx + mw - 200, 58, { size: 11.5, weight: '800', color: started ? C.ink : '#FFFFFF', align: 'center' });
 
-          let currentChars = [];
-          if (loadedOldDemo) currentChars = 'ABCDBCA-AB'.split('');
-          else if (typedLen > 0) {
-            currentChars = baseKey.slice(0, typedLen).split('');
-            if (fixedSlot5 && currentChars.length >= 5) currentChars[4] = 'B';
-            if (fixedSlot3 && currentChars.length >= 3) currentChars[2] = 'D';
+          this.fillRoundRect(mx + mw - 108, 42, 92, 32, 16, started && !submitted ? C.raspberry : C.raspberrySoft, C.raspberry, 1);
+          this.drawText('Nộp bài', mx + mw - 62, 58, { size: 11.5, weight: '800', color: started && !submitted ? '#FFFFFF' : C.raspberry, align: 'center' });
+
+          if (!started) {
+            this.fillRoundRect(mx, 110, mw, 50, 14, C.sunflowerSoft, C.sunflower, 1.4);
+            this.drawText('🔒 Phòng thi đang chờ bắt đầu. Đồng hồ chưa chạy & đáp án đang được khóa.', mx + 20, 135, { size: 12.5, weight: '700', color: C.ink });
+            this.drawSpotlightRing(mx + mw - 282, 42, 164, 32, 16, t, C.sunflower);
+            this.drawStepCallout(mx + 352, 86, '1', 'Tùy chọn 15–90 phút hoặc Không giới hạn → Bấm Bắt đầu', C.sangria, 1);
+          } else if (submitted) {
+            this.fillRoundRect(mx, 110, mw, 78, 16, C.sunflowerSoft, C.sunflower, 1.6);
+            this.drawText('KẾT QUẢ BÀI THI', mx + 22, 130, { size: 10.5, weight: '800', color: C.raspberry, mono: true });
+            this.drawText('Điểm: 9.25 / 10   •   Đúng 37 / 40 câu', mx + 22, 158, { size: 20, weight: '800', color: C.ink });
+            this.fillRoundRect(mx + mw - 206, 132, 184, 36, 18, C.sangria);
+            this.drawText('Xem chi tiết bài làm →', mx + mw - 114, 150, { size: 11.5, weight: '700', color: '#FFFFFF', align: 'center' });
           }
 
-          const loadBtnX = mainX + mainW - 348;
-          this.fillRoundRect(mainX + 20, boxY + 12, 300, 32, 10, C.bg, phase === 0 ? C.sangria : C.blonde, phase === 0 ? 1.8 : 1);
-          this.drawText('De_Ky_Thuat_Dien.pdf (120 câu) ▾', mainX + 32, boxY + 28, { size: 11.5, weight: '600' });
-          this.fillRoundRect(loadBtnX, boxY + 12, 174, 32, 16, phase === 0 ? C.sunflowerSoft : C.surface, phase === 0 ? C.sunflower : C.blonde, phase === 0 ? 1.8 : 1);
-          this.drawText('📥 Nạp đáp án hiện có', loadBtnX + 87, boxY + 28, { size: 11, weight: '700', align: 'center' });
+          // Biểu đồ lịch sử thi thử (Điểm nổi bật)
+          const histY = submitted ? 204 : 176;
+          this.fillRoundRect(mx, histY, mw, 210, 18, C.surface, C.blonde, 1.3);
+          this.drawText('📈 LỊCH SỬ THI THỬ & BIỂU ĐỒ TIẾN ĐỘ (LƯU INDEXEDDB)', mx + 20, histY + 26, { size: 12, weight: '800', color: C.ink, mono: true });
 
-          const inputX = mainX + 20, inputY = boxY + 72, inputW = mainW - 238;
-          const saveX = mainX + mainW - 204;
-          this.drawText('NHẬP NHANH & SỬA TRỰC TIẾP ĐÁP ÁN HÀNG LOẠT (VD: ABCD-BAD HOẶC 1A 2B)', mainX + 20, boxY + 58, { size: 10.5, weight: '800', color: C.sangria, mono: true });
-          this.fillRoundRect(inputX, inputY, inputW, 44, 12, C.bg, phase === 1 ? C.sangria : C.blonde, phase === 1 ? 2 : 1.2);
+          const scores = [5.5, 6.25, 7.0, 6.75, 7.5, 8.0, 8.5, 8.25, 8.75, submitted ? 9.25 : 8.5];
+          const chartX = mx + 24, chartY = histY + 46, chartW = mw - 48, chartH = 142;
+          this.fillRoundRect(chartX, chartY, chartW, chartH, 14, C.bg, C.hairline, 1);
+          const barSlot = (chartW - 40) / scores.length;
+          scores.forEach((sc, i) => {
+            const anim = this.easeOut(this.seg(lt, 0.4 + i * 0.12, 1.2 + i * 0.12));
+            const bh = (sc / 10) * (chartH - 42) * anim;
+            const bx = chartX + 24 + i * barSlot;
+            const by = chartY + chartH - 16 - bh;
+            const col = sc >= 8 ? C.sunflower : (sc >= 6 ? C.sangria : C.raspberry);
+            this.fillRoundRect(bx, by, 38, Math.max(6, bh), 6, col);
+            this.drawText(sc.toFixed(2).replace(/\.00$/, ''), bx + 19, by - 12, { size: 10.5, weight: '800', color: C.ink, align: 'center', mono: true });
+            this.drawText(`Lần ${i + 1}`, bx + 19, chartY + chartH - 6, { size: 9.5, weight: '600', color: C.muted, align: 'center', mono: true });
+          });
 
-          if (currentChars.length > 0) {
-            ctx.font = '800 18px "JetBrains Mono", monospace';
-            let curCharX = inputX + 16;
-            currentChars.forEach((ch, ci) => {
-              const cw = ctx.measureText(ch).width;
-              const hl = (ci === 4 && fixedSlot5 && phase === 2) || (ci === 2 && fixedSlot3 && phase === 3) || ch === '-';
-              if (hl) this.fillRoundRect(curCharX - 4, inputY + 7, cw + 8, 30, 7, ch === '-' ? C.raspberrySoft : C.sunflowerSoft, C.raspberry, 1.5);
-              this.drawText(ch, curCharX, inputY + 22.5, { size: 18, weight: '800', color: hl ? C.raspberry : C.ink, mono: true });
-              curCharX += cw + 3;
+          // Dòng mô tả tính năng phụ bên dưới
+          const cardY = histY + 224;
+          this.fillRoundRect(mx, cardY, mw, Math.max(100, 598 - cardY), 18, C.surface, C.blonde, 1.2);
+          this.drawText('• Các câu làm sai trong phòng thi tự động cộng vào bộ lọc ⚠️ Hay sai để ôn lại.', mx + 22, cardY + 34, { size: 13, weight: '600', color: C.ink });
+          this.drawText('• Hỗ trợ đảo câu + đáp án, khôi phục gốc và chuyển chế độ Từng câu / Danh sách.', mx + 22, cardY + 66, { size: 13, weight: '600', color: C.muted });
+          if (submitted) {
+            this.drawStepCallout(mx + 22, histY - 12, '2', 'Chấm điểm tức thì & tự cập nhật biểu đồ tiến độ', C.raspberry, 1);
+          }
+        },
+
+        // ====================================================================
+        // SCENE 5 (39–49s): NGÂN HÀNG & NHẬP NHANH / SỬA ĐÁP ÁN 2 CHIỀU
+        // ====================================================================
+        drawScene5(lt, t) {
+          const C = this.C;
+          const sbW = 60;
+          this.drawSidebar(sbW, 3, t, false);
+          const mx = sbW + 24, mw = this.W - sbW - 48;
+
+          this.fillRoundRect(mx, 20, mw, 578, 20, C.surface, C.blonde, 1.3);
+          this.drawText('NHẬP NHANH & SỬA TRỰC TIẾP ĐÁP ÁN HÀNG LOẠT (ĐỒNG BỘ 2 CHIỀU)', mx + 22, 46, { size: 12.5, weight: '800', color: C.ink, mono: true });
+
+          // Nút Nạp ĐA cũ + Chia 50 + Gọt lẹm
+          this.fillRoundRect(mx + mw - 382, 32, 138, 28, 14, C.bg, C.blonde, 1);
+          this.drawText('📥 Nạp ĐA hiện có', mx + mw - 313, 46, { size: 11, weight: '700', color: C.ink, align: 'center' });
+          this.fillRoundRect(mx + mw - 236, 32, 126, 28, 14, C.bg, C.blonde, 1);
+          this.drawText('Chia 50 câu', mx + mw - 173, 46, { size: 11, weight: '700', color: C.ink, align: 'center' });
+          this.fillRoundRect(mx + mw - 102, 32, 84, 28, 14, C.sangria);
+          this.drawText('🧹 Gọt lẹm', mx + mw - 60, 46, { size: 11, weight: '700', color: '#FFFFFF', align: 'center' });
+
+          // Ô gõ chuỗi đáp án
+          const fixedQ175 = lt >= 6.4;
+          const keyStr = fixedQ175 ? 'ABCD-BACD  (Câu 175: B → C • Đã đồng bộ)' : 'ABCD-BABD  (Dùng dấu - để bỏ qua câu trống)';
+          this.fillRoundRect(mx + 22, 72, mw - 234, 38, 12, C.bg, C.sangria, 1.5);
+          this.drawText(keyStr, mx + 36, 91, { size: 13, weight: '700', color: C.ink, mono: true });
+          this.fillRoundRect(mx + mw - 202, 72, 180, 38, 19, C.sangria);
+          this.drawText('💾 Áp dụng & Lưu tất cả', mx + mw - 112, 91, { size: 11.5, weight: '700', color: '#FFFFFF', align: 'center' });
+
+          // Thanh lọc + Ô tìm câu sửa
+          this.fillRoundRect(mx + 22, 126, mw - 44, 448, 16, C.bg, C.blonde, 1);
+          this.drawText('Đã nhận diện 50 đáp án • Từ câu 1', mx + 38, 152, { size: 12, weight: '700', color: C.ink });
+          if (fixedQ175) {
+            this.fillRoundRect(mx + 280, 141, 108, 22, 11, C.raspberry);
+            this.drawText('ĐÃ SỬA: 1 CÂU', mx + 334, 152, { size: 10, weight: '800', color: '#FFFFFF', align: 'center', mono: true });
+          }
+
+          const flts = ['🔍 Tìm câu sửa', 'Đã sửa', 'Chưa gán (-)'];
+          flts.forEach((f, i) => {
+            const act = i === 0;
+            this.fillRoundRect(mx + mw - 356 + i * 108, 139, 102, 26, 13, act ? C.sangria : C.surface, C.blonde, 1);
+            this.drawText(f, mx + mw - 305 + i * 108, 152, { size: 10.5, weight: '700', color: act ? '#FFFFFF' : C.muted, align: 'center' });
+          });
+
+          // Ô gõ tìm câu 175
+          const typed = lt < 2.2 ? '17' : '175';
+          this.fillRoundRect(mx + 38, 178, mw - 76, 36, 12, C.surface, C.sangria, 1.4);
+          this.drawText(`🔍  ${typed}`, mx + 54, 196, { size: 13, weight: '700', color: C.ink, mono: true });
+
+          // Thẻ kết quả câu #175 để đối chiếu và bấm đổi đáp án
+          this.fillRoundRect(mx + 38, 228, mw - 76, 326, 14, C.surface, fixedQ175 ? C.sangria : C.blonde, fixedQ175 ? 2 : 1.2);
+          this.fillRoundRect(mx + 54, 244, 58, 24, 12, C.sangria);
+          this.drawText('#175', mx + 83, 256, { size: 11, weight: '800', color: '#FFFFFF', align: 'center', mono: true });
+          this.drawText('Câu 175 • Chương 4 (Câu 151 - 200)', mx + 122, 256, { size: 13, weight: '700', color: C.ink });
+
+          // 5 nút A B C D -
+          ['A', 'B', 'C', 'D', '-'].forEach((ltr, i) => {
+            const bx = mx + mw - 266 + i * 40;
+            const sel = fixedQ175 ? ltr === 'C' : ltr === 'B';
+            this.fillRoundRect(bx, 242, 34, 28, 8, sel ? C.sangria : C.bg, sel ? C.sangria : C.blonde, 1.2);
+            this.drawText(ltr, bx + 17, 256, { size: 12, weight: '800', color: sel ? '#FFFFFF' : C.ink, align: 'center', mono: true });
+          });
+
+          this.drawText('Đề bài đối chiếu: Tần số góc cộng hưởng của mạch RLC nối tiếp là:', mx + 54, 304, { size: 14, weight: '700', color: C.ink });
+          const opts = [
+            ['A', 'ω0 = √(L·C)'], ['B', 'ω0 = L / C'],
+            ['C', 'ω0 = 1 / √(L·C)'], ['D', 'ω0 = R / √(L·C)']
+          ];
+          const ow = (mw - 132) / 2;
+          opts.forEach(([l, txt], idx) => {
+            const ox = mx + 54 + (idx % 2) * (ow + 14);
+            const oy = 336 + Math.floor(idx / 2) * 58;
+            const picked = fixedQ175 ? l === 'C' : l === 'B';
+            this.fillRoundRect(ox, oy, ow, 46, 12, picked ? '#F7EEF1' : C.bg, picked ? C.sangria : C.blonde, picked ? 1.8 : 1);
+            this.drawText(`${l}.  ${txt}`, ox + 16, oy + 23, { size: 13, weight: picked ? '800' : '600', color: C.ink, mono: true });
+          });
+
+          if (lt >= 5.2 && lt <= 6.8) {
+            this.drawCursor(mx + mw - 266 + 2 * 40 + 17, 256, this.seg(lt, 6.2, 6.6));
+          }
+          if (lt >= 7.6) {
+            this.drawSpotlightRing(mx + mw - 202, 72, 180, 38, 19, t, C.sunflower);
+            this.drawStepCallout(mx + 54, 480, '3', 'Bấm Áp dụng & Lưu tất cả để ghi thẳng vào IndexedDB', C.sangria, 1);
+          } else if (fixedQ175) {
+            this.drawStepCallout(mx + 54, 480, '2', 'Bấm đổi đáp án C → Chuỗi phía trên tự cập nhật đồng bộ!', C.raspberry, 1);
+          } else {
+            this.drawStepCallout(mx + 54, 480, '1', 'Gõ số câu (175), khoảng câu (170-175) hoặc từ khóa để sửa nhanh', C.sangria, 1);
+          }
+        },
+
+        // ====================================================================
+        // SCENE 6 (49–60s): TÀI LIỆU LÝ THUYẾT, WARM DARK MODE & CÀI APP PWA
+        // ====================================================================
+        drawScene6(lt, t) {
+          const C = this.C;
+          const darkMode = lt >= 5.5;
+          const bg = darkMode ? '#1B1215' : C.bg;
+          const surf = darkMode ? '#261A1E' : C.surface;
+          const subBg = darkMode ? '#302126' : C.bg;
+          const border = darkMode ? '#463138' : C.blonde;
+          const ink = darkMode ? '#F5EFE6' : C.ink;
+          const muted = darkMode ? '#C6B1B8' : C.muted;
+
+          this.ctx.fillStyle = bg;
+          this.ctx.fillRect(0, 0, this.W, this.H - 96);
+
+          const sbW = darkMode ? 212 : 60;
+          this.drawSidebar(sbW, 4, t, darkMode);
+          const mx = sbW + 22, mw = this.W - sbW - 44;
+
+          // Thanh trên Tài Liệu Lý Thuyết
+          this.fillRoundRect(mx, 20, mw, 58, 16, surf, border, 1.2);
+          this.fillRoundRect(mx + 14, 34, 330, 30, 10, subBg, border, 1);
+          this.drawText('📖 Giao_Trinh_Mach_Dien.pdf (124 trang) ▾', mx + 26, 49, { size: 11.5, weight: '700', color: ink });
+          this.fillRoundRect(mx + mw - 318, 34, 152, 30, 15, C.sangria);
+          this.drawText('＋ Nạp tài liệu', mx + mw - 242, 49, { size: 11, weight: '700', color: '#FFFFFF', align: 'center' });
+          this.fillRoundRect(mx + mw - 158, 34, 144, 30, 15, subBg, border, 1);
+          this.drawText('🔀 Chuyển Đề thi', mx + mw - 86, 49, { size: 11, weight: '700', color: ink, align: 'center' });
+
+          // Cột trái: Mục lục / Tìm kiếm / Ghim
+          const sideW = 280;
+          this.fillRoundRect(mx, 92, sideW, 504, 18, surf, border, 1.2);
+          const showSearch = lt >= 2.6 && lt < 5.5;
+          const tabs = ['📑 Mục lục', '🔍 Tìm', '🔖 Ghim (2)'];
+          tabs.forEach((tb, i) => {
+            const act = (i === 0 && !showSearch) || (i === 1 && showSearch);
+            this.fillRoundRect(mx + 10 + i * 87, 104, 83, 26, 13, act ? C.sangria : subBg);
+            this.drawText(tb, mx + 51 + i * 87, 117, { size: 10.5, weight: '700', color: act ? '#FFFFFF' : muted, align: 'center' });
+          });
+
+          if (!showSearch) {
+            const tocs = [
+              ['Chương 1: Khái niệm cơ bản', 'tr.3', false],
+              ['1.1. Các phần tử mạch R, L, C', 'tr.8', false],
+              ['Chương 2: Định luật Kirchhoff', 'tr.24', true],
+              ['2.1. Định luật KCL & KVL', 'tr.26', false],
+              ['Chương 3: Mạch xoay chiều', 'tr.58', false]
+            ];
+            tocs.forEach(([title, pg, act], i) => {
+              const ty = 146 + i * 42;
+              this.fillRoundRect(mx + 12, ty, sideW - 24, 34, 10, act ? C.sangria : 'transparent');
+              this.drawText(title, mx + 22, ty + 17, { size: 11, weight: act ? '700' : '500', color: act ? '#FFFFFF' : ink });
+              this.drawText(pg, mx + sideW - 20, ty + 17, { size: 10, weight: '600', color: act ? C.sunflower : muted, align: 'right', mono: true });
             });
           } else {
-            this.drawText('Gõ liền mạch đáp án: abcd-bad... hoặc 1A 2B 5D (Nhấn Enter để lưu)', inputX + 16, inputY + 22, { size: 12.5, weight: '500', color: '#9A7E87' });
+            this.fillRoundRect(mx + 12, 144, sideW - 24, 32, 10, subBg, C.sangria, 1.3);
+            this.drawText('🔍 Kirchhoff', mx + 22, 160, { size: 11.5, weight: '700', color: ink });
+            [24, 26, 41].forEach((pg, i) => {
+              const ry = 188 + i * 68;
+              this.fillRoundRect(mx + 12, ry, sideW - 24, 58, 12, subBg, border, 1);
+              this.drawText(`TRANG ${pg}`, mx + 22, ry + 18, { size: 10, weight: '800', color: C.raspberry, mono: true });
+              this.drawText('...Định luật Kirchhoff về dòng...', mx + 22, ry + 38, { size: 11, weight: '600', color: ink });
+            });
           }
 
-          this.fillRoundRect(saveX, inputY, 184, 44, 22, savedAll ? C.sunflower : C.sangria);
-          this.drawText(savedAll ? '✓ Đã lưu 10 câu!' : '💾 Áp dụng & Lưu tất cả', saveX + 92, inputY + 22, { size: 12, weight: '700', color: savedAll ? C.ink : '#FFFFFF', align: 'center' });
+          // Cột phải: Trình đọc trang PDF (ăn theo Warm Dark Mode + Dịu ảnh PDF)
+          const rX = mx + sideW + 16, rW = mw - sideW - 16;
+          this.fillRoundRect(rX, 92, rW, 48, 16, surf, border, 1.2);
+          this.drawText('← Trước    Trang 24 / 124    Sau →', rX + 18, 116, { size: 11.5, weight: '700', color: ink, mono: true });
+          this.fillRoundRect(rX + rW - 196, 102, 118, 28, 14, darkMode ? '#382B1D' : C.sunflowerSoft, C.sunflower, 1.2);
+          this.drawText('🔖 Đã đánh dấu', rX + rW - 137, 116, { size: 10.5, weight: '700', color: ink, align: 'center' });
+          this.drawText('− 100% ＋', rX + rW - 42, 116, { size: 11, weight: '700', color: muted, align: 'center', mono: true });
 
-          const panelY = boxY + 128;
-          this.fillRoundRect(mainX + 20, panelY, mainW - 40, 414, 16, C.bg, C.blonde, 1);
+          // Trang giáo trình (khi bật Dark Mode + Dịu ảnh PDF -> chuyển nền giấy ấm dịu mắt)
+          this.fillRoundRect(rX, 152, rW, 444, 18, surf, border, 1.2);
+          const paperFill = darkMode ? '#DDD4C6' : '#FFFFFF';
+          this.fillRoundRect(rX + 26, 170, rW - 52, 408, 12, paperFill, border, 1);
+          this.drawText('CHƯƠNG 2: CÁC ĐỊNH LUẬT CƠ BẢN CỦA MẠCH ĐIỆN', rX + 52, 212, { size: 15, weight: '800', color: '#3E1D27' });
+          this.drawText('2.1. Định luật Kirchhoff 1 (KCL): Tổng đại số các dòng điện tại một nút bằng 0.', rX + 52, 256, { size: 13, weight: '600', color: '#1F2937' });
+          this.drawText('∑ i_k = 0    (tại mọi nút của mạch điện)', rX + 52, 294, { size: 14, weight: '700', color: '#653040', mono: true });
+          this.drawText('2.2. Định luật Kirchhoff 2 (KVL): Tổng đại số điện áp dọc một vòng kín bằng 0.', rX + 52, 344, { size: 13, weight: '600', color: '#1F2937' });
+          this.drawText('∑ u_k = ∑ e_k    (dọc theo chiều vòng đã chọn)', rX + 52, 382, { size: 14, weight: '700', color: '#653040', mono: true });
 
-          const cY = panelY + 56, cW = mainW - 76, cH = 336;
-          if (phase <= 1) {
-            this.fillRoundRect(mainX + 38, cY, cW, cH, 14, C.surface, C.blonde, 1.2);
-            this.drawText('• Chọn đúng Tài liệu/Chương & đặt "Từ câu số" hoặc bấm 📥 Nạp đáp án hiện có', mainX + 60, cY + 64, { size: 14, weight: '700' });
-            this.drawText('• Hỗ trợ 2 kiểu nhập: Chuỗi liền mạch (ABCD-BADAB) hoặc kèm số câu (1A 2B 5D)', mainX + 60, cY + 124, { size: 14, weight: '700', color: C.sangria });
-            this.drawText('• Dùng dấu "-" hoặc "?" để giữ nguyên câu chưa muốn ghi đè', mainX + 60, cY + 184, { size: 14, weight: '600', color: C.raspberry });
-            this.drawText('• Mọi thay đổi trên thẻ câu hỏi đều đồng bộ 2 chiều ngược lên ô chuỗi phía trên!', mainX + 60, cY + 244, { size: 14, weight: '600', color: C.muted });
-          } else if (phase === 2) {
-            this.fillRoundRect(mainX + 38, cY, cW, cH, 14, C.surface, fixedSlot5 ? C.sangria : C.raspberry, 2);
-            this.drawText(fixedSlot5 ? '#5 • ĐÃ SỬA: - → B (Đồng bộ tức thì lên vị trí thứ 5!)' : '#5 • Lọc "Chưa gán (-)" phát hiện câu trống → Bấm chọn B', mainX + 60, cY + 46, { size: 14, weight: '800', color: fixedSlot5 ? C.sangria : C.raspberry });
-            this.drawText('Câu 5: Trong mạch xoay chiều thuần cảm (L), dòng điện i so với điện áp u sẽ:', mainX + 60, cY + 106, { size: 14.5, weight: '700' });
-            ['A. Sớm pha π/2', 'B. Chậm pha π/2', 'C. Cùng pha u', 'D. Ngược pha π'].forEach((tOpt, i) => {
-              const ow = (cW - 60) / 2;
-              const ox = mainX + 60 + (i % 2) * (ow + 16);
-              const oy = cY + 150 + Math.floor(i / 2) * 74;
-              const sel = fixedSlot5 && i === 1;
-              this.fillRoundRect(ox, oy, ow, 56, 11, sel ? '#F7EEF1' : C.bg, sel ? C.sangria : C.blonde, sel ? 2 : 1);
-              this.drawText(tOpt, ox + 18, oy + 28, { size: 13.5, weight: sel ? '700' : '500' });
-            });
-          } else if (phase === 3) {
-            this.fillRoundRect(mainX + 38, cY, cW, cH, 14, C.surface, fixedSlot3 ? C.sangria : C.blonde, 2);
-            this.drawText(fixedSlot3 ? '#3 • ĐÃ SỬA: C → D (Đồng bộ 2 chiều lên ô chuỗi!)' : '🔍 Tìm câu sửa (3 / 1-5 / 3,5 / từ khóa) → Đối chiếu & bấm D để sửa', mainX + 60, cY + 46, { size: 14, weight: '800', color: C.sangria });
-            this.drawText('Câu 3: Công suất tác dụng P của mạch điện xoay chiều 1 pha bằng:', mainX + 60, cY + 106, { size: 14.5, weight: '700' });
-            ['A. U · I · sin(φ)', 'B. U · I', 'C. U² / Z', 'D. U · I · cos(φ)'].forEach((tOpt, i) => {
-              const ow = (cW - 60) / 2;
-              const ox = mainX + 60 + (i % 2) * (ow + 16);
-              const oy = cY + 150 + Math.floor(i / 2) * 74;
-              const sel = (fixedSlot3 && i === 3) || (!fixedSlot3 && i === 2);
-              this.fillRoundRect(ox, oy, ow, 56, 11, sel ? '#F7EEF1' : C.bg, sel ? C.sangria : C.blonde, sel ? 2 : 1);
-              this.drawText(tOpt, ox + 18, oy + 28, { size: 13.5, weight: sel ? '700' : '500', mono: true });
-            });
+          if (darkMode) {
+            this.drawSpotlightRing(10, this.H - 172, sbW - 20, 52, 14, t, C.sunflower);
+            this.drawStepCallout(sbW + 24, this.H - 170, '2', '🌙 Ban đêm ấm áp + 🕯️ Dịu ảnh PDF + 📲 Cài App PWA dùng Offline', C.sangria, 1);
           } else {
-            this.fillRoundRect(mainX + 38, cY, cW, cH, 14, C.surface, savedAll ? C.sunflower : C.sangria, 2);
-            this.drawText(savedAll ? '✅ ĐÃ LƯU THÀNH CÔNG TOÀN BỘ 10 ĐÁP ÁN VÀO INDEXEDDB!' : '📋 RÀ SOÁT TAB "ĐÃ SỬA" (2 CÂU) → BẤM LƯU TẤT CẢ (HOẶC ENTER)', mainX + 60, cY + 52, { size: 14, weight: '800', color: C.sangria });
-            this.fillRoundRect(mainX + 60, cY + 94, cW - 44, 62, 12, savedAll ? C.sunflowerSoft : C.bg, C.blonde, 1);
-            this.drawText('#3  Câu 3 • Công suất tác dụng P...   [ C → D ]', mainX + 82, cY + 125, { size: 13.5, weight: '700' });
-            this.fillRoundRect(mainX + 60, cY + 172, cW - 44, 62, 12, savedAll ? C.sunflowerSoft : C.bg, C.blonde, 1);
-            this.drawText('#5  Câu 5 • Mạch thuần cảm L...       [ - → B ]', mainX + 82, cY + 203, { size: 13.5, weight: '700' });
-            if (!savedAll) this.drawSpotlightRing(saveX, inputY, 184, 44, 22, t, C.sunflower);
-          }
-
-          if (lt >= 12.1) {
-            const oa = this.easeOut(this.seg(lt, 12.1, 12.55));
-            ctx.save();
-            ctx.globalAlpha = oa;
-            ctx.fillStyle = 'rgba(45, 20, 28, 0.90)';
-            ctx.fillRect(0, 0, this.W, this.H);
-            this.drawBrandLogo(this.W / 2 - 40, this.H / 2 - 156, 80);
-            this.drawText('SẴN SÀNG ÔN LUYỆN CÙNG VIETTULAM', this.W / 2, this.H / 2 - 42, { size: 26, weight: '800', color: '#FFFFFF', align: 'center' });
-            this.drawText('Nạp tài liệu ở mục Tổng Quan để bắt đầu ôn tập hiệu quả ngay hôm nay!', this.W / 2, this.H / 2 + 12, { size: 14, weight: '500', color: '#E2D7BF', align: 'center' });
-            ctx.restore();
+            this.drawStepCallout(rX + 46, 466, '1', 'Đọc giáo trình PDF/DOCX/TXT nhẹ RAM • Tự tách Mục lục, Tìm toàn văn & Ghim trang', C.sangria, 1);
           }
         },
 
@@ -10593,23 +10949,23 @@
           let xCur = 12;
           this.SCENES.forEach(sc => {
             const segW = ((sc.end - sc.start) / this.DURATION) * usableW;
-            this.fillRoundRect(xCur, 5, segW, 4, 2, 'rgba(62, 29, 39, 0.14)');
+            this.fillRoundRect(xCur, 5, segW, 4, 2, 'rgba(62, 29, 39, 0.16)');
             const ratio = t >= sc.end ? 1 : (t <= sc.start ? 0 : (t - sc.start) / (sc.end - sc.start));
             if (ratio > 0) this.fillRoundRect(xCur, 5, segW * ratio, 4, 2, sc.id === scene.id ? C.raspberry : C.sangria);
             xCur += segW + gap;
           });
 
           const subY = this.H - 96;
-          ctx.fillStyle = 'rgba(45, 20, 28, 0.94)';
+          ctx.fillStyle = 'rgba(45, 20, 28, 0.95)';
           ctx.fillRect(0, subY, this.W, 96);
           ctx.fillStyle = C.sunflower;
           ctx.fillRect(0, subY, this.W, 2.5);
 
           this.fillRoundRect(24, subY + 16, 124, 26, 13, C.sangria, C.sunflower, 1.2);
           this.drawText(scene.tag, 86, subY + 29.5, { size: 11, weight: '800', color: '#FAF8F4', align: 'center', mono: true });
-          this.drawText(scene.title, 162, subY + 30, { size: 16.5, weight: '800', color: '#FFFFFF' });
-          this.drawText(scene.sub, 24, subY + 66, { size: 13.5, weight: '500', color: '#E2D7BF' });
-          this.drawText(`${this.formatClock(t)} / 00:40`, this.W - 24, subY + 30, { size: 12, weight: '700', color: C.sunflower, align: 'right', mono: true });
+          this.drawText(scene.title, 162, subY + 30, { size: 16, weight: '800', color: '#FFFFFF' });
+          this.drawText(scene.sub, 24, subY + 66, { size: 13, weight: '500', color: '#E2D7BF' });
+          this.drawText(`${this.formatClock(t)} / 01:00`, this.W - 24, subY + 30, { size: 12, weight: '700', color: C.sunflower, align: 'right', mono: true });
         },
 
         getSceneAt(t) {
@@ -10645,7 +11001,9 @@
           if (scene.id === 0) this.drawScene1(lt, t);
           else if (scene.id === 1) this.drawScene2(lt, t);
           else if (scene.id === 2) this.drawScene3(lt, t);
-          else this.drawScene4(lt, t);
+          else if (scene.id === 3) this.drawScene4(lt, t);
+          else if (scene.id === 4) this.drawScene5(lt, t);
+          else this.drawScene6(lt, t);
 
           this.drawSceneChrome(scene, t);
           this.speakSceneIfNeeded(scene);
@@ -10671,7 +11029,7 @@
           if (this.state.isRecording) {
             const pct = Math.min(100, Math.round((this.state.currentTime / this.DURATION) * 100));
             const recTxt = document.getElementById('guideRecordingProgressText');
-            if (recTxt) recTxt.textContent = `Đang xuất video HD 40s... ${pct}%`;
+            if (recTxt) recTxt.textContent = `Đang xuất video HD 60s... ${pct}%`;
           }
         },
 
@@ -10735,12 +11093,12 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'huong_dan_viettulam_40s_HD.webm';
+            a.download = 'huong_dan_viettulam_60s_HD.webm';
             document.body.appendChild(a);
             a.click();
             a.remove();
             setTimeout(() => URL.revokeObjectURL(url), 4000);
-            AppUtils.showToast('Đã xuất & tải xong video hướng dẫn 40s (.webm)!', 'success');
+            AppUtils.showToast('Đã xuất & tải xong video hướng dẫn 1 phút (.webm)!', 'success');
           };
 
           this.state.isRecording = true;
@@ -10753,7 +11111,7 @@
           const recOv = document.getElementById('guideRecordingOverlay');
           const playBtn = document.getElementById('btnGuidePlayPause');
           if (btnRec) btnRec.disabled = true;
-          if (recBtnTxt) recBtnTxt.textContent = 'Đang ghi (00:40)...';
+          if (recBtnTxt) recBtnTxt.textContent = 'Đang ghi (01:00)...';
           if (recOv) recOv.classList.remove('hidden');
           if (playBtn) playBtn.textContent = '⏸ Đang ghi';
 
@@ -10775,7 +11133,7 @@
           const recOv = document.getElementById('guideRecordingOverlay');
           const playBtn = document.getElementById('btnGuidePlayPause');
           if (btnRec) btnRec.disabled = false;
-          if (recBtnTxt) recBtnTxt.textContent = '⬇ Xuất & Tải Video 40s (.webm)';
+          if (recBtnTxt) recBtnTxt.textContent = '⬇ Xuất & Tải Video 60s (.webm)';
           if (recOv) recOv.classList.add('hidden');
           if (playBtn) playBtn.textContent = '▶ Phát tiếp';
         },

@@ -1495,7 +1495,7 @@
           <div class="flex items-center gap-2 font-mono-code text-[10px] text-[#9A7E87]">
             <span>LOCAL WORKSPACE • PDF / DOCX / TXT</span>
             <button id="btnCheckAppUpdate" type="button" title="Xem có gì mới & Kiểm tra phiên bản mới" class="px-2.5 py-0.5 rounded-full border border-[#E2D7BF] bg-[#FFFFFF] hover:bg-[#653040] hover:text-[#FFFFFF] hover:border-[#653040] text-[#653040] font-bold transition">
-              v12.0 • Kiểm tra cập nhật
+              v12.3 • Kiểm tra cập nhật
             </button>
           </div>
         </div>
@@ -1585,7 +1585,7 @@
     <div class="bg-[#FFFFFF] rounded-2xl border border-[#E2D7BF] max-w-lg w-full shadow-2xl overflow-hidden animate-stage">
       <div class="px-5 py-4 border-b border-[#EFE8DA] bg-[#653040] text-[#FFFFFF] flex items-center justify-between gap-3">
         <div class="flex items-center gap-2.5">
-          <span class="px-2.5 py-0.5 rounded-full bg-[#DDB247] text-[#3E1D27] font-mono-code text-[11px] font-extrabold" id="whatsNewVersionBadge">v12.0</span>
+          <span class="px-2.5 py-0.5 rounded-full bg-[#DDB247] text-[#3E1D27] font-mono-code text-[11px] font-extrabold" id="whatsNewVersionBadge">v12.3</span>
           <h3 class="text-sm font-bold">Có gì mới trên viettulam</h3>
         </div>
         <button id="btnCloseWhatsNewModal" type="button" class="px-2.5 py-1 rounded-full bg-white/15 hover:bg-white/25 text-xs font-semibold transition">
@@ -4028,32 +4028,186 @@
           }
         },
 
-        extractTocFromPagesText(pagesText) {
-          const toc = [];
-          const seen = new Set();
-          const lvl1Re = /^(?:CHƯƠNG|Chương|PHẦN|Phần|BÀI|Bài|CHAPTER|PART)\s+[0-9IVXLCDM]+(?:[\.\:\-\s]+.*)?$/;
-          const lvl2Re = /^(?:[IVX]+\.\s+\S|\d+\.\d+(?:\.\d+)?\.?\s+\S)/;
+        cleanTocTitle(rawTitle) {
+          return String(rawTitle || '')
+            .replace(/[\.\s…·]{4,}\d*\s*$/g, '')
+            .replace(/\s*[:\-–]\s*$/g, '')
+            .replace(/\s{2,}/g, ' ')
+            .trim();
+        },
 
-          pagesText.forEach((pText, idx) => {
-            const pageNum = idx + 1;
-            const lines = String(pText || '').split(/\r?\n/).map(l => l.trim()).filter(Boolean);
-            for (const line of lines) {
-              if (line.length < 5 || line.length > 120) continue;
-              if (/[,;]$/.test(line)) continue;
-              let level = 0;
-              if (lvl1Re.test(line)) level = 1;
-              else if (lvl2Re.test(line)) level = 2;
-              if (level > 0) {
-                const key = `${pageNum}::${line.toLowerCase().slice(0, 48)}`;
-                if (!seen.has(key)) {
-                  seen.add(key);
-                  toc.push({ title: line, page: pageNum, level });
-                  if (toc.length >= 250) return;
-                }
+        detectHeadingRank(title, fallbackLevel = 2) {
+          const t = this.cleanTocTitle(title);
+          if (/^(?:CHƯƠNG|Chương|PHẦN|Phần|CHAPTER|PART|HỌC\s+PHẦN|MODULE)\s+[0-9IVXLCDM]+(?:\b|[\.\:\-\s])/i.test(t)) return 1;
+          if (/^(?:BÀI|Bài|CHỦ\s+ĐỀ|Chủ\s+đề|CHUYÊN\s+ĐỀ|Chuyên\s+đề|UNIT|LESSON|TOPIC|SECTION)\s+[0-9IVXLCDM]+(?:\b|[\.\:\-\s])/i.test(t)) return 2;
+          if (/^[IVXLCDM]+[\.\)]\s+\S/.test(t)) return 3;
+          if (/^\d+\.\d+\.\d+/.test(t)) return 6;
+          if (/^\d+\.\d+/.test(t)) return 5;
+          if (/^\d+[\.\)]\s+\S/.test(t)) return 4;
+          if (fallbackLevel === 1) return 1;
+          if (fallbackLevel >= 3) return 6;
+          return 5;
+        },
+
+        buildHierarchicalTocGroups(rawToc) {
+          if (!Array.isArray(rawToc) || rawToc.length === 0) return [];
+          const normalized = [];
+          const seenClean = new Set();
+
+          for (let i = 0; i < rawToc.length; i++) {
+            const it = rawToc[i];
+            const title = this.cleanTocTitle(it.title);
+            if (!title) continue;
+            const page = Number(it.page) || 1;
+            const dedupKey = `${page}::${title.toLowerCase().slice(0, 56)}`;
+            if (seenClean.has(dedupKey)) continue;
+            seenClean.add(dedupKey);
+            const rank = this.detectHeadingRank(title, it.level || 2);
+            normalized.push({
+              title,
+              page,
+              level: it.level || 2,
+              rank,
+              origIdx: i
+            });
+          }
+
+          if (normalized.length === 0) return [];
+
+          // Tự động xác định cấp gốc (Chương/Phần -> Bài/Chủ đề -> I./II. -> 1./2. -> 1.1) tùy theo cấu trúc từng file
+          const rankCounts = {};
+          for (const item of normalized) {
+            rankCounts[item.rank] = (rankCounts[item.rank] || 0) + 1;
+          }
+
+          let rootRank = null;
+          for (const candidate of [1, 2, 3, 4, 5]) {
+            if ((rankCounts[candidate] || 0) >= 1) {
+              // Chỉ chọn làm cấp nhóm cha nếu còn các mục cấp sâu hơn, hoặc có ít nhất 2 nhóm cùng cấp
+              const hasDeeper = normalized.some(it => it.rank > candidate);
+              if (hasDeeper || rankCounts[candidate] >= 2) {
+                rootRank = candidate;
+                break;
               }
             }
-          });
-          return toc;
+          }
+
+          // Nếu toàn bộ đều là 1.1, 1.2, 2.1, 2.2 (rank 5/6) mà không có dòng "Chương 1" đứng trước -> tự gộp theo đầu số 1, 2, 3...
+          if (rootRank === 5 && !normalized.some(it => it.rank < 5)) {
+            const prefixGroups = new Map();
+            for (const item of normalized) {
+              const m = item.title.match(/^(\d+)\./);
+              const majorKey = m ? `Phần ${m[1]}` : 'Mục lục';
+              if (!prefixGroups.has(majorKey)) {
+                prefixGroups.set(majorKey, {
+                  title: majorKey,
+                  page: item.page,
+                  children: []
+                });
+              }
+              prefixGroups.get(majorKey).children.push({
+                ...item,
+                depth: item.rank >= 6 ? 2 : 1
+              });
+            }
+            if (prefixGroups.size >= 2) {
+              return Array.from(prefixGroups.values());
+            }
+          }
+
+          // Nếu không phân cấp rõ ràng (tất cả cùng 1 cấp) -> giữ gọn thành các nhóm gốc không có con
+          if (rootRank === null) {
+            return normalized.map(item => ({
+              title: item.title,
+              page: item.page,
+              children: []
+            }));
+          }
+
+          const groups = [];
+          let currentGroup = null;
+
+          for (const item of normalized) {
+            if (item.rank <= rootRank) {
+              currentGroup = {
+                title: item.title,
+                page: item.page,
+                children: []
+              };
+              groups.push(currentGroup);
+            } else {
+              if (!currentGroup) {
+                currentGroup = {
+                  title: 'Mở đầu',
+                  page: item.page,
+                  children: []
+                };
+                groups.push(currentGroup);
+              }
+              currentGroup.children.push({
+                ...item,
+                depth: item.rank >= 6 ? 2 : 1
+              });
+            }
+          }
+
+          return groups;
+        },
+
+        extractTocFromPagesText(pagesText) {
+          const majorRe = /^(?:CHƯƠNG|Chương|PHẦN|Phần|CHAPTER|PART|HỌC\s+PHẦN|MODULE)\s+[0-9IVXLCDM]+(?:[\.\:\-\s]+.*)?$/i;
+          const unitRe = /^(?:BÀI|Bài|CHỦ\s+ĐỀ|Chủ\s+đề|CHUYÊN\s+ĐỀ|Chuyên\s+đề|UNIT|LESSON|TOPIC)\s+[0-9IVXLCDM]+(?:[\.\:\-\s]+.*)?$/i;
+          const romanRe = /^[IVXLCDM]+[\.\)]\s+\S/;
+          const sub3Re = /^\d+\.\d+\.\d+\.?\s+\S/;
+          const sub2Re = /^\d+\.\d+\.?\s+\S/;
+          const dotLeaderRe = /[\.…·]{4,}\s*\d*\s*$/;
+
+          const scanPages = (skipTocIndexPages) => {
+            const toc = [];
+            const seen = new Set();
+
+            pagesText.forEach((pText, idx) => {
+              const pageNum = idx + 1;
+              const lines = String(pText || '').split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+              if (skipTocIndexPages) {
+                const dotLines = lines.filter(l => dotLeaderRe.test(l)).length;
+                const hasTocHeader = lines.slice(0, 6).some(l => /^(?:MỤC\s+LỤC|TABLE\s+OF\s+CONTENTS|NỘI\s+DUNG)\b/i.test(l));
+                if (dotLines >= 4 || (hasTocHeader && dotLines >= 2)) {
+                  return;
+                }
+              }
+
+              for (const rawLine of lines) {
+                if (rawLine.length < 4 || rawLine.length > 140) continue;
+                const line = this.cleanTocTitle(rawLine);
+                if (line.length < 4 || /[,;]$/.test(line)) continue;
+
+                let level = 0;
+                if (majorRe.test(line)) level = 1;
+                else if (unitRe.test(line)) level = 1;
+                else if (romanRe.test(line)) level = 2;
+                else if (sub3Re.test(line)) level = 3;
+                else if (sub2Re.test(line)) level = 2;
+
+                if (level > 0) {
+                  const key = `${pageNum}::${line.toLowerCase().slice(0, 52)}`;
+                  if (!seen.has(key)) {
+                    seen.add(key);
+                    toc.push({ title: line, page: pageNum, level });
+                    if (toc.length >= 280) return;
+                  }
+                }
+              }
+            });
+            return toc;
+          };
+
+          // Ưu tiên bỏ qua trang in sẵn MỤC LỤC để lấy đúng số trang nội dung thật
+          let result = scanPages(true);
+          if (result.length < 2) {
+            result = scanPages(false);
+          }
+          return result;
         },
 
         async processTheoryFile(file, onProgress, abortSignal = null) {
@@ -4089,19 +4243,27 @@
               let lines = [];
               let curLine = '';
               let lastY = null;
+              let lastEndX = null;
               for (const item of tc.items) {
                 const s = AppUtils.decodeSymbolPuaText(item.str || '');
+                if (!s) continue;
+                const x = item.transform ? item.transform[4] : null;
                 const y = item.transform ? Math.round(item.transform[5]) : null;
+                const w = typeof item.width === 'number' ? item.width : 0;
                 if (lastY !== null && y !== null && Math.abs(y - lastY) > 4) {
-                  if (curLine.trim()) lines.push(curLine.trim());
+                  if (curLine.trim()) lines.push(curLine.trim().normalize('NFC'));
                   curLine = s;
                 } else {
-                  curLine += (curLine && s && !curLine.endsWith(' ') && !s.startsWith(' ') ? ' ' : '') + s;
+                  // Chỉ chèn dấu cách khi có khoảng hở thực sự giữa 2 khối chữ (tránh tách "CH Ư Ơ NG" hay "M Ở Đ Ầ U")
+                  const hasRealGap = lastEndX !== null && x !== null && (x - lastEndX) > 1.8;
+                  const needSpace = curLine && s && !curLine.endsWith(' ') && !s.startsWith(' ') && hasRealGap;
+                  curLine += (needSpace ? ' ' : '') + s;
                 }
                 if (y !== null) lastY = y;
+                if (x !== null) lastEndX = x + w;
               }
-              if (curLine.trim()) lines.push(curLine.trim());
-              pagesText.push(lines.join('\n'));
+              if (curLine.trim()) lines.push(curLine.trim().normalize('NFC'));
+              pagesText.push(lines.join('\n').normalize('NFC'));
               if (typeof page.cleanup === 'function') { try { page.cleanup(); } catch (e) {} }
             }
 
@@ -5500,6 +5662,8 @@
           theoryCurrentPage: 1,
           theoryZoom: 1,
           theorySidePanel: 'TOC',
+          theoryExpandedTocGroupIdx: 0,
+          theoryActiveTocKey: null,
           theorySearchQuery: '',
           activeTheoryPdfHandle: null,
           activeTheoryPdfHandleDocName: null,
@@ -6437,22 +6601,58 @@
           const bmCountEl = document.getElementById('theoryBookmarkCountBadge');
           if (bmCountEl) bmCountEl.textContent = String(bookmarks.length);
 
-          // 1. Render TOC
+          // 1. Render TOC dạng Accordion (Nhấn chương nào mở chương đó, chương khác tự thụt vào)
           const tocEl = document.getElementById('theoryPanelToc');
           if (tocEl) {
-            const toc = Array.isArray(doc.toc) ? doc.toc : [];
-            if (toc.length === 0) {
+            const groups = TheoryDocumentEngine.buildHierarchicalTocGroups(doc.toc || []);
+            if (groups.length === 0) {
               tocEl.innerHTML = `<div class="p-3 rounded-xl bg-[#FAF8F4] border border-dashed border-[#E2D7BF] text-[#7B5A64] text-center">Tài liệu không có tiêu đề Chương/Mục rõ ràng. Bạn có thể dùng ô <strong>Tìm kiếm</strong> hoặc nhập số trang trực tiếp.</div>`;
             } else {
-              tocEl.innerHTML = toc.map(item => {
-                const isCur = item.page === this.state.theoryCurrentPage;
-                const indent = item.level === 2 ? 'pl-4' : (item.level >= 3 ? 'pl-7' : 'pl-2.5');
+              if (this.state.theoryExpandedTocGroupIdx !== null && this.state.theoryExpandedTocGroupIdx >= groups.length) {
+                this.state.theoryExpandedTocGroupIdx = 0;
+              }
+              const expandedIdx = this.state.theoryExpandedTocGroupIdx;
+
+              tocEl.innerHTML = groups.map((grp, gIdx) => {
+                const hasChildren = grp.children && grp.children.length > 0;
+                const isExpanded = expandedIdx === gIdx;
+                const grpKey = `G_${gIdx}`;
+                const isGroupActive = this.state.theoryActiveTocKey
+                  ? this.state.theoryActiveTocKey === grpKey
+                  : (!hasChildren && grp.page === this.state.theoryCurrentPage);
+
+                const childrenHtml = hasChildren && isExpanded
+                  ? `<div class="mt-1 ml-2.5 pl-2.5 border-l-2 border-[#E2D7BF] space-y-0.5">
+                      ${grp.children.map((ch, cIdx) => {
+                        const itemKey = `C_${gIdx}_${cIdx}`;
+                        const isItemActive = this.state.theoryActiveTocKey === itemKey;
+                        const padCls = ch.depth >= 2 ? 'pl-4' : 'pl-2';
+                        return `
+                          <button type="button" data-action="theory-jump-page" data-page="${ch.page}" data-toc-key="${itemKey}" data-group-idx="${gIdx}"
+                            class="w-full text-left ${padCls} pr-2 py-1.5 rounded-lg transition flex items-start justify-between gap-2 text-[11.5px] ${isItemActive ? 'bg-[#653040] text-[#FFFFFF] font-semibold' : 'hover:bg-[#F4EFE6] text-[#3E1D27]'}">
+                            <span class="line-clamp-2 leading-snug">${AppUtils.escapeHtml(ch.title)}</span>
+                            <span class="font-mono-code text-[10px] shrink-0 opacity-75">tr.${ch.page}</span>
+                          </button>
+                        `;
+                      }).join('')}
+                    </div>`
+                  : '';
+
                 return `
-                  <button type="button" data-action="theory-jump-page" data-page="${item.page}"
-                    class="w-full text-left ${indent} pr-2.5 py-2 rounded-xl transition flex items-start justify-between gap-2 ${isCur ? 'bg-[#653040] text-[#FFFFFF] font-semibold' : 'hover:bg-[#F4EFE6] text-[#3E1D27]'}">
-                    <span class="line-clamp-2 leading-snug">${AppUtils.escapeHtml(item.title)}</span>
-                    <span class="font-mono-code text-[10px] shrink-0 opacity-75">tr.${item.page}</span>
-                  </button>
+                  <div class="rounded-xl border ${isExpanded && hasChildren ? 'border-[#CE675D]/60 bg-[#FAF8F4]' : 'border-transparent'} p-1 transition">
+                    <button type="button" data-action="theory-toggle-toc-group" data-group-idx="${gIdx}" data-page="${grp.page}" data-has-children="${hasChildren ? '1' : '0'}"
+                      class="w-full text-left px-2.5 py-2 rounded-lg transition flex items-start justify-between gap-2 ${isGroupActive || (isExpanded && hasChildren) ? 'bg-[#653040] text-[#FFFFFF] font-semibold' : 'hover:bg-[#F4EFE6] text-[#3E1D27] font-semibold'}">
+                      <span class="flex items-start gap-1.5 min-w-0 flex-1">
+                        ${hasChildren ? `<span class="font-mono-code text-[11px] shrink-0 mt-0.5 transition-transform">${isExpanded ? '▾' : '▸'}</span>` : ''}
+                        <span class="line-clamp-2 leading-snug">${AppUtils.escapeHtml(grp.title)}</span>
+                      </span>
+                      <span class="flex items-center gap-1.5 shrink-0 mt-0.5">
+                        ${hasChildren ? `<span class="px-1.5 py-0.2 rounded-full font-mono-code text-[9px] ${isExpanded ? 'bg-white/20 text-[#FFFFFF]' : 'bg-[#EFE8DA] text-[#7B5A64]'}">${grp.children.length}</span>` : ''}
+                        <span class="font-mono-code text-[10px] opacity-80">tr.${grp.page}</span>
+                      </span>
+                    </button>
+                    ${childrenHtml}
+                  </div>
                 `;
               }).join('');
             }
@@ -6487,23 +6687,72 @@
           const resEl = document.getElementById('theorySearchResults');
           const doc = this.getActiveTheoryDoc();
           if (!resEl || !doc) return;
-          const kw = String(this.state.theorySearchQuery || '').trim();
+          const kw = String(this.state.theorySearchQuery || '').trim().normalize('NFC');
           if (!kw) {
-            resEl.innerHTML = `<div class="p-3 rounded-xl bg-[#FAF8F4] border border-dashed border-[#E2D7BF] text-[#7B5A64] text-center">Nhập từ khóa (VD: Kirchhoff, tích phân, định luật...) để tìm nhanh trong toàn bộ ${doc.totalPages || 1} trang.</div>`;
+            resEl.innerHTML = `<div class="p-3 rounded-xl bg-[#FAF8F4] border border-dashed border-[#E2D7BF] text-[#7B5A64] text-center">Nhập từ khóa (VD: chương, Kirchhoff, tích phân...) để tìm nhanh trong toàn bộ ${doc.totalPages || 1} trang (hỗ trợ cả có dấu &amp; không dấu).</div>`;
             return;
           }
 
-          const kwLower = kw.toLowerCase();
+          const foldVi = s => String(s || '')
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/đ/g, 'd')
+            .replace(/Đ/g, 'D')
+            .toLowerCase();
+
+          // Tạo regex linh hoạt: cho phép khoảng trắng rỗng giữa các ký tự bị PDF tách rời (VD: "CH Ư Ơ NG" vẫn khớp "chương")
+          const kwChars = Array.from(kw.toLowerCase()).filter(ch => !/\s/.test(ch));
+          const escChar = ch => ch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+          const flexibleExactRe = kwChars.length > 0
+            ? new RegExp(kwChars.map(escChar).join('\\s*'), 'iu')
+            : null;
+
+          const kwFoldedChars = Array.from(foldVi(kw)).filter(ch => !/\s/.test(ch));
+          const flexibleFoldedRe = kwFoldedChars.length > 0
+            ? new RegExp(kwFoldedChars.map(escChar).join('\\s*'), 'i')
+            : null;
+
           const pagesText = Array.isArray(doc.pagesText) ? doc.pagesText : [];
           const matches = [];
+
           for (let i = 0; i < pagesText.length; i++) {
-            const pTxt = String(pagesText[i] || '');
-            const pos = pTxt.toLowerCase().indexOf(kwLower);
-            if (pos !== -1) {
-              const start = Math.max(0, pos - 42);
-              const end = Math.min(pTxt.length, pos + kw.length + 78);
-              const rawSnippet = (start > 0 ? '…' : '') + pTxt.slice(start, end).replace(/\s+/g, ' ') + (end < pTxt.length ? '…' : '');
-              matches.push({ page: i + 1, snippet: rawSnippet });
+            const pTxt = String(pagesText[i] || '').normalize('NFC');
+            if (!pTxt) continue;
+
+            let matchIdx = -1;
+            let matchLen = kw.length;
+
+            // 1. Khớp trực tiếp (có dấu, chuẩn NFC)
+            const directPos = pTxt.toLowerCase().indexOf(kw.toLowerCase());
+            if (directPos !== -1) {
+              matchIdx = directPos;
+              matchLen = kw.length;
+            } else if (flexibleExactRe) {
+              // 2. Khớp có dấu nhưng bỏ qua khoảng trắng bị tách chữ từ PDF (VD: "CH Ư Ơ NG")
+              const mExact = pTxt.match(flexibleExactRe);
+              if (mExact && typeof mExact.index === 'number') {
+                matchIdx = mExact.index;
+                matchLen = mExact[0].length;
+              }
+            }
+
+            // 3. Khớp không dấu (VD: gõ "chuong" tìm được "CHƯƠNG")
+            if (matchIdx === -1 && flexibleFoldedRe) {
+              const foldedPage = foldVi(pTxt);
+              const mFold = foldedPage.match(flexibleFoldedRe);
+              if (mFold && typeof mFold.index === 'number') {
+                matchIdx = mFold.index;
+                matchLen = mFold[0].length;
+              }
+            }
+
+            if (matchIdx !== -1) {
+              const start = Math.max(0, matchIdx - 42);
+              const end = Math.min(pTxt.length, matchIdx + matchLen + 78);
+              const before = (start > 0 ? '…' : '') + pTxt.slice(start, matchIdx).replace(/\s+/g, ' ');
+              const hit = pTxt.slice(matchIdx, matchIdx + matchLen).replace(/\s+/g, ' ');
+              const after = pTxt.slice(matchIdx + matchLen, end).replace(/\s+/g, ' ') + (end < pTxt.length ? '…' : '');
+              matches.push({ page: i + 1, before, hit, after });
               if (matches.length >= 40) break;
             }
           }
@@ -6513,22 +6762,15 @@
             return;
           }
 
-          const safeRegex = new RegExp(`(${kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
           resEl.innerHTML =
             `<div class="font-mono-code text-[10px] font-bold text-[#7B5A64] px-1">Tìm thấy trên ${matches.length}${matches.length >= 40 ? '+' : ''} trang:</div>` +
-            matches.map(m => {
-              const highlighted = AppUtils.escapeHtml(m.snippet).replace(
-                safeRegex,
-                '<mark class="bg-[#DDB247]/60 text-[#3E1D27] px-0.5 rounded font-semibold">$1</mark>'
-              );
-              return `
-                <button type="button" data-action="theory-jump-page" data-page="${m.page}"
-                  class="w-full text-left p-2.5 rounded-xl border border-[#E2D7BF] bg-[#FAF8F4] hover:border-[#653040] hover:bg-[#F4EFE6] space-y-1 transition">
-                  <div class="font-mono-code text-[10px] font-bold text-[#AA1342]">TRANG ${m.page}</div>
-                  <div class="text-[11px] text-[#3E1D27] leading-relaxed">${highlighted}</div>
-                </button>
-              `;
-            }).join('');
+            matches.map(m => `
+              <button type="button" data-action="theory-jump-page" data-page="${m.page}"
+                class="w-full text-left p-2.5 rounded-xl border border-[#E2D7BF] bg-[#FAF8F4] hover:border-[#653040] hover:bg-[#F4EFE6] space-y-1 transition">
+                <div class="font-mono-code text-[10px] font-bold text-[#AA1342]">TRANG ${m.page}</div>
+                <div class="text-[11px] text-[#3E1D27] leading-relaxed">${AppUtils.escapeHtml(m.before)}<mark class="bg-[#DDB247]/60 text-[#3E1D27] px-0.5 rounded font-semibold">${AppUtils.escapeHtml(m.hit)}</mark>${AppUtils.escapeHtml(m.after)}</div>
+              </button>
+            `).join('');
         },
 
         async renderTheoryCurrentPage() {
@@ -8866,6 +9108,8 @@
             this.state.activeTheoryDocName = nextName;
             const doc = this.getActiveTheoryDoc();
             this.state.theoryCurrentPage = doc?.lastPage || 1;
+            this.state.theoryExpandedTocGroupIdx = 0;
+            this.state.theoryActiveTocKey = null;
             this.state.theorySearchQuery = '';
             const sInput = document.getElementById('theorySearchInput');
             if (sInput) sInput.value = '';
@@ -9668,8 +9912,35 @@
               return;
             }
 
+            if (action === 'theory-toggle-toc-group') {
+              const gIdx = parseInt(actionBtn.getAttribute('data-group-idx') || '0', 10);
+              const p = parseInt(actionBtn.getAttribute('data-page') || '1', 10);
+              const hasChildren = actionBtn.getAttribute('data-has-children') === '1';
+              if (!Number.isNaN(gIdx)) {
+                if (hasChildren) {
+                  // Accordion: nhấn chương đang đóng -> mở chương này & tự thu gọn các chương khác; nhấn lại chương đang mở -> thu gọn
+                  this.state.theoryExpandedTocGroupIdx =
+                    this.state.theoryExpandedTocGroupIdx === gIdx ? null : gIdx;
+                }
+                this.state.theoryActiveTocKey = `G_${gIdx}`;
+                if (!Number.isNaN(p)) {
+                  this.state.theoryCurrentPage = p;
+                  this.renderTheoryCurrentPage();
+                }
+                this.renderTheorySidePanels();
+              }
+              return;
+            }
+
             if (action === 'theory-jump-page') {
               const p = parseInt(actionBtn.getAttribute('data-page') || '1', 10);
+              const tocKey = actionBtn.getAttribute('data-toc-key');
+              const gIdxAttr = actionBtn.getAttribute('data-group-idx');
+              if (tocKey) this.state.theoryActiveTocKey = tocKey;
+              if (gIdxAttr !== null && gIdxAttr !== '') {
+                const parsedG = parseInt(gIdxAttr, 10);
+                if (!Number.isNaN(parsedG)) this.state.theoryExpandedTocGroupIdx = parsedG;
+              }
               if (!Number.isNaN(p)) {
                 this.state.theoryCurrentPage = p;
                 this.renderTheorySidePanels();
@@ -9809,12 +10080,13 @@
        * 11B. HỆ THỐNG THÔNG BÁO PHIÊN BẢN MỚI (GITHUB PAGES + WHAT'S NEW)
        * ==================================================================== */
       const AppVersionManager = {
-        CURRENT_VERSION: '12.0',
+        CURRENT_VERSION: '12.3',
         RELEASE_DATE: '25/11/2026',
         VERSION_JSON_URL: './version.json',
         STORAGE_KEY: 'viettulam_seen_version_v1',
+        DISMISSED_REMOTE_KEY: 'viettulam_dismissed_remote_version_v1',
         RELEASE_NOTES: [
-          'Tự động kiểm tra và thông báo khi có phiên bản mới trên GitHub Pages (kèm nút Cập nhật ngay).',
+          'Sửa lỗi tìm kiếm tiếng Việt trong Tài Liệu PDF (khớp chuẩn cả khi PDF tách chữ có dấu như CH Ư Ơ NG, hỗ trợ tìm cả có dấu & không dấu).',
           'Bổ sung kho Tài Liệu Lý Thuyết nhẹ RAM: tự phân loại file, Mục lục tự động, Tìm kiếm toàn văn & Ghim trang.',
           'Nâng cấp Studio Cắt Tay PDF Pro (cắt riêng 2 trang, 4 tay nắm góc, phóng to 250%, Hoàn tác & Đặt lại tự động).',
           'Tích hợp Video Hướng Dẫn Tổng Quan 1 phút (60 giây HD) trong mục Hướng Dẫn.'
@@ -9834,6 +10106,9 @@
         },
 
         init() {
+          try {
+            this.dismissedRemoteVersion = localStorage.getItem(this.DISMISSED_REMOTE_KEY) || null;
+          } catch (e) {}
           this.bindEvents();
           this.checkLocalWhatsNew();
           // Kiểm tra bản mới từ GitHub Pages sau khi tải trang 2.5s
@@ -9852,10 +10127,9 @@
         checkLocalWhatsNew() {
           try {
             const seen = localStorage.getItem(this.STORAGE_KEY);
-            if (seen && seen !== this.CURRENT_VERSION) {
+            // Hiện 1 lần duy nhất cho mỗi phiên bản; tắt xong sẽ lưu lại và không hiện nữa tới khi lên bản mới
+            if (seen !== this.CURRENT_VERSION) {
               this.openWhatsNewModal();
-            } else if (!seen) {
-              localStorage.setItem(this.STORAGE_KEY, this.CURRENT_VERSION);
             }
           } catch (e) {}
         },
@@ -9908,7 +10182,12 @@
             if (!remoteVer) return;
 
             if (this.compareVersions(remoteVer, this.CURRENT_VERSION) > 0) {
-              if (!isManual && this.dismissedRemoteVersion === remoteVer) return;
+              let savedDismissed = this.dismissedRemoteVersion;
+              try { savedDismissed = localStorage.getItem(this.DISMISSED_REMOTE_KEY) || savedDismissed; } catch (e) {}
+              // Nếu người dùng đã tắt thông báo của đúng bản remoteVer này rồi thì không hiện lại cho tới khi có bản mới hơn
+              if (!isManual && savedDismissed && this.compareVersions(remoteVer, savedDismissed) <= 0) {
+                return;
+              }
               this.showUpdateBanner(data);
               if (isManual) {
                 this.closeWhatsNewModal();
@@ -9947,6 +10226,7 @@
 
         async applyUpdateNow() {
           try {
+            localStorage.removeItem(this.DISMISSED_REMOTE_KEY);
             if ('caches' in window) {
               const keys = await caches.keys();
               await Promise.all(keys.map(k => caches.delete(k)));
@@ -9974,10 +10254,25 @@
           document.getElementById('btnAckWhatsNew')?.addEventListener('click', () => {
             this.closeWhatsNewModal();
           });
+          document.getElementById('whatsNewModal')?.addEventListener('click', e => {
+            if (e.target === e.currentTarget) this.closeWhatsNewModal();
+          });
+          document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') {
+              const m = document.getElementById('whatsNewModal');
+              if (m && !m.classList.contains('hidden')) {
+                this.closeWhatsNewModal();
+              }
+            }
+          });
           const dismissFn = () => {
             const banner = document.getElementById('updateAvailableBanner');
             if (banner) {
-              this.dismissedRemoteVersion = banner.dataset.remoteVersion || null;
+              const rVer = banner.dataset.remoteVersion || null;
+              this.dismissedRemoteVersion = rVer;
+              if (rVer) {
+                try { localStorage.setItem(this.DISMISSED_REMOTE_KEY, rVer); } catch (e) {}
+              }
               banner.classList.add('hidden');
             }
           };
